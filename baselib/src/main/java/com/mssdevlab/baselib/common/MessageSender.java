@@ -5,10 +5,9 @@ import android.app.Activity;
 /**
  * Sending messages
  */
-@SuppressWarnings("ALL")
-public interface MessageSender {
+public abstract class MessageSender {
     /**
      * Send message
      */
-    void send(final Activity activity, String message);
+    abstract void send(final Activity activity, String message);
 }

@@ -13,7 +13,7 @@ import java.util.List;
  * Send e-mail according to specified parameters.
  */
 @SuppressWarnings("unused")
-public class EMailSender implements MessageSender {
+public class EMailSender extends MessageSender {
     private final int emailAddressRes;
     private final int emailSubjectRes;
     private final int chooseTitleRes;
