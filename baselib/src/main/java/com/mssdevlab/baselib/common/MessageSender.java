@@ -9,5 +9,5 @@ public abstract class MessageSender {
     /**
      * Send message
      */
-    abstract void send(final Activity activity, String message);
+    public abstract void send(final Activity activity, String message);
 }

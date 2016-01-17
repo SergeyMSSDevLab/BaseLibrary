@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Отчет об ошибке</string>
+    <string name="common_error_report_dialog_text">Произошла ошибка в приложении. Желаете послать отчет разработчикам?  У Вас будет возможность отредактировать сообщение.</string>
+    <string name="common_error_report_choose_title">Выберите службу для отправки</string>
+
+    <string name="common_menu_play_apps">Приложения</string>
+
+    <string name="common_enjoy_prompt">Нравится %s?</string>
+    <string name="common_enjoy_yes">Да</string>
+    <string name="common_enjoy_not">Не совсем</string>
+
+    <string name="common_enjoy_rate_prompt">Может тогда повысим рейтинг приложению?</string>
+    <string name="common_enjoy_rate_yes">Да, конечно</string>
+    <string name="common_enjoy_rate_not">Не сейчас</string>
+
+    <string name="common_enjoy_feedback_prompt">Посоветуете что-нибудь разработчикам?</string>
+    <string name="common_enjoy_feedback_yes">Да, конечно</string>
+    <string name="common_enjoy_feedback_not">Не сейчас</string>
+
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Raportul de eroare</string>
+    <string name="common_error_report_dialog_text">O eroare a apărut în cerere. Doriți să e-mail un raport de eroare pentru dezvoltatori? Veți putea edita mesajul înainte de expediere.</string>
+    <string name="common_error_report_choose_title">Alege un furnizor de e-mail</string>
+
+    <string name="common_menu_play_apps">Aplicații</string>
+
+    <string name="common_enjoy_prompt">Îți place %s?</string>
+    <string name="common_enjoy_yes">Da</string>
+    <string name="common_enjoy_not">Nu chiar</string>
+
+    <string name="common_enjoy_rate_prompt">Ce zici de un rating pe la magazin, apoi?</string>
+    <string name="common_enjoy_rate_yes">Da, desigur</string>
+    <string name="common_enjoy_rate_not">Nu, multumesc</string>
+
+    <string name="common_enjoy_feedback_prompt">Te superi ne da un feedback?</string>
+    <string name="common_enjoy_feedback_yes">Da, desigur</string>
+    <string name="common_enjoy_feedback_not">Nu, multumesc</string>
+
+</resources>

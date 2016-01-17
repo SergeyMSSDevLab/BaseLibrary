@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Hata raporu</string>
+    <string name="common_error_report_dialog_text">Bir hata uygulamasında ortaya çıktı. Eğer geliştiriciler bir hata raporu e-posta ister misiniz? Sen göndermeden önce mesajı düzenlemek mümkün olacaktır.</string>
+    <string name="common_error_report_choose_title">Bir e-posta sağlayıcısı seçin</string>
+
+    <string name="common_menu_play_apps">Uygulamalar</string>
+
+    <string name="common_enjoy_prompt">%s hoşlanıyor musunuz?</string>
+    <string name="common_enjoy_yes">Evet</string>
+    <string name="common_enjoy_not">Tam olarak değil</string>
+
+    <string name="common_enjoy_rate_prompt">O halde nasıl deposunda bir değerlendirmesi, ne dersiniz?</string>
+    <string name="common_enjoy_rate_yes">Evet elbette</string>
+    <string name="common_enjoy_rate_not">Hayır, teşekkürler</string>
+
+    <string name="common_enjoy_feedback_prompt">Bize biraz geribildirim veren misiniz?</string>
+    <string name="common_enjoy_feedback_yes">Evet elbette</string>
+    <string name="common_enjoy_feedback_not">Hayır, teşekkürler</string>
+
+</resources>

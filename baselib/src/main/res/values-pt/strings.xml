@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_error_report_email_subject">Relatório de erro</string>
+    <string name="common_error_report_dialog_text">Foi cometido um erro na aplicação. Gostaria de enviar e-mail um relatório de erro para os desenvolvedores? Você será capaz de editar mensagem antes de enviar.</string>
+    <string name="common_error_report_choose_title">Escolha um provedor de e-mail</string>
+
+    <string name="common_menu_play_apps">Aplicações</string>
+
+    <string name="common_enjoy_prompt">Apreciando %s?</string>
+    <string name="common_enjoy_yes">Sim</string>
+    <string name="common_enjoy_not">Nem por isso</string>
+
+    <string name="common_enjoy_rate_prompt">Como sobre uma classificação na loja, então?</string>
+    <string name="common_enjoy_rate_yes">OK, com certeza</string>
+    <string name="common_enjoy_rate_not">Não, obrigado</string>
+
+    <string name="common_enjoy_feedback_prompt">Você se importaria de nos dar algum feedback?</string>
+    <string name="common_enjoy_feedback_yes">OK, com certeza</string>
+    <string name="common_enjoy_feedback_not">Não, obrigado</string>
+</resources>

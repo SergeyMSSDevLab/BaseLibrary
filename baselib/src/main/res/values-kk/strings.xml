@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Қате туралы хабарлау</string>
+    <string name="common_error_report_dialog_text">Өтініште қате пайда болды. Сіз әзірлеушілер үшін есеп жіберу келеді ме? Сіз хабарды өңдеу мүмкіндігіне ие болады.</string>
+    <string name="common_error_report_choose_title">Жіберу үшін Қызметті таңдаңыз</string>
+
+    <string name="common_menu_play_apps">Бағдарламаны</string>
+
+    <string name="common_enjoy_prompt">%s ұнайды ма?</string>
+    <string name="common_enjoy_yes">Иә</string>
+    <string name="common_enjoy_not">Oнша емес</string>
+
+    <string name="common_enjoy_rate_prompt">Қалай дүкенде туралы рейтингі туралы, содан кейін?</string>
+    <string name="common_enjoy_rate_yes">Көз, Ok</string>
+    <string name="common_enjoy_rate_not">Жоқ рақмет</string>
+
+    <string name="common_enjoy_feedback_prompt">Сіз бізге біреу нәтиже беруге қарсы болмайсыз ба?</string>
+    <string name="common_enjoy_feedback_yes">Көз, Ok</string>
+    <string name="common_enjoy_feedback_not">Жоқ рақмет</string>
+
+</resources>

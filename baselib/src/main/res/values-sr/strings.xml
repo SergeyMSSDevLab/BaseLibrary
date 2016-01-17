@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Грешка извештај</string>
+    <string name="common_error_report_dialog_text">Грешка се појавила у апликацији. Да ли желите да е-маил извештај о грешци програмерима? Моћи ћете да измените поруку пре слања.</string>
+    <string name="common_error_report_choose_title">Изаберите услуга е-поште</string>
+
+    <string name="common_menu_play_apps">Апликације</string>
+
+    <string name="common_enjoy_prompt">Да ли вам се допада %s?</string>
+    <string name="common_enjoy_yes">Да</string>
+    <string name="common_enjoy_not">Не баш</string>
+
+    <string name="common_enjoy_rate_prompt">Како о рејтингу на продавници, онда?</string>
+    <string name="common_enjoy_rate_yes">Да, наравно</string>
+    <string name="common_enjoy_rate_not">Не, хвала</string>
+
+    <string name="common_enjoy_feedback_prompt">Да ли бисте нам дали неке повратне информације?</string>
+    <string name="common_enjoy_feedback_yes">Да, наравно</string>
+    <string name="common_enjoy_feedback_not">Не, хвала</string>
+
+</resources>

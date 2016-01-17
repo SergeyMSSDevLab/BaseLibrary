@@ -18,7 +18,7 @@ public class EMailSender extends MessageSender {
     private final int emailSubjectRes;
     private final int chooseTitleRes;
 
-    public EMailSender(@StringRes int emailAddressRes, @StringRes int emailSubjectRes, @StringRes int chooseTitleRes) {
+    protected EMailSender(@StringRes int emailAddressRes, @StringRes int emailSubjectRes, @StringRes int chooseTitleRes) {
         this.emailAddressRes = emailAddressRes;
         this.emailSubjectRes = emailSubjectRes;
         this.chooseTitleRes = chooseTitleRes;

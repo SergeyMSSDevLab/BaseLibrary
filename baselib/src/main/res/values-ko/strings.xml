@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_error_report_email_subject">오류 보고서</string>
+    <string name="common_error_report_dialog_text">오류가 응용 프로그램에 출연했다. 당신은 개발자에게 오류 보고서를 이메일을 보내시겠습니까? 당신은 보내기 전에 메시지를 편집 할 수 있습니다.</string>
+    <string name="common_error_report_choose_title">이메일 제공자를 선택하세요</string>
+
+    <string name="common_menu_play_apps">응용 프로그램</string>
+
+    <string name="common_enjoy_prompt">즐기기 %s?</string>
+    <string name="common_enjoy_yes">예</string>
+    <string name="common_enjoy_not">별로</string>
+
+    <string name="common_enjoy_rate_prompt">그렇다면 가게에 평가, 어떻습니까?</string>
+    <string name="common_enjoy_rate_yes">물론, 좋아</string>
+    <string name="common_enjoy_rate_not">아니, 감사합니다</string>
+
+    <string name="common_enjoy_feedback_prompt">당신은 우리에게 피드백을 제공시겠습니까?</string>
+    <string name="common_enjoy_feedback_yes">물론, 좋아</string>
+    <string name="common_enjoy_feedback_not">아니, 감사합니다</string>
+</resources>

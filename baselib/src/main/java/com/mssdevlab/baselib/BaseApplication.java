@@ -1,22 +1,21 @@
-package com.mssdevlab.baselib.common;
+package com.mssdevlab.baselib;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.util.Log;
+
+import com.mssdevlab.baselib.common.Helper;
+import com.mssdevlab.baselib.common.MessageSender;
+import com.mssdevlab.common.R;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.text.DateFormat;
-import java.util.Calendar;
 
 /**
  * Base class for MSSDevLab Application object
@@ -89,7 +88,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     }
 
     @CheckResult
-    public boolean hasError(final Activity context, @StringRes int dialogTitle, @StringRes int dialogText) {
+    public boolean hasError(final Activity context) {
         Log.v(LOG_TAG, "ShowErrorReport");
         final String message = this.GetLastExceptionReport();
         if (message != null) {
@@ -97,8 +96,8 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
             if (reportSender != null){
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                 final Resources res = context.getResources();
-                dialog.setTitle(res.getString(dialogTitle));
-                dialog.setMessage(res.getString(dialogText));
+                dialog.setTitle(res.getString(R.string.common_error_report_email_subject));
+                dialog.setMessage(res.getString(R.string.common_error_report_dialog_text));
                 dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -153,86 +152,6 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
     protected String CreateReport4Throwable(final Throwable e) {
         Log.v(LOG_TAG, "CreateReport4Throwable");
-        final String DOUBLE_LINE_SEP = "\n\n";
-        final String SINGLE_LINE_SEP = "\n";
-        final String LINE_SEP = "-------------------------------\n\n";
-
-        StackTraceElement[] arr = e.getStackTrace();
-        DateFormat df = DateFormat.getDateTimeInstance();
-        Calendar cal = Calendar.getInstance();
-
-        final StringBuilder report = new StringBuilder(e.toString());
-        report.append(DOUBLE_LINE_SEP);
-        report.append(df.format(cal.getTime()));
-        report.append(SINGLE_LINE_SEP);
-        report.append("--------- Stack trace ---------\n\n");
-        for(StackTraceElement el : arr){
-            report.append("    ");
-            report.append(el.toString());
-            report.append(SINGLE_LINE_SEP);
-        }
-        report.append(LINE_SEP);
-
-        report.append("--------- Cause ---------\n\n");
-        Throwable cause = e.getCause();
-        if (cause != null) {
-            report.append(cause.toString());
-            report.append(DOUBLE_LINE_SEP);
-            arr = cause.getStackTrace();
-            for(StackTraceElement el : arr){
-                report.append("    ");
-                report.append(el.toString());
-                report.append(SINGLE_LINE_SEP);
-            }
-        }
-        report.append(LINE_SEP);
-        report.append("Package: ");
-        report.append(this.getPackageName());
-        report.append(SINGLE_LINE_SEP);
-        report.append(LINE_SEP);
-        report.append("Package version code: ");
-        report.append(this.getVersion());
-        report.append(SINGLE_LINE_SEP);
-        report.append(LINE_SEP);
-        report.append("Build.BRAND: ");
-        report.append(Build.BRAND);
-        report.append(SINGLE_LINE_SEP);
-        report.append("Build.DEVICE: ");
-        report.append(Build.DEVICE);
-        report.append(SINGLE_LINE_SEP);
-        report.append("Build.MODEL: ");
-        report.append(Build.MODEL);
-        report.append(SINGLE_LINE_SEP);
-        report.append("Build.ID: ");
-        report.append(Build.ID);
-        report.append(SINGLE_LINE_SEP);
-        report.append("Build.PRODUCT: ");
-        report.append(Build.PRODUCT);
-        report.append(SINGLE_LINE_SEP);
-        report.append(LINE_SEP);
-        report.append("Build.VERSION.SDK_INT: ");
-        report.append(Build.VERSION.SDK_INT);
-        report.append(SINGLE_LINE_SEP);
-        report.append("Build.VERSION.RELEASE: ");
-        report.append(Build.VERSION.RELEASE);
-        report.append(SINGLE_LINE_SEP);
-        report.append("Build.VERSION.INCREMENTAL: ");
-        report.append(Build.VERSION.INCREMENTAL);
-        report.append(SINGLE_LINE_SEP);
-        report.append(LINE_SEP);
-
-        String rep = report.toString();
-        Log.v(LOG_TAG, rep);
-        return rep;
-    }
-
-    private int getVersion() {
-        int v = 0;
-        try {
-            v = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            // Huh? Really?
-        }
-        return v;
+        return Helper.CreateReport4Throwable(e, this);
     }
 }

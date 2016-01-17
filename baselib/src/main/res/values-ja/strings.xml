@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_error_report_email_subject">エラーレポート</string>
+    <string name="common_error_report_dialog_text">エラーは、アプリケーションで登場しました。あなたが開発者にエラーレポートを電子メールで送信しますか？あなたは、送信する前にメッセージを編集することができます。</string>
+    <string name="common_error_report_choose_title">メールプロバイダーを選択してください</string>
+
+    <string name="common_menu_play_apps">アプリケーション</string>
+
+    <string name="common_enjoy_prompt">アプリケーションを楽しみますか %s</string>
+    <string name="common_enjoy_yes">はい</string>
+    <string name="common_enjoy_not">あんまり</string>
+
+    <string name="common_enjoy_rate_prompt">どのようにして店の評価、についてはどうですか</string>
+    <string name="common_enjoy_rate_yes">確認し、</string>
+    <string name="common_enjoy_rate_not">結構です</string>
+
+    <string name="common_enjoy_feedback_prompt">あなたは私たちにいくつかのフィードバックを与えていただけませんか</string>
+    <string name="common_enjoy_feedback_yes">確認し、</string>
+    <string name="common_enjoy_feedback_not">結構です</string>
+</resources>

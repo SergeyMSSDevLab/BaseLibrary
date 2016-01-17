@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Доклад за грешка</string>
+    <string name="common_error_report_dialog_text">Възникна грешка в програмата. Бихте ли искали да изпрати доклад до разработчиците? Вие ще бъдете в състояние да редактирате съобщението.</string>
+    <string name="common_error_report_choose_title">Изберете услуга за изпращане</string>
+
+    <string name="common_menu_play_apps">Софтуер</string>
+
+    <string name="common_enjoy_prompt">Харесва ли ви %s?</string>
+    <string name="common_enjoy_yes">Да</string>
+    <string name="common_enjoy_not">Не съвсем</string>
+
+    <string name="common_enjoy_rate_prompt">Може би след това повиши рейтинга на софтуера?</string>
+    <string name="common_enjoy_rate_yes">Да разбира се</string>
+    <string name="common_enjoy_rate_not">Не сега</string>
+
+    <string name="common_enjoy_feedback_prompt">Уведомява разработчик?</string>
+    <string name="common_enjoy_feedback_yes">Да разбира се</string>
+    <string name="common_enjoy_feedback_not">Не сега</string>
+</resources>

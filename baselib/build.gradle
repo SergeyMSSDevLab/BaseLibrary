@@ -35,7 +35,7 @@ uploadArchives {
             pom.project {
                 groupId 'com.mssdevlab.baselib'
                 artifactId 'baselib'
-                version '1.0.0'
+                version android.defaultConfig.versionName
             }
         }
     }

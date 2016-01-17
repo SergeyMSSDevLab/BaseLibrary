@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_error_report_email_subject">Rapport d\'erreur</string>
+    <string name="common_error_report_dialog_text">Une erreur se est glissée dans l\'application. Voulez-vous envoyer un courriel à un rapport d\'erreur pour les développeurs? Vous serez en mesure de modifier le message avant de l\'envoyer.</string>
+    <string name="common_error_report_choose_title">Choisissez un fournisseur de messagerie</string>
+
+    <string name="common_menu_play_apps">Applications</string>
+
+    <string name="common_enjoy_prompt">Aimez-vous %s?</string>
+    <string name="common_enjoy_yes">Oui</string>
+    <string name="common_enjoy_not">Pas vraiment</string>
+
+    <string name="common_enjoy_rate_prompt">Que diriez-vous d\'une note sur le magasin, alors?</string>
+    <string name="common_enjoy_rate_yes">OK, bien sûr</string>
+    <string name="common_enjoy_rate_not">Non merci</string>
+
+    <string name="common_enjoy_feedback_prompt">Pourriez-vous nous donner quelques commentaires?</string>
+    <string name="common_enjoy_feedback_yes">OK, bien sûr</string>
+    <string name="common_enjoy_feedback_not">Non merci</string>
+</resources>

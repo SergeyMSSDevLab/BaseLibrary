@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common_error_report_email_subject">Fehler-Bericht</string>
+    <string name="common_error_report_dialog_text">Ein Fehler erschien in der Applikation. Möchten Sie den Fehlerbericht an die Entwickler per E-Mail senden? Sie haben die Möglichkeit, den Bericht vor der Absendung zu bearbeiten.</string>
+    <string name="common_error_report_choose_title">Wählen Sie einen E-Mail-Provider</string>
+
+    <string name="common_menu_play_apps">Anwendungen</string>
+
+    <string name="common_enjoy_prompt">Genießen %s?</string>
+    <string name="common_enjoy_yes">Ja</string>
+    <string name="common_enjoy_not">Nicht wirklich</string>
+
+    <string name="common_enjoy_rate_prompt">Wie wäre es mit einer Bewertung über dem Laden, dann?</string>
+    <string name="common_enjoy_rate_yes">Ok, sicher</string>
+    <string name="common_enjoy_rate_not">Nein, danke</string>
+
+    <string name="common_enjoy_feedback_prompt">Hätten Sie etwas dagegen, uns ein Feedback?</string>
+    <string name="common_enjoy_feedback_yes">Ok, sicher</string>
+    <string name="common_enjoy_feedback_not">Nein, danke</string>
+
+</resources>
