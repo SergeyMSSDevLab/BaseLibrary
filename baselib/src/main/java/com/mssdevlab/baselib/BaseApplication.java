@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
-import com.mssdevlab.common.R;
+import com.mssdevlab.baselib.common.PromoteScreenManager;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -46,6 +46,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         if (curInstance == null) {
             curInstance = this;
             originalHandler = Thread.getDefaultUncaughtExceptionHandler();
+            PromoteScreenManager.MarkStarting(this);
         }
 
         Thread.setDefaultUncaughtExceptionHandler(this);

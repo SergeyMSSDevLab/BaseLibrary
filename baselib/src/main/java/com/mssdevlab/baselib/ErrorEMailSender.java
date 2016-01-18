@@ -3,7 +3,6 @@ package com.mssdevlab.baselib;
 import android.support.annotation.StringRes;
 
 import com.mssdevlab.baselib.common.EMailSender;
-import com.mssdevlab.common.R;
 
 /**
  * Error report e-mail sender
