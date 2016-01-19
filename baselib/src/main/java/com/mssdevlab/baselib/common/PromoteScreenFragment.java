@@ -1,5 +1,6 @@
 package com.mssdevlab.baselib.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,24 +27,21 @@ public class PromoteScreenFragment extends Fragment {
     final static public int NEVER_SELECTED = 3;
 
     final static private String LOG_TAG = "PromoteScreenFragment";
-    private static final String ARG_APP_NAME = "param_app_name";
-    private static final String ARG_DEV_EMAIL = "param_dev_email";
 
     private String appName;
     private String devEMail;
-    private OnRatePromptListener ratePromptListener;
-    private OnFormatListener formatListener;
+    private OnRatePromptListener ratePromptListener = null;
+    private OnFormatListener formatListener = null;
     Button btnYes;
     Button btnNot;
     TextView tvPrompt;
 
-    public static PromoteScreenFragment newInstance(String appName, String devEMail) {
+    public static PromoteScreenFragment newInstance(String appName, String devEMail, OnRatePromptListener listener ) {
         Log.v(LOG_TAG, "newInstance appName: " + appName);
         PromoteScreenFragment fragment = new PromoteScreenFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_APP_NAME, appName);
-        args.putString(ARG_DEV_EMAIL, devEMail);
-        fragment.setArguments(args);
+        fragment.appName = appName;
+        fragment.devEMail = devEMail;
+        fragment.ratePromptListener = listener;
         return fragment;
     }
 
@@ -52,23 +50,13 @@ public class PromoteScreenFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private void setActivity(FragmentActivity activity) {
-        if (activity instanceof OnFormatListener) {
-            this.formatListener = (OnFormatListener) activity;
-        }
-        this.ratePromptListener = (OnRatePromptListener) activity;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setActivity(getActivity());
-
         Log.v(LOG_TAG, "onCreate");
-        if (getArguments() != null) {
-            this.appName = getArguments().getString(ARG_APP_NAME);
-            this.devEMail = getArguments().getString(ARG_DEV_EMAIL);
-            Log.v(LOG_TAG, "onCreate appName: " + this.appName + "; email: " + this.devEMail);
+        super.onCreate(savedInstanceState);
+        Activity activity = getActivity();
+        if (activity instanceof OnFormatListener) {
+            this.formatListener = (OnFormatListener) activity;
         }
     }
 

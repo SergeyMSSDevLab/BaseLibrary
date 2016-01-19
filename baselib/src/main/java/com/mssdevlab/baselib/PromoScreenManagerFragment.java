@@ -15,7 +15,9 @@ import com.mssdevlab.baselib.common.PromoteStuff;
  * Manages the rate dialog showing/removing.
  */
 @SuppressWarnings("unused")
-public class PromoScreenManagerFragment extends Fragment {
+public class PromoScreenManagerFragment
+        extends Fragment
+        implements PromoteScreenFragment.OnRatePromptListener {
     private static final String LOG_TAG = "PromoScreenManagerFr-t";
     private FrameLayout parentLayout;
     private String appName;
@@ -54,13 +56,17 @@ public class PromoScreenManagerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "onResume entered.");
+        this.managePromoteFragment();
+    }
+
+    private void managePromoteFragment(){
         FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
         if (fragmentManager != null) {
             Fragment fragment = fragmentManager.findFragmentByTag(this.tagName);
             if (this.showPromote) {
                 Log.v(LOG_TAG, "managePromoteFragment: promptFragment adding");
                 if (fragment == null) {
-                    fragment = PromoteScreenFragment.newInstance(this.appName, this.devEmail);
+                    fragment = PromoteScreenFragment.newInstance(this.appName, this.devEmail, this);
                     fragmentManager.beginTransaction()
                             .replace(this.parentLayout.getId(), fragment, this.tagName)
                             .commitAllowingStateLoss();
@@ -74,4 +80,12 @@ public class PromoScreenManagerFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActionSelected(int actionSelected) {
+        Log.v(LOG_TAG, "onActionSelected entered.");
+        this.showPromote = false;
+        if (actionSelected != PromoteScreenFragment.RATE_SELECTED) {
+            this.managePromoteFragment();
+        }
+    }
 }
