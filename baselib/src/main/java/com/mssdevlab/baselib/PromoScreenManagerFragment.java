@@ -84,8 +84,6 @@ public class PromoScreenManagerFragment
     public void onActionSelected(int actionSelected) {
         Log.v(LOG_TAG, "onActionSelected entered.");
         this.showPromote = false;
-        if (actionSelected != PromoteScreenFragment.RATE_SELECTED) {
-            this.managePromoteFragment();
-        }
+        this.managePromoteFragment();
     }
 }
