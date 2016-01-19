@@ -9,13 +9,20 @@ import android.util.Log;
 /**
  * Manages promote screen operations
  */
-public class PromoteScreenManager {
+@SuppressWarnings("unused")
+public class PromoteStuff {
     private static final String LOG_TAG = "PromoteScreenManager";
+    private static final Long DAY_MS = 1000l * 60 * 60 * 24;
     private static final String SHARED_PREF = "PromoteApp";
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private static final String PREF_LAUNCHES = "Launches";
     private static final String PREF_NEVER_SHOW = "NeverShow";
-    private static final Long DAY_MS = 1000l * 60 * 60 * 24;
+    private static final String PREF_DAYS_BEFORE_SHOW_RATE = "PromoteStuff.getDaysBeforeShowRate";
+    private static final String PREF_LAUNCHES_BEFORE_SHOW_RATE = "PromoteStuff.launchesBeforeShowRate";
+
+    // There is the default rule to show a rate dialog: on third day and as least ten launches
+    private static final int daysBeforeShowRate = 3;
+    private static final int launchesBeforeShowRate = 10;
 
     /*
     * Stores information about launches of application
@@ -42,13 +49,15 @@ public class PromoteScreenManager {
     /*
     * Checks if conditions are ok for the promotion screen showing
     */
-    public static boolean IsTimeToShowRate(int reqDays, int reqLaunches, final Context context) {
+    public static boolean IsTimeToShowRate(final Context context) {
         Log.v(LOG_TAG, "IsTimeToShowRate");
         SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
 
         if (sharedPref.getBoolean(PREF_NEVER_SHOW, false)) {
             return false;
         }
+        int reqDays = getDaysBeforeShowRate(context);
+        int reqLaunches = getLaunchesBeforeShowRate(context);
 
         Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, 0);
         Long launches = sharedPref.getLong(PREF_LAUNCHES, 0);
@@ -97,4 +106,27 @@ public class PromoteScreenManager {
         spEditor.apply();
     }
 
+    public static int getDaysBeforeShowRate(final Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        return  sharedPref.getInt(PREF_DAYS_BEFORE_SHOW_RATE, PromoteStuff.daysBeforeShowRate);
+    }
+
+    public static void setDaysBeforeShowRate(final Context context, int daysBeforeShowRate) {
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sharedPref.edit();
+        spEditor.putInt(PREF_DAYS_BEFORE_SHOW_RATE, daysBeforeShowRate);
+        spEditor.apply();
+    }
+
+    public static int getLaunchesBeforeShowRate(final Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        return  sharedPref.getInt(PREF_LAUNCHES_BEFORE_SHOW_RATE, PromoteStuff.launchesBeforeShowRate);
+    }
+
+    public static void setLaunchesBeforeShowRate(final Context context, int launchesBeforeShowRate) {
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sharedPref.edit();
+        spEditor.putInt(PREF_LAUNCHES_BEFORE_SHOW_RATE, launchesBeforeShowRate);
+        spEditor.apply();
+    }
 }

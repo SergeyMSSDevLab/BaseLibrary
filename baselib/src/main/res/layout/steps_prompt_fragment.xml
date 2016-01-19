@@ -25,6 +25,7 @@
         android:layout_below="@id/tvPromptQuestion"
         android:orientation="horizontal"
         tools:ignore="RtlHardcoded"
+        style="?android:attr/buttonStyle"
         android:id="@+id/linearLayout">
 
         <Button
@@ -32,6 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
             android:text="@string/common_enjoy_yes" />
 
         <Button
@@ -39,6 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
             android:text="@string/common_enjoy_not" />
     </LinearLayout>
 </RelativeLayout>

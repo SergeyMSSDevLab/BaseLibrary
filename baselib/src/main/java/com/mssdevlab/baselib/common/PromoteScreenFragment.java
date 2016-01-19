@@ -1,12 +1,12 @@
 package com.mssdevlab.baselib.common;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +19,7 @@ import com.mssdevlab.baselib.R;
 /**
  * Shows the promote screen and controls the workflow
  */
+@SuppressWarnings("unused")
 public class PromoteScreenFragment extends Fragment {
     final static public int RATE_SELECTED = 1;
     final static public int NOT_NOW_SELECTED = 2;
@@ -28,13 +29,13 @@ public class PromoteScreenFragment extends Fragment {
     private static final String ARG_APP_NAME = "param_app_name";
     private static final String ARG_DEV_EMAIL = "param_dev_email";
 
-    private String mAppName;
-    private String mDevEMail;
-    private OnRatePromptListener mListener;
-    private OnFormatListener mFormatCallback;
-    Button mBtnYes;
-    Button mBtnNot;
-    TextView mTvPrompt;
+    private String appName;
+    private String devEMail;
+    private OnRatePromptListener ratePromptListener;
+    private OnFormatListener formatListener;
+    Button btnYes;
+    Button btnNot;
+    TextView tvPrompt;
 
     public static PromoteScreenFragment newInstance(String appName, String devEMail) {
         Log.v(LOG_TAG, "newInstance appName: " + appName);
@@ -51,11 +52,11 @@ public class PromoteScreenFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private void setActivity(Activity activity) {
+    private void setActivity(FragmentActivity activity) {
         if (activity instanceof OnFormatListener) {
-            this.mFormatCallback = (OnFormatListener) activity;
+            this.formatListener = (OnFormatListener) activity;
         }
-        this.mListener = (OnRatePromptListener) activity;
+        this.ratePromptListener = (OnRatePromptListener) activity;
     }
 
     @Override
@@ -65,9 +66,9 @@ public class PromoteScreenFragment extends Fragment {
 
         Log.v(LOG_TAG, "onCreate");
         if (getArguments() != null) {
-            this.mAppName = getArguments().getString(ARG_APP_NAME);
-            this.mDevEMail = getArguments().getString(ARG_DEV_EMAIL);
-            Log.v(LOG_TAG, "onCreate mAppName: " + this.mAppName + "; email: " + this.mDevEMail);
+            this.appName = getArguments().getString(ARG_APP_NAME);
+            this.devEMail = getArguments().getString(ARG_DEV_EMAIL);
+            Log.v(LOG_TAG, "onCreate appName: " + this.appName + "; email: " + this.devEMail);
         }
     }
 
@@ -75,71 +76,71 @@ public class PromoteScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreateView");
         View root = inflater.inflate(R.layout.steps_prompt_fragment, container, false);
-        mBtnYes = (Button) root.findViewById(R.id.btnYes);
-        mBtnNot = (Button) root.findViewById(R.id.btnNot);
-        mTvPrompt = (TextView) root.findViewById(R.id.tvPromptQuestion);
-        String text = this.getActivity().getResources().getString(R.string.common_enjoy_prompt, mAppName);
-        mTvPrompt.setText(text);
-        mBtnYes.setText(R.string.common_enjoy_yes);
-        mBtnNot.setText(R.string.common_enjoy_not);
+        btnYes = (Button) root.findViewById(R.id.btnYes);
+        btnNot = (Button) root.findViewById(R.id.btnNot);
+        tvPrompt = (TextView) root.findViewById(R.id.tvPromptQuestion);
+        String text = this.getActivity().getResources().getString(R.string.common_enjoy_prompt, appName);
+        tvPrompt.setText(text);
+        btnYes.setText(R.string.common_enjoy_yes);
+        btnNot.setText(R.string.common_enjoy_not);
 
-        mBtnYes.setOnClickListener(new View.OnClickListener() {
+        btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userEnjoy();
             }
         });
 
-        mBtnNot.setOnClickListener(new View.OnClickListener() {
+        btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userNotEnjoy();
             }
         });
 
-        if (this.mFormatCallback != null) {
-            this.mFormatCallback.onFormat(root);
+        if (this.formatListener != null) {
+            this.formatListener.onFormat(root);
         }
         Log.v(LOG_TAG, "onCreateView: initialized");
         return root;
     }
 
     void userEnjoy() {
-        mTvPrompt.setText(R.string.common_enjoy_rate_prompt);
-        mBtnYes.setText(R.string.common_enjoy_rate_yes);
-        mBtnNot.setText(R.string.common_enjoy_rate_not);
+        tvPrompt.setText(R.string.common_enjoy_rate_prompt);
+        btnYes.setText(R.string.common_enjoy_rate_yes);
+        btnNot.setText(R.string.common_enjoy_rate_not);
 
         final Context activity = this.getActivity();
-        mBtnYes.setOnClickListener(new View.OnClickListener() {
+        btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteScreenManager.GoToRateScreen(activity);
+                PromoteStuff.GoToRateScreen(activity);
                 onActionSelected(RATE_SELECTED);
             }
         });
 
-        mBtnNot.setOnClickListener(new View.OnClickListener() {
+        btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteScreenManager.MarkRateNotNow(activity);
+                PromoteStuff.MarkRateNotNow(activity);
                 onActionSelected(NOT_NOW_SELECTED);
             }
         });
     }
 
     void userNotEnjoy() {
-        mTvPrompt.setText(R.string.common_enjoy_feedback_prompt);
-        mBtnYes.setText(R.string.common_enjoy_feedback_yes);
-        mBtnNot.setText(R.string.common_enjoy_feedback_not);
+        tvPrompt.setText(R.string.common_enjoy_feedback_prompt);
+        btnYes.setText(R.string.common_enjoy_feedback_yes);
+        btnNot.setText(R.string.common_enjoy_feedback_not);
 
         final Context activity = this.getActivity();
         final Resources res = activity.getResources();
-        mBtnYes.setOnClickListener(new View.OnClickListener() {
+        btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String uriText = "mailto:" + mDevEMail + "?subject="
-                        + Uri.encode(mAppName) + "&body=" + " ... ";
+                String uriText = "mailto:" + devEMail + "?subject="
+                        + Uri.encode(appName) + "&body=" + " ... ";
                 Uri uri = Uri.parse(uriText);
 
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
@@ -147,15 +148,15 @@ public class PromoteScreenFragment extends Fragment {
                 activity.startActivity(Intent.createChooser(sendIntent,
                         res.getString(R.string.common_error_report_choose_title)));
 
-                PromoteScreenManager.MarkRateCancelPermanently(activity);
+                PromoteStuff.MarkRateCancelPermanently(activity);
                 onActionSelected(NEVER_SELECTED);
             }
         });
 
-        mBtnNot.setOnClickListener(new View.OnClickListener() {
+        btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteScreenManager.MarkRateCancelPermanently(activity);
+                PromoteStuff.MarkRateCancelPermanently(activity);
                 onActionSelected(NEVER_SELECTED);
             }
         });
@@ -163,16 +164,16 @@ public class PromoteScreenFragment extends Fragment {
 
     // RateFragment action finished
     public void onActionSelected(int actionSelected) {
-        if (this.mListener != null) {
-            mListener.onActionSelected(actionSelected);
+        if (this.ratePromptListener != null) {
+            ratePromptListener.onActionSelected(actionSelected);
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-        mFormatCallback = null;
+        ratePromptListener = null;
+        formatListener = null;
     }
 
     public interface OnRatePromptListener {
