@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,22 +25,26 @@ public class PromoteScreenFragment extends Fragment {
     final static public int NOT_NOW_SELECTED = 2;
     final static public int NEVER_SELECTED = 3;
 
+    private static final String ARG_APP_NAME = "param1";
+    private static final String ARG_DEV_EMAIL = "param2";
+
     final static private String LOG_TAG = "PromoteScreenFragment";
 
     private String appName;
-    private String devEMail;
+    private String devEmail;
     private OnRatePromptListener ratePromptListener = null;
     private OnFormatListener formatListener = null;
     Button btnYes;
     Button btnNot;
     TextView tvPrompt;
 
-    public static PromoteScreenFragment newInstance(String appName, String devEMail, OnRatePromptListener listener ) {
+    public static PromoteScreenFragment newInstance(String appName, String devEMail) {
         Log.v(LOG_TAG, "newInstance appName: " + appName);
         PromoteScreenFragment fragment = new PromoteScreenFragment();
-        fragment.appName = appName;
-        fragment.devEMail = devEMail;
-        fragment.ratePromptListener = listener;
+        Bundle args = new Bundle();
+        args.putString(ARG_APP_NAME, appName);
+        args.putString(ARG_DEV_EMAIL, devEMail);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -54,10 +57,19 @@ public class PromoteScreenFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            this.appName = args.getString(ARG_APP_NAME);
+            this.devEmail = args.getString(ARG_DEV_EMAIL);
+        }
         Activity activity = getActivity();
         if (activity instanceof OnFormatListener) {
             this.formatListener = (OnFormatListener) activity;
         }
+    }
+
+    public void setRatePromptListener(OnRatePromptListener listener){
+        this.ratePromptListener = listener;
     }
 
     @Override
@@ -127,7 +139,7 @@ public class PromoteScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String uriText = "mailto:" + devEMail + "?subject="
+                String uriText = "mailto:" + devEmail + "?subject="
                         + Uri.encode(appName) + "&body=" + " ... ";
                 Uri uri = Uri.parse(uriText);
 
