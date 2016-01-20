@@ -59,7 +59,6 @@ public class PromoScreenManagerFragment
             this.devEmail = args.getString(ARG_DEV_EMAIL);
         }
         this.showPromote = PromoteStuff.IsTimeToShowRate(getActivity());
-        this.showPromote = true; // TODO: Don't forget to comment the line
 
         this.setHasOptionsMenu(true);
     }
