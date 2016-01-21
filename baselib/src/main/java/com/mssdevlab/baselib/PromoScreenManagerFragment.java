@@ -59,6 +59,7 @@ public class PromoScreenManagerFragment
             this.devEmail = args.getString(ARG_DEV_EMAIL);
         }
         this.showPromote = PromoteStuff.IsTimeToShowRate(getActivity());
+        //this.showPromote = true; // TODO: delete
 
         this.setHasOptionsMenu(true);
     }
@@ -84,7 +85,7 @@ public class PromoScreenManagerFragment
             if (this.showPromote) {
                 Log.v(LOG_TAG, "managePromoteFragment: promptFragment adding");
                 if (fragment == null) {
-                    fragment = PromoteScreenFragment.newInstance(this.appName, this.devEmail);
+                    fragment = PromoteScreenFragment.newInstance(this.appName, this.devEmail, this.tagName);
                     fragmentManager.beginTransaction()
                             .replace(this.parentLayoutId, fragment, this.tagName)
                             .commitAllowingStateLoss();

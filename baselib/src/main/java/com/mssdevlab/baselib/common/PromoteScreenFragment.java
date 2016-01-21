@@ -27,23 +27,26 @@ public class PromoteScreenFragment extends Fragment {
 
     private static final String ARG_APP_NAME = "param1";
     private static final String ARG_DEV_EMAIL = "param2";
+    private static final String ARG_TAG_NAME = "param3";
 
     final static private String LOG_TAG = "PromoteScreenFragment";
 
     private String appName;
     private String devEmail;
+    private String tagName;
     private OnRatePromptListener ratePromptListener = null;
     private OnFormatListener formatListener = null;
     Button btnYes;
     Button btnNot;
     TextView tvPrompt;
 
-    public static PromoteScreenFragment newInstance(String appName, String devEMail) {
+    public static PromoteScreenFragment newInstance(String appName, String devEMail, String tagName) {
         Log.v(LOG_TAG, "newInstance appName: " + appName);
         PromoteScreenFragment fragment = new PromoteScreenFragment();
         Bundle args = new Bundle();
         args.putString(ARG_APP_NAME, appName);
         args.putString(ARG_DEV_EMAIL, devEMail);
+        args.putString(ARG_TAG_NAME, tagName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,6 +64,7 @@ public class PromoteScreenFragment extends Fragment {
         if (args != null) {
             this.appName = args.getString(ARG_APP_NAME);
             this.devEmail = args.getString(ARG_DEV_EMAIL);
+            this.tagName = args.getString(ARG_TAG_NAME);
         }
         Activity activity = getActivity();
         if (activity instanceof OnFormatListener) {
@@ -99,7 +103,7 @@ public class PromoteScreenFragment extends Fragment {
         });
 
         if (this.formatListener != null) {
-            this.formatListener.onFormat(root);
+            this.formatListener.onFormat(root, this.tagName);
         }
         Log.v(LOG_TAG, "onCreateView: initialized");
         return root;

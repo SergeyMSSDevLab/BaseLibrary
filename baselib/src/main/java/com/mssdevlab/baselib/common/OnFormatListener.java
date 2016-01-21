@@ -7,5 +7,5 @@ import android.view.View;
  */
 @SuppressWarnings("WeakerAccess")
 public interface OnFormatListener {
-    void onFormat(View view);
+    void onFormat(View view, String tagName);
 }
