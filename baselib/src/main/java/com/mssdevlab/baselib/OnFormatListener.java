@@ -1,5 +1,6 @@
-package com.mssdevlab.baselib.common;
+package com.mssdevlab.baselib;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 /**
@@ -7,5 +8,5 @@ import android.view.View;
  */
 @SuppressWarnings("WeakerAccess")
 public interface OnFormatListener {
-    void onFormat(View view, String tagName);
+    void onFormat(@NonNull View view, @NonNull String tagName);
 }
