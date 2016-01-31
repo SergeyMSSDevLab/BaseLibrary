@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Common Helpers
@@ -73,6 +74,9 @@ public class Helper {
         report.append(SINGLE_LINE_SEP);
         report.append("Build.PRODUCT: ");
         report.append(Build.PRODUCT);
+        report.append(SINGLE_LINE_SEP);
+        report.append("Locale: ");
+        report.append(Locale.getDefault().toString());
         report.append(SINGLE_LINE_SEP);
         report.append(LINE_SEP);
         report.append("Build.VERSION.SDK_INT: ");
