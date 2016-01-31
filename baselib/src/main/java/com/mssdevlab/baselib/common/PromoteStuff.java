@@ -38,9 +38,9 @@ public class PromoteStuff {
             spEditor.putLong(PREF_FIRST_LAUNCH, firstLaunch);
         }
 
-        long launches = sharedPref.getLong(PREF_LAUNCHES, 0);
-        if (launches < 1000) {
-            spEditor.putLong(PREF_LAUNCHES, launches + 1);
+        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
+        if (launches < Integer.MAX_VALUE) {
+            spEditor.putInt(PREF_LAUNCHES, launches + 1);
         }
 
         spEditor.apply();
@@ -60,7 +60,7 @@ public class PromoteStuff {
         int reqLaunches = getLaunchesBeforeShowRate(context);
 
         Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, 0);
-        Long launches = sharedPref.getLong(PREF_LAUNCHES, 0);
+        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
         Long curMs = System.currentTimeMillis();
 
         return (((firstLaunch + reqDays * DAY_MS) < curMs) && (launches > reqLaunches));
@@ -90,9 +90,9 @@ public class PromoteStuff {
         Log.v(LOG_TAG, "MarkRateNotNow");
         SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
 
-        SharedPreferences.Editor spEditor = sharedPref.edit();
-        spEditor.putLong(PREF_LAUNCHES, 1);
-        spEditor.apply();
+        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
+        int reqLaunches = getLaunchesBeforeShowRate(context);
+        setLaunchesBeforeShowRate(context, getLaunchesBeforeShowRate(context) + sharedPref.getInt(PREF_LAUNCHES, 0));
     }
 
     /*
