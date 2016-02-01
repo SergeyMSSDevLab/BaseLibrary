@@ -59,9 +59,9 @@ public class PromoteStuff {
         int reqDays = getDaysBeforeShowRate(context);
         int reqLaunches = getLaunchesBeforeShowRate(context);
 
-        Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, 0);
-        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
         Long curMs = System.currentTimeMillis();
+        Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
+        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
 
         return (((firstLaunch + reqDays * DAY_MS) < curMs) && (launches > reqLaunches));
     }
@@ -104,6 +104,19 @@ public class PromoteStuff {
         SharedPreferences.Editor spEditor = sharedPref.edit();
         spEditor.putBoolean(PREF_NEVER_SHOW, true);
         spEditor.apply();
+    }
+
+    public static int getDaysFromInstall(final Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        Long curMs = System.currentTimeMillis();
+        Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
+
+        return (int)((curMs - firstLaunch) / DAY_MS);
+    }
+
+    public static int getLaunchesFromInstall(final Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        return sharedPref.getInt(PREF_LAUNCHES, 0);
     }
 
     public static int getDaysBeforeShowRate(final Context context) {
