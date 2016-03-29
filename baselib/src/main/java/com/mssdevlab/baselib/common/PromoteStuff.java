@@ -27,7 +27,7 @@ public class PromoteStuff {
     /*
     * Stores information about launches of application
     */
-    public static void MarkStarting(Context context) {
+    public static void markStarting(Context context) {
         Log.v(LOG_TAG, "MarkStarting");
         SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor spEditor = sharedPref.edit();
@@ -49,44 +49,50 @@ public class PromoteStuff {
     /*
     * Checks if conditions are ok for the promotion screen showing
     */
-    public static boolean IsTimeToShowRate(final Context context) {
+    public static boolean isTimeToShowPromoScreen(final Context context) {
         Log.v(LOG_TAG, "IsTimeToShowRate");
         SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
 
-        if (sharedPref.getBoolean(PREF_NEVER_SHOW, false)) {
+        if (isPromoScreenEnabled(context)) {
+            int reqDays = getDaysBeforeShowRate(context);
+            int reqLaunches = getLaunchesBeforeShowRate(context);
+
+            Long curMs = System.currentTimeMillis();
+            Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
+            int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
+
+            return (((firstLaunch + reqDays * DAY_MS) < curMs) && (launches > reqLaunches));
+        } else {
             return false;
         }
-        int reqDays = getDaysBeforeShowRate(context);
-        int reqLaunches = getLaunchesBeforeShowRate(context);
+    }
 
-        Long curMs = System.currentTimeMillis();
-        Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
-        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
-
-        return (((firstLaunch + reqDays * DAY_MS) < curMs) && (launches > reqLaunches));
+    public static boolean isPromoScreenEnabled(final Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        return !sharedPref.getBoolean(PREF_NEVER_SHOW, false);
     }
 
     /*
     * Redirects user to google play application screen
     * */
-    public static void GoToRateScreen(final Context context) {
+    public static void goToPromoScreen(final Context context) {
         Log.v(LOG_TAG, "GoToRateScreen");
         try {
             Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(goToMarket);
-            MarkRateCancelPermanently(context);
+            cancelPromoScreenPermanently(context);
 
         } catch (Exception ex) {
             Log.e(LOG_TAG, "GoToRateScreen fails: " + ex.getMessage());
-            MarkRateNotNow(context);
+            markRateNotNow(context);
         }
     }
 
     /*
     * Sets conditions that to show the promotion screen later
     */
-    public static void MarkRateNotNow(final Context context) {
+    public static void markRateNotNow(final Context context) {
         Log.v(LOG_TAG, "MarkRateNotNow");
         SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
 
@@ -98,11 +104,22 @@ public class PromoteStuff {
     /*
     * Sets conditions that to never show the promotion screen
     */
-    public static void MarkRateCancelPermanently(final Context context) {
+    public static void cancelPromoScreenPermanently(final Context context) {
         Log.v(LOG_TAG, "MarkRateCancelPermanently");
         SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor spEditor = sharedPref.edit();
         spEditor.putBoolean(PREF_NEVER_SHOW, true);
+        spEditor.apply();
+    }
+
+    /*
+    * Sets conditions that to never show the promotion screen
+    */
+    public static void setPromoScreenEnabled(final Context context, boolean enabled) {
+        Log.v(LOG_TAG, "EnableMarkRate");
+        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sharedPref.edit();
+        spEditor.putBoolean(PREF_NEVER_SHOW, !enabled);
         spEditor.apply();
     }
 

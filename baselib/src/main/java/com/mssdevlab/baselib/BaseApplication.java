@@ -46,7 +46,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         if (curInstance == null) {
             curInstance = this;
             originalHandler = Thread.getDefaultUncaughtExceptionHandler();
-            PromoteStuff.MarkStarting(this);
+            PromoteStuff.markStarting(this);
         }
 
         Thread.setDefaultUncaughtExceptionHandler(this);

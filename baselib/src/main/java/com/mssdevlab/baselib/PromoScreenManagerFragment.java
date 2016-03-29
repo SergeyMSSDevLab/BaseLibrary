@@ -58,7 +58,7 @@ public class PromoScreenManagerFragment
             this.appName = args.getString(ARG_APP_NAME);
             this.devEmail = args.getString(ARG_DEV_EMAIL);
         }
-        this.showPromote = PromoteStuff.IsTimeToShowRate(getActivity());
+        this.showPromote = PromoteStuff.isTimeToShowPromoScreen(getActivity());
         //this.showPromote = true; // TODO: delete
 
         this.setHasOptionsMenu(true);
