@@ -1,8 +1,13 @@
 package com.mssdevlab.baselib.common;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -104,4 +109,20 @@ public class Helper {
         }
         return v;
     }
+
+    /*
+    * Open url in a default browser
+    */
+    public static void openUrl(@StringRes int gotoUrl, @NonNull final Context context) {
+        Log.v(LOG_TAG, "openURL");
+        try {
+            Uri uri = Uri.parse(context.getString(gotoUrl));
+            Intent goToIntent = new Intent(Intent.ACTION_VIEW, uri);
+            context.startActivity(goToIntent);
+
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, "openURL fails: " + ex.getMessage());
+        }
+    }
+
 }

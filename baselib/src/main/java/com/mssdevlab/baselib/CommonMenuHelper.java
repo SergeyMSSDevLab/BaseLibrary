@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mssdevlab.baselib.common.Helper;
+
 /**
  * Manages common menu items
  */
@@ -45,15 +47,7 @@ public class CommonMenuHelper {
     public static boolean onOptionsItemSelected(@NonNull MenuItem item, @NonNull final Context context) {
         Log.v(LOG_TAG, "onOptionsItemSelected");
         if (item.getItemId() == R.id.menu_action_play_app) {
-            try {
-                Log.v(LOG_TAG, "menu_action_play_app");
-                Uri uri = Uri.parse(context.getString(companyURL));
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                context.startActivity(goToMarket);
-
-            } catch (Exception ex) {
-                Log.e(LOG_TAG, "menu_action_play_app fails: " + ex.getMessage());
-            }
+            Helper.openUrl(companyURL, context);
             return true;
         }
         return false;
