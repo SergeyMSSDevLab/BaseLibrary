@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.mssdevlab.baselib" >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mssdevlab.baselib">
 
-    <application />
+    <application>
+        <activity
+            android:label="@string/common_error_report_email_subject"
+            android:name=".ErrorActivity">
+        </activity>
+    </application>
 
 </manifest>

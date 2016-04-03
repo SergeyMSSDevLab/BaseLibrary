@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
@@ -26,7 +27,8 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     private static final String NAME_FILE_DATA = "error.data";
     private static BaseApplication curInstance;
     private static Thread.UncaughtExceptionHandler originalHandler;
-    private static MessageSender reportSender = null;
+    static MessageSender reportSender = null;
+
 
     private final Object syncObject = new Object();
 
@@ -88,38 +90,19 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
     }
 
-    @CheckResult
-    public boolean hasError(final Activity context) {
-        Log.v(LOG_TAG, "ShowErrorReport");
+    public void handleLastError(final Activity mainActivity) {
+        Log.v(LOG_TAG, "handleLastError");
         final String message = this.GetLastExceptionReport();
         if (message != null) {
 
             if (reportSender != null){
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                final Resources res = context.getResources();
-                dialog.setTitle(res.getString(R.string.common_error_report_email_subject));
-                dialog.setMessage(res.getString(R.string.common_error_report_dialog_text));
-                dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        reportSender.send(context, message);
-                        context.finish();
-                    }
-                });
-
-                dialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        context.finish();
-                    }
-                });
-                dialog.create().show();
+                Intent intent = new Intent(this, ErrorActivity.class);
+                intent.putExtra(ErrorActivity.ERROR_REPORT_CONTENT, message);
+                mainActivity.startActivity(intent);
             }
-
-            return true;
+            // Always stop the main activity that to clear error details
+            mainActivity.finish();
         }
-
-        return false;
     }
 
     private String GetLastExceptionReport() {
