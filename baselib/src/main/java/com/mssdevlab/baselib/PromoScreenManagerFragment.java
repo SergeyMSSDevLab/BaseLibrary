@@ -59,7 +59,6 @@ public class PromoScreenManagerFragment
             this.devEmail = args.getString(ARG_DEV_EMAIL);
         }
         this.showPromote = PromoteStuff.isTimeToShowPromoScreen(getActivity());
-        //this.showPromote = true; // TODO: delete
 
         this.setHasOptionsMenu(true);
     }
