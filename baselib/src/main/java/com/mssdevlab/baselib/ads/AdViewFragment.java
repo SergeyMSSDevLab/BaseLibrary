@@ -25,6 +25,7 @@ public class AdViewFragment extends Fragment {
     private String tagName;
     private AdView mAdView;
     private OnFormatListener formatListener = null;
+    private AdSize mAdSize = null;
 
     public static AdViewFragment newInstance(String adUnitId, String tagName) {
         Log.v(LOG_TAG, "newInstance adUnitId: " + adUnitId);
@@ -41,6 +42,10 @@ public class AdViewFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void setSize (AdSize size){
+        Log.v(LOG_TAG, "setSize");
+        this.mAdSize = size;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +69,11 @@ public class AdViewFragment extends Fragment {
         Log.v(LOG_TAG, "onCreateView");
 
         this.mAdView = new AdView(this.getActivity());
-        this.mAdView.setAdSize(AdSize.SMART_BANNER);
+        if (this.mAdSize == null) {
+            this.mAdSize = AdSize.SMART_BANNER;
+        }
+        Log.v(LOG_TAG, "onCreateView: " + this.mAdSize.toString());
+        this.mAdView.setAdSize(this.mAdSize);
         this.mAdView.setAdUnitId(this.mAdUnitId);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
         this.mAdView.loadAd(adRequest);

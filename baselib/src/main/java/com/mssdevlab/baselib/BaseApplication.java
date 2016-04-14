@@ -1,19 +1,15 @@
 package com.mssdevlab.baselib;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Application;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.annotation.CallSuper;
-import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
-import com.mssdevlab.baselib.common.PromoteStuff;
+import com.mssdevlab.baselib.common.PromoteManager;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -48,10 +44,20 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         if (curInstance == null) {
             curInstance = this;
             originalHandler = Thread.getDefaultUncaughtExceptionHandler();
-            PromoteStuff.markStarting(this);
         }
 
         Thread.setDefaultUncaughtExceptionHandler(this);
+
+        new Thread(new Runnable() {
+            public void run() {
+                initApplicationInBacground();
+            }
+        }).start();
+    }
+
+    @CallSuper
+    protected void initApplicationInBacground(){
+        PromoteManager.markStarting(this);
     }
 
     @Override

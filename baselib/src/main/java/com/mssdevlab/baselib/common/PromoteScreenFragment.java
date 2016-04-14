@@ -119,7 +119,7 @@ public class PromoteScreenFragment extends Fragment {
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteStuff.goToPromoScreen(activity);
+                PromoteManager.goToPromoScreen(activity);
                 onActionSelected(RATE_SELECTED);
             }
         });
@@ -127,7 +127,7 @@ public class PromoteScreenFragment extends Fragment {
         btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteStuff.markRateNotNow(activity);
+                PromoteManager.markRateNotNow(activity);
                 onActionSelected(NOT_NOW_SELECTED);
             }
         });
@@ -153,7 +153,7 @@ public class PromoteScreenFragment extends Fragment {
                 activity.startActivity(Intent.createChooser(sendIntent,
                         res.getString(R.string.common_error_report_choose_title)));
 
-                PromoteStuff.cancelPromoScreenPermanently(activity);
+                PromoteManager.cancelPromoScreenPermanently(activity);
                 onActionSelected(NEVER_SELECTED);
             }
         });
@@ -161,7 +161,7 @@ public class PromoteScreenFragment extends Fragment {
         btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteStuff.cancelPromoScreenPermanently(activity);
+                PromoteManager.cancelPromoScreenPermanently(activity);
                 onActionSelected(NEVER_SELECTED);
             }
         });

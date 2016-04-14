@@ -1,8 +1,6 @@
 package com.mssdevlab.baselib;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.view.MenuItemCompat;
@@ -21,6 +19,7 @@ public class CommonMenuHelper {
     private static int companyURL;
 
     public static void setUpCommonMenu(@StringRes int companyUrl){
+        Log.v(LOG_TAG, "setUpCommonMenu");
         companyURL = companyUrl;
     }
 

@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
+import com.mssdevlab.baselib.common.PromoteManager;
 import com.mssdevlab.baselib.common.PromoteScreenFragment;
-import com.mssdevlab.baselib.common.PromoteStuff;
 
 /**
  * Manages the rate dialog showing/removing.
@@ -58,7 +58,7 @@ public class PromoScreenManagerFragment
             this.appName = args.getString(ARG_APP_NAME);
             this.devEmail = args.getString(ARG_DEV_EMAIL);
         }
-        this.showPromote = PromoteStuff.isTimeToShowPromoScreen(getActivity());
+        this.showPromote = PromoteManager.isTimeToShowPromoScreen(getActivity());
 
         this.setHasOptionsMenu(true);
     }
