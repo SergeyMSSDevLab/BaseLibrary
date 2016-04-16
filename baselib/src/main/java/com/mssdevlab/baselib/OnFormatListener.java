@@ -8,5 +8,5 @@ import android.view.View;
  */
 @SuppressWarnings("WeakerAccess")
 public interface OnFormatListener {
-    void onFormat(@NonNull View view, @NonNull String tagName);
+    void onFormat(@NonNull View view);
 }

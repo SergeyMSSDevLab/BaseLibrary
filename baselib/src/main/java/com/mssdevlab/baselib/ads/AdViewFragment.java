@@ -79,7 +79,7 @@ public class AdViewFragment extends Fragment {
         this.mAdView.loadAd(adRequest);
 
         if (this.formatListener != null) {
-            this.formatListener.onFormat(this.mAdView, this.tagName);
+            // TODO: remove the class. this.formatListener.onFormat(this.mAdView, this.tagName);
         }
         return this.mAdView;
     }

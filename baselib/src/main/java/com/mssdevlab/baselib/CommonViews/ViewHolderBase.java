@@ -24,7 +24,6 @@ public class ViewHolderBase {
 
     protected ViewStub mViewStub;
     protected String mInstanceTag;
-    protected String mConfigTag;
     protected Bundle mArguments;
 
     public void onResume() {
@@ -44,11 +43,10 @@ public class ViewHolderBase {
     /**
      * Supply the construction arguments for this holder.
      */
-    public void setArguments(@NonNull String configTag, @Nullable Bundle args, @Nullable OnFormatListener formatListener) {
+    public void setArguments(@Nullable Bundle args, @Nullable OnFormatListener formatListener) {
         Log.v(LOG_TAG, "setArguments entered.");
         this.mArguments = args;
         this.mFormatListener = formatListener;
-        this.mConfigTag = configTag;
     }
 
     @CallSuper
@@ -63,7 +61,7 @@ public class ViewHolderBase {
     protected void setUpView(@NonNull View view){
         Log.v(LOG_TAG, "setUpView entered.");
         if (this.mFormatListener != null) {
-            this.mFormatListener.onFormat(view, this.mConfigTag);
+            this.mFormatListener.onFormat(view);
         }
         Log.v(LOG_TAG, "setUpView: initialized");
     }
