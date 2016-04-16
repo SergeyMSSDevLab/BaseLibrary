@@ -23,11 +23,11 @@ public class PromoScreenManagerFragment
     private static final String ARG_APP_NAME = "param2";
     private static final String ARG_TAG_NAME = "param3";
     private static final String ARG_DEV_EMAIL = "param4";
-    private int parentLayoutId;
-    private String appName;
-    private String tagName;
-    private String devEmail;
-    private boolean showPromote = false;
+    private int mParentLayoutId;
+    private String mAppName;
+    private String mTagName;
+    private String mDevEmail;
+    private boolean mShowPromote = false;
 
     public static PromoScreenManagerFragment newInstance(final Context context,
                                                          String tag,
@@ -53,12 +53,12 @@ public class PromoScreenManagerFragment
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            this.parentLayoutId = args.getInt(ARG_ROOT_ID);
-            this.tagName = args.getString(ARG_TAG_NAME);
-            this.appName = args.getString(ARG_APP_NAME);
-            this.devEmail = args.getString(ARG_DEV_EMAIL);
+            this.mParentLayoutId = args.getInt(ARG_ROOT_ID);
+            this.mTagName = args.getString(ARG_TAG_NAME);
+            this.mAppName = args.getString(ARG_APP_NAME);
+            this.mDevEmail = args.getString(ARG_DEV_EMAIL);
         }
-        this.showPromote = PromoteManager.isTimeToShowPromoScreen(getActivity());
+        this.mShowPromote = PromoteManager.isTimeToShowPromoScreen(getActivity());
 
         this.setHasOptionsMenu(true);
     }
@@ -73,20 +73,20 @@ public class PromoScreenManagerFragment
     @Override
     public void onActionSelected(int actionSelected) {
         Log.v(LOG_TAG, "onActionSelected entered.");
-        this.showPromote = false;
+        this.mShowPromote = false;
         this.managePromoteFragment();
     }
 
     private void managePromoteFragment(){
         FragmentManager fragmentManager = this.getActivity().getSupportFragmentManager();
         if (fragmentManager != null) {
-            PromoteScreenFragment fragment = (PromoteScreenFragment)fragmentManager.findFragmentByTag(this.tagName);
-            if (this.showPromote) {
+            PromoteScreenFragment fragment = (PromoteScreenFragment)fragmentManager.findFragmentByTag(this.mTagName);
+            if (this.mShowPromote) {
                 Log.v(LOG_TAG, "managePromoteFragment: promptFragment adding");
                 if (fragment == null) {
-                    fragment = PromoteScreenFragment.newInstance(this.appName, this.devEmail, this.tagName);
+                    fragment = PromoteScreenFragment.newInstance(this.mAppName, this.mDevEmail, this.mTagName);
                     fragmentManager.beginTransaction()
-                            .replace(this.parentLayoutId, fragment, this.tagName)
+                            .replace(this.mParentLayoutId, fragment, this.mTagName)
                             .commitAllowingStateLoss();
                 }
                 fragment.setRatePromptListener(this);

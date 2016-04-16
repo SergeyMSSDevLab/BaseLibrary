@@ -23,8 +23,8 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     private static final String NAME_FILE_DATA = "error.data";
     private static BaseApplication curInstance;
     private static Thread.UncaughtExceptionHandler originalHandler;
-    static MessageSender reportSender = null;
 
+    static MessageSender reportSender = null;
 
     private final Object syncObject = new Object();
 
@@ -41,6 +41,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     public void onCreate() {
         super.onCreate();
         Log.v(LOG_TAG, "onCreate");
+
         if (curInstance == null) {
             curInstance = this;
             originalHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -50,7 +51,15 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         new Thread(new Runnable() {
             public void run() {
-                initApplicationInBacground();
+                try {
+                    initApplicationInBacground();
+                } catch (Throwable ex) {
+                    try {
+                        createReportFile(ex);
+                    } catch (Exception e) {
+                        Log.v(LOG_TAG, e.getMessage());
+                    }
+                }
             }
         }).start();
     }
@@ -64,26 +73,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     public void uncaughtException(Thread thread, Throwable ex) {
         Log.v(LOG_TAG, "uncaughtException");
         try {
-            // Only create the error report if a report sender is specified
-            if (reportSender != null){
-                synchronized (syncObject) {
-                    String report = this.CreateReport4Throwable(ex);
-                    RandomAccessFile file = null;
-                    try {
-                        file = new RandomAccessFile(this.getFileStreamPath(NAME_FILE_DATA), "rw");
-                        file.seek(file.length());
-                        file.write(report.getBytes("UTF-8"));
-                    } finally {
-                        if (file != null) {
-                            try {
-                                file.close();
-                            } catch (IOException e) {
-                                Log.v(LOG_TAG, e.getMessage());
-                            }
-                        }
-                    }
-                }
-            }
+            createReportFile(ex);
         } catch (Exception e) {
             Log.v(LOG_TAG, e.getMessage());
         } finally {
@@ -93,21 +83,43 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
                 System.exit(0);
             }
         }
-
     }
 
-    public void handleLastError(final Activity mainActivity) {
+    private void createReportFile(Throwable ex) throws IOException {
+        // Only create the error report if a report sender is specified
+        if (reportSender != null) {
+            synchronized (syncObject) {
+                String report = this.CreateReport4Throwable(ex);
+                RandomAccessFile file = null;
+                try {
+                    file = new RandomAccessFile(this.getFileStreamPath(NAME_FILE_DATA), "rw");
+                    file.seek(file.length());
+                    file.write(report.getBytes("UTF-8"));
+                } finally {
+                    if (file != null) {
+                        try {
+                            file.close();
+                        } catch (IOException e) {
+                            Log.v(LOG_TAG, e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void handleLastError(Activity activity) {
         Log.v(LOG_TAG, "handleLastError");
         final String message = this.GetLastExceptionReport();
         if (message != null) {
 
-            if (reportSender != null){
+            if (reportSender != null) {
                 Intent intent = new Intent(this, ErrorActivity.class);
                 intent.putExtra(ErrorActivity.ERROR_REPORT_CONTENT, message);
-                mainActivity.startActivity(intent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+                activity.finish();
             }
-            // Always stop the main activity that to clear error details
-            mainActivity.finish();
         }
     }
 

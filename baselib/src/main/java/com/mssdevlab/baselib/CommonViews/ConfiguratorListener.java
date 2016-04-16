@@ -6,5 +6,5 @@ import android.support.annotation.NonNull;
  * Listener to obtain configuration
  */
 public interface ConfiguratorListener {
-    void onConfigureCompleted(@NonNull ViewHolderBase config, @NonNull String tagName);
+    void onConfigureCompleted(@NonNull ViewHolderBase viewHolder);
 }
