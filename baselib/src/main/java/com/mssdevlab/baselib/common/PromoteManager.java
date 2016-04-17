@@ -103,9 +103,6 @@ public class PromoteManager {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "MarkRateNotNow");
             SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-
-            int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
-            int reqLaunches = getLaunchesBeforeShowRate(context);
             setLaunchesBeforeShowRate(context, getLaunchesBeforeShowRate(context) + sharedPref.getInt(PREF_LAUNCHES, 0));
         }
     }
