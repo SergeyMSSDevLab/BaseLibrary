@@ -66,7 +66,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
     @CallSuper
     protected void initApplicationInBacground(){
-        PromoteManager.markStarting(this);
+        PromoteManager.markStarting();
     }
 
     @Override

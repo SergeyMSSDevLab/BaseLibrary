@@ -6,32 +6,34 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
+import com.mssdevlab.baselib.BaseApplication;
+
 /**
  * Manages promote screen operations
  */
 @SuppressWarnings("unused")
 public class PromoteManager {
-    private static final String LOG_TAG = "PromoteManager";
+    private static final String LOG_TAG = PromoteManager.class.getCanonicalName();
     private static final Long DAY_MS = 1000l * 60 * 60 * 24;
     private static final String SHARED_PREF = "PromoteApp";
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private static final String PREF_LAUNCHES = "Launches";
     private static final String PREF_NEVER_SHOW = "NeverShow";
     private static final String PREF_DAYS_BEFORE_SHOW_RATE = "PromoteManager.getDaysBeforeShowRate";
-    private static final String PREF_LAUNCHES_BEFORE_SHOW_RATE = "PromoteManager.launchesBeforeShowRate";
+    private static final String PREF_LAUNCHES_BEFORE_SHOW_RATE = "PromoteManager.sLaunchesBeforeShowRate";
     private static final Object lockObj = new Object();
 
     // There is the default rule to show a rate dialog: on third day and as least ten launches
-    private static final int daysBeforeShowRate = 3;
-    private static final int launchesBeforeShowRate = 10;
+    private static final int sDaysBeforeShowRate = 3;
+    private static final int sLaunchesBeforeShowRate = 10;
 
     /*
     * Stores information about launches of application
     */
-    public static void markStarting(Context context) {
+    public static void markStarting() {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "MarkStarting");
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             SharedPreferences.Editor spEditor = sharedPref.edit();
 
             Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, 0);
@@ -52,14 +54,14 @@ public class PromoteManager {
     /*
     * Checks if conditions are ok for the promotion screen showing
     */
-    public static boolean isTimeToShowPromoScreen(final Context context) {
+    public static boolean isTimeToShowPromoScreen() {
         Log.v(LOG_TAG, "IsTimeToShowRate");
-        SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
 
-        if (isPromoScreenEnabled(context)) {
+        if (isPromoScreenEnabled()) {
             synchronized (lockObj) {
-                int reqDays = getDaysBeforeShowRate(context);
-                int reqLaunches = getLaunchesBeforeShowRate(context);
+                int reqDays = getDaysBeforeShowRate();
+                int reqLaunches = getLaunchesBeforeShowRate();
 
                 Long curMs = System.currentTimeMillis();
                 Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
@@ -72,9 +74,9 @@ public class PromoteManager {
         }
     }
 
-    public static boolean isPromoScreenEnabled(final Context context){
+    public static boolean isPromoScreenEnabled(){
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             return !sharedPref.getBoolean(PREF_NEVER_SHOW, false);
         }
     }
@@ -88,32 +90,31 @@ public class PromoteManager {
             Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(goToMarket);
-            cancelPromoScreenPermanently(context);
+            cancelPromoScreenPermanently();
 
         } catch (Exception ex) {
             Log.e(LOG_TAG, "GoToRateScreen fails: " + ex.getMessage());
-            markRateNotNow(context);
+            markRateNotNow();
         }
     }
 
     /*
     * Sets conditions that to show the promotion screen later
     */
-    public static void markRateNotNow(final Context context) {
+    public static void markRateNotNow() {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "MarkRateNotNow");
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            setLaunchesBeforeShowRate(context, getLaunchesBeforeShowRate(context) + sharedPref.getInt(PREF_LAUNCHES, 0));
+            setLaunchesBeforeShowRate(getLaunchesFromInstall() + 5);
         }
     }
 
     /*
     * Sets conditions that to never show the promotion screen
     */
-    public static void cancelPromoScreenPermanently(final Context context) {
+    public static void cancelPromoScreenPermanently() {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "MarkRateCancelPermanently");
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             SharedPreferences.Editor spEditor = sharedPref.edit();
             spEditor.putBoolean(PREF_NEVER_SHOW, true);
             spEditor.apply();
@@ -123,19 +124,19 @@ public class PromoteManager {
     /*
     * Sets conditions that to never show the promotion screen
     */
-    public static void setPromoScreenEnabled(final Context context, boolean enabled) {
+    public static void setPromoScreenEnabled(boolean enabled) {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "EnableMarkRate");
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             SharedPreferences.Editor spEditor = sharedPref.edit();
             spEditor.putBoolean(PREF_NEVER_SHOW, !enabled);
             spEditor.apply();
         }
     }
 
-    public static int getDaysFromInstall(final Context context){
+    public static int getDaysFromInstall(){
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             Long curMs = System.currentTimeMillis();
             Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
 
@@ -143,39 +144,42 @@ public class PromoteManager {
         }
     }
 
-    public static int getLaunchesFromInstall(final Context context){
+    public static int getLaunchesFromInstall(){
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             return sharedPref.getInt(PREF_LAUNCHES, 0);
         }
     }
 
-    public static int getDaysBeforeShowRate(final Context context) {
+    public static int getDaysBeforeShowRate() {
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            return sharedPref.getInt(PREF_DAYS_BEFORE_SHOW_RATE, PromoteManager.daysBeforeShowRate);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            return sharedPref.getInt(PREF_DAYS_BEFORE_SHOW_RATE, PromoteManager.sDaysBeforeShowRate);
         }
     }
 
-    public static void setDaysBeforeShowRate(final Context context, int daysBeforeShowRate) {
+    public static void setDaysBeforeShowRate(int daysBeforeShowRate) {
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             SharedPreferences.Editor spEditor = sharedPref.edit();
             spEditor.putInt(PREF_DAYS_BEFORE_SHOW_RATE, daysBeforeShowRate);
             spEditor.apply();
         }
     }
 
-    public static int getLaunchesBeforeShowRate(final Context context) {
+    public static int getLaunchesBeforeShowRate() {
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            return sharedPref.getInt(PREF_LAUNCHES_BEFORE_SHOW_RATE, PromoteManager.launchesBeforeShowRate);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            int ret =  sharedPref.getInt(PREF_LAUNCHES_BEFORE_SHOW_RATE, PromoteManager.sLaunchesBeforeShowRate);
+            Log.v(LOG_TAG, "getLaunchesBeforeShowRate: " + ret);
+            return ret;
         }
     }
 
-    public static void setLaunchesBeforeShowRate(final Context context, int launchesBeforeShowRate) {
+    public static void setLaunchesBeforeShowRate(int launchesBeforeShowRate) {
+        Log.v(LOG_TAG, "setLaunchesBeforeShowRate: " + launchesBeforeShowRate);
         synchronized (lockObj) {
-            SharedPreferences sharedPref = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             SharedPreferences.Editor spEditor = sharedPref.edit();
             spEditor.putInt(PREF_LAUNCHES_BEFORE_SHOW_RATE, launchesBeforeShowRate);
             spEditor.apply();

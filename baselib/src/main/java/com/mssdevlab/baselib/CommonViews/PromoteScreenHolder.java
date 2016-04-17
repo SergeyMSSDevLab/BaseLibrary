@@ -32,7 +32,7 @@ public class PromoteScreenHolder extends ViewHolderBase{
     public void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "mView != null: " + (mView != null));
-        if (PromoteManager.isTimeToShowPromoScreen(this.getActivity())){
+        if (PromoteManager.isTimeToShowPromoScreen()){
             if (this.mView == null) {
                 this.mViewStub.setLayoutResource(R.layout.steps_prompt_fragment);
                 this.mView = this.mViewStub.inflate();
@@ -98,7 +98,7 @@ public class PromoteScreenHolder extends ViewHolderBase{
         btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteManager.markRateNotNow(activity);
+                PromoteManager.markRateNotNow();
                 mView.setVisibility(View.GONE);
             }
         });
@@ -124,7 +124,7 @@ public class PromoteScreenHolder extends ViewHolderBase{
                 activity.startActivity(Intent.createChooser(sendIntent,
                         res.getString(R.string.common_error_report_choose_title)));
 
-                PromoteManager.cancelPromoScreenPermanently(activity);
+                PromoteManager.cancelPromoScreenPermanently();
                 mView.setVisibility(View.GONE);
             }
         });
@@ -132,7 +132,7 @@ public class PromoteScreenHolder extends ViewHolderBase{
         btnNot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PromoteManager.cancelPromoScreenPermanently(activity);
+                PromoteManager.cancelPromoScreenPermanently();
                 mView.setVisibility(View.GONE);
             }
         });
