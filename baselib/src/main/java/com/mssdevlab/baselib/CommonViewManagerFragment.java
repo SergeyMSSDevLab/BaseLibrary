@@ -25,7 +25,6 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     private ViewStub mPlaceHolder;
     private ViewHolderBase mViewHolder;
 
-
     public static CommonViewManagerFragment newInstance(final String configTag, final String instanceTag) {
         Log.v(LOG_TAG, "newInstance entered.");
         CommonViewManagerFragment fragment = new CommonViewManagerFragment();
@@ -45,13 +44,14 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     public void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate entered.");
         super.onCreate(savedInstanceState);
+
         Bundle args = getArguments();
         if (args != null) {
             this.mConfigurationTag = args.getString(ARG_CONFIG_TAG);
             this.mInstanceTag = args.getString(ARG_INSTANCE_TAG);
         }
 
-        if (mViewHolder == null)
+        if (mViewHolder == null && this.mPlaceHolder != null)
             Configurator.setListener(this.mConfigurationTag, this.mInstanceTag, this);
     }
 
@@ -74,6 +74,7 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     @Override
     public void onDestroy() {
         Log.v(LOG_TAG, "onDestroy entered.");
+        Configurator.removeListener(this.mConfigurationTag, this.mInstanceTag);
         if (this.mViewHolder != null)
             this.mViewHolder.onDestroy();
         super.onDestroy();

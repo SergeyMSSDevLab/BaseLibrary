@@ -28,6 +28,16 @@ public class Configurator {
         }
     }
 
+    public static void removeListener(@Nullable String configTag, @Nullable String instanceTag){
+        Log.v(LOG_TAG, "setListener entered.");
+        if (configTag != null && instanceTag != null) {
+            Map<String, ConfiguratorListener> listeners = mListenersMap.get(configTag);
+            if (listeners != null && listeners.containsKey(instanceTag)){
+                listeners.remove(instanceTag);
+            }
+        }
+    }
+
     public static void setConfiguration(@NonNull String configTag, @NonNull Configuration config){
         Log.v(LOG_TAG, "setConfiguration entered.");
         mConfigurationMap.put(configTag, config);
