@@ -16,8 +16,8 @@ import com.mssdevlab.baselib.common.PromoteManager;
 /**
  * View holder manages the promote screen.
  */
-public class PromoteScreenHolder extends ViewHolderBase{
-    private static final String LOG_TAG = PromoteScreenHolder.class.getCanonicalName();
+public class PromoteViewProvider extends CommonViewProvider {
+    private static final String LOG_TAG = PromoteViewProvider.class.getCanonicalName();
     public static final String ARG_APP_NAME = "promoteScreenHolder.param1";
     public static final String ARG_DEV_EMAIL = "promoteScreenHolder.param2";
 

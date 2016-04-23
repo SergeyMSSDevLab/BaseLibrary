@@ -9,7 +9,7 @@ import android.view.ViewStub;
 
 import com.mssdevlab.baselib.CommonViews.Configurator;
 import com.mssdevlab.baselib.CommonViews.ConfiguratorListener;
-import com.mssdevlab.baselib.CommonViews.ViewHolderBase;
+import com.mssdevlab.baselib.CommonViews.CommonViewProvider;
 
 /**
  * Manages common view lifecycle
@@ -23,7 +23,7 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     private String mConfigurationTag;
     private String mInstanceTag;
     private ViewStub mPlaceHolder;
-    private ViewHolderBase mViewHolder;
+    private CommonViewProvider mViewHolder;
 
     public static CommonViewManagerFragment newInstance(final String configTag, final String instanceTag) {
         Log.v(LOG_TAG, "newInstance entered.");
@@ -88,7 +88,7 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     }
 
     @Override
-    public void onConfigureCompleted(@NonNull ViewHolderBase viewHolder) {
+    public void onConfigureCompleted(@NonNull CommonViewProvider viewHolder) {
         Log.v(LOG_TAG, "onConfigureCompleted entered.");
         this.mViewHolder = viewHolder;
         viewHolder.setPlaceHolder(this.mPlaceHolder, getActivity(), this.mInstanceTag);

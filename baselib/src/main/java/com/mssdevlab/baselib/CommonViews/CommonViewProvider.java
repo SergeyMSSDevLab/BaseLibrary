@@ -16,8 +16,8 @@ import java.lang.ref.WeakReference;
 /**
  * Base class for all common view viewHolders.
  */
-public class ViewHolderBase {
-    private static final String LOG_TAG = ViewHolderBase.class.getCanonicalName();
+public class CommonViewProvider {
+    private static final String LOG_TAG = CommonViewProvider.class.getCanonicalName();
 
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private OnFormatListener mFormatListener = null;
