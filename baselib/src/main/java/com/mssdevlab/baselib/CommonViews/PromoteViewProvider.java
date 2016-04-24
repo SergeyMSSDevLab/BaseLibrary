@@ -33,13 +33,15 @@ public class PromoteViewProvider extends CommonViewProvider {
         super.onResume();
         Log.v(LOG_TAG, "mView != null: " + (mView != null));
         if (PromoteManager.isTimeToShowPromoScreen()){
-            if (this.mView == null) {
-                this.mViewStub.setLayoutResource(R.layout.steps_prompt_fragment);
+            if (this.mView == null && this.mViewStub != null) {
+                this.mViewStub.setLayoutResource(R.layout.promote_view);
                 this.mView = this.mViewStub.inflate();
                 this.setUpView(this.mView);
             }
-            this.mView.setVisibility(View.VISIBLE);
-            Log.v(LOG_TAG, "onResume: Promo screen visible.");
+            if (this.mView != null) {
+                this.mView.setVisibility(View.VISIBLE);
+                Log.v(LOG_TAG, "onResume: Promo screen visible.");
+            }
         } else {
             if (this.mView != null){
                 this.mView.setVisibility(View.GONE);
@@ -136,5 +138,10 @@ public class PromoteViewProvider extends CommonViewProvider {
                 mView.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public boolean isViewAvailable() {
+        return PromoteManager.isTimeToShowPromoScreen();
     }
 }

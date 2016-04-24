@@ -1,10 +1,10 @@
 package com.mssdevlab.baselib.CommonViews;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -17,8 +17,8 @@ import java.lang.ref.WeakReference;
 public class CommonViewProvider {
     private static final String LOG_TAG = CommonViewProvider.class.getCanonicalName();
 
-    private WeakReference<Activity> mActivity = new WeakReference<>(null);
-    private CommonViewListener mFormatListener = null;
+    private WeakReference<FragmentActivity> mActivity = new WeakReference<>(null);
+    private CommonViewListener mListener = null;
 
     protected ViewStub mViewStub;
     protected String mInstanceTag;
@@ -41,30 +41,43 @@ public class CommonViewProvider {
     /**
      * Supply the construction arguments for this holder.
      */
-    public void setArguments(@Nullable Bundle args, @Nullable CommonViewListener formatListener) {
+    public void setArguments(@Nullable Bundle args, @Nullable CommonViewListener listener) {
         Log.v(LOG_TAG, "setArguments entered.");
         this.mArguments = args;
-        this.mFormatListener = formatListener;
+        this.mListener = listener;
     }
 
     @CallSuper
-    public void setPlaceHolder(@NonNull ViewStub viewStub, @NonNull Activity activity, @NonNull String instanceTag) {
-        Log.v(LOG_TAG, "setPlaceHolder entered.");
-        this.mActivity = new WeakReference<>(activity);
+    public void setViewStub(@NonNull ViewStub viewStub) {
+        Log.v(LOG_TAG, "setViewStub entered.");
         this.mViewStub = viewStub;
+    }
+
+    @CallSuper
+    public void setActivity(@NonNull FragmentActivity activity, @NonNull String instanceTag) {
+        Log.v(LOG_TAG, "setActivity entered.");
+        this.mActivity = new WeakReference<>(activity);
         this.mInstanceTag = instanceTag;
     }
 
     @CallSuper
     protected void setUpView(@NonNull View view){
         Log.v(LOG_TAG, "setUpView entered.");
-        if (this.mFormatListener != null) {
-            this.mFormatListener.onViewCreated(view);
+        if (this.mListener != null) {
+            this.mListener.onViewCreated(view);
         }
         Log.v(LOG_TAG, "setUpView: initialized");
     }
 
-    public Activity getActivity(){
+    public FragmentActivity getActivity(){
         return this.mActivity.get();
+    }
+
+    public boolean isViewAvailable() {
+        return false;
+    }
+
+    public View getView(){
+        return null;
     }
 }

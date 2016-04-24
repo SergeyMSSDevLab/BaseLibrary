@@ -1,9 +1,11 @@
 package com.mssdevlab.baselib;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ViewStub;
 
@@ -19,18 +21,20 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     private static final String LOG_TAG = CommonViewManagerFragment.class.getCanonicalName();
     private static final String ARG_CONFIG_TAG = "commonViewManagerFragment.param1";
     private static final String ARG_INSTANCE_TAG = "commonViewManagerFragment.param2";
+    private static final String ARG_VIEWSTUB_TAG = "commonViewManagerFragment.param3";
 
     private String mConfigurationTag;
     private String mInstanceTag;
-    private ViewStub mPlaceHolder;
-    private CommonViewProvider mViewHolder;
+    private ViewStub mViewStub = null;
+    private CommonViewProvider mViewProvider;
 
-    public static CommonViewManagerFragment newInstance(final String configTag, final String instanceTag) {
+    public static CommonViewManagerFragment newInstance(@NonNull final String configTag, @NonNull final String instanceTag, @IdRes int idViewStub) {
         Log.v(LOG_TAG, "newInstance entered.");
         CommonViewManagerFragment fragment = new CommonViewManagerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_CONFIG_TAG, configTag);
         args.putString(ARG_INSTANCE_TAG, instanceTag);
+        args.putInt(ARG_VIEWSTUB_TAG, idViewStub);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,33 +45,47 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "onCreate entered.");
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onActivityCreated entered.");
         super.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
         if (args != null) {
             this.mConfigurationTag = args.getString(ARG_CONFIG_TAG);
             this.mInstanceTag = args.getString(ARG_INSTANCE_TAG);
+            if (args.containsKey(ARG_VIEWSTUB_TAG)){
+                int id = args.getInt(ARG_VIEWSTUB_TAG);
+                this.mViewStub = (ViewStub) this.getActivity().findViewById(id);
+            }
         }
+        Log.v(LOG_TAG, "onActivityCreated mViewStub != null: " + (this.mViewStub != null));
 
-        if (mViewHolder == null && this.mPlaceHolder != null)
-            Configurator.setListener(this.mConfigurationTag, this.mInstanceTag, this);
+        // Configurator initializes asynchronously and we have to wait callback.
+        Configurator.setListener(this.mConfigurationTag, this.mInstanceTag, this);
+    }
+
+    @Override
+    public void onConfigureCompleted(@NonNull CommonViewProvider viewProvider) {
+        Log.v(LOG_TAG, "onConfigureCompleted entered.");
+        this.mViewProvider = viewProvider;
+        this.mViewProvider.setActivity(getActivity(), this.mInstanceTag);
+        if (this.mViewStub != null)
+            this.mViewProvider.setViewStub(this.mViewStub);
     }
 
     @Override
     public void onResume() {
         Log.v(LOG_TAG, "onResume entered.");
         super.onResume();
-        if (this.mViewHolder != null)
-            this.mViewHolder.onResume();
+        if (this.mViewProvider != null)
+            this.mViewProvider.onResume();
     }
 
     @Override
     public void onPause() {
         Log.v(LOG_TAG, "onPause entered.");
-        if (this.mViewHolder != null)
-            this.mViewHolder.onPause();
+        if (this.mViewProvider != null)
+            this.mViewProvider.onPause();
         super.onPause();
     }
 
@@ -75,22 +93,16 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     public void onDestroy() {
         Log.v(LOG_TAG, "onDestroy entered.");
         Configurator.removeListener(this.mConfigurationTag, this.mInstanceTag);
-        if (this.mViewHolder != null)
-            this.mViewHolder.onDestroy();
+        if (this.mViewProvider != null)
+            this.mViewProvider.onDestroy();
         super.onDestroy();
     }
 
-    public void setPlaceHolder(@Nullable ViewStub placeHolder){
-        Log.v(LOG_TAG, "setPlaceHolder entered.");
-        this.mPlaceHolder = placeHolder;
-        if (mViewHolder == null)
-            Configurator.setListener(this.mConfigurationTag, this.mInstanceTag, this);
-    }
-
-    @Override
-    public void onConfigureCompleted(@NonNull CommonViewProvider viewHolder) {
-        Log.v(LOG_TAG, "onConfigureCompleted entered.");
-        this.mViewHolder = viewHolder;
-        viewHolder.setPlaceHolder(this.mPlaceHolder, getActivity(), this.mInstanceTag);
+    public boolean isViewAvailable() {
+        if (this.mViewProvider != null) {
+            return this.mViewProvider.isViewAvailable();
+        } else {
+            return false;
+        }
     }
 }
