@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.mssdevlab.baselib.OnFormatListener;
+import com.mssdevlab.baselib.CommonViews.CommonViewListener;
 
 /**
  * Manages ad view in application
@@ -24,7 +24,7 @@ public class AdViewFragment extends Fragment {
     private String mAdUnitId;
     private String tagName;
     private AdView mAdView;
-    private OnFormatListener formatListener = null;
+    private CommonViewListener formatListener = null;
     private AdSize mAdSize = null;
 
     public static AdViewFragment newInstance(String adUnitId, String tagName) {
@@ -58,8 +58,8 @@ public class AdViewFragment extends Fragment {
             this.tagName = args.getString(ARG_TAG_NAME);
         }
         Activity activity = getActivity();
-        if (activity instanceof OnFormatListener) {
-            this.formatListener = (OnFormatListener) activity;
+        if (activity instanceof CommonViewListener) {
+            this.formatListener = (CommonViewListener) activity;
         }
     }
 
@@ -79,7 +79,7 @@ public class AdViewFragment extends Fragment {
         this.mAdView.loadAd(adRequest);
 
         if (this.formatListener != null) {
-            // TODO: remove the class. this.formatListener.onFormat(this.mAdView, this.tagName);
+            // TODO: remove the class. this.formatListener.onViewCreated(this.mAdView, this.tagName);
         }
         return this.mAdView;
     }

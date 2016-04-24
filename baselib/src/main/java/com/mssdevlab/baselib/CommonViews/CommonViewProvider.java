@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.mssdevlab.baselib.OnFormatListener;
-
 import java.lang.ref.WeakReference;
 
 /**
@@ -20,7 +18,7 @@ public class CommonViewProvider {
     private static final String LOG_TAG = CommonViewProvider.class.getCanonicalName();
 
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
-    private OnFormatListener mFormatListener = null;
+    private CommonViewListener mFormatListener = null;
 
     protected ViewStub mViewStub;
     protected String mInstanceTag;
@@ -43,7 +41,7 @@ public class CommonViewProvider {
     /**
      * Supply the construction arguments for this holder.
      */
-    public void setArguments(@Nullable Bundle args, @Nullable OnFormatListener formatListener) {
+    public void setArguments(@Nullable Bundle args, @Nullable CommonViewListener formatListener) {
         Log.v(LOG_TAG, "setArguments entered.");
         this.mArguments = args;
         this.mFormatListener = formatListener;
@@ -61,7 +59,7 @@ public class CommonViewProvider {
     protected void setUpView(@NonNull View view){
         Log.v(LOG_TAG, "setUpView entered.");
         if (this.mFormatListener != null) {
-            this.mFormatListener.onFormat(view);
+            this.mFormatListener.onViewCreated(view);
         }
         Log.v(LOG_TAG, "setUpView: initialized");
     }
