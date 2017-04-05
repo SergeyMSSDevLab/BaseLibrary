@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 24
-        versionCode 1100100
-        versionName "1.0.0"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1400101
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -21,15 +21,16 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-annotations:24.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile 'com.android.support:support-annotations:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.google.android.gms:play-services-ads:10.2.1'
 }
 
 apply plugin: 'maven'
 
 //noinspection GroovyMissingReturnStatement
+// Windows: gradlew uploadArchives
 uploadArchives {
     repositories {
         mavenDeployer {
