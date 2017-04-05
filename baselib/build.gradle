@@ -31,6 +31,7 @@ apply plugin: 'maven'
 
 //noinspection GroovyMissingReturnStatement
 // Windows: gradlew uploadArchives
+// Ubuntu ./gradlew uploadArchives
 uploadArchives {
     repositories {
         mavenDeployer {
