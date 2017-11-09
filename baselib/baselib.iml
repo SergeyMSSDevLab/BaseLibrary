@@ -63,13 +63,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
@@ -77,6 +70,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
@@ -107,21 +107,21 @@
     <orderEntry type="library" exported="" scope="TEST" name="junit:junit:4.12@jar" level="project" />
     <orderEntry type="library" exported="" name="android.arch.lifecycle:common:1.0.0@jar" level="project" />
     <orderEntry type="library" exported="" name="android.arch.core:common:1.0.0@jar" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-lite-license-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-11.6.0" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-lite-license-11.6.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-core-utils-27.0.0" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-gass-license-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-gass-license-11.6.0" level="project" />
     <orderEntry type="library" exported="" name="android.arch.lifecycle:runtime-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-media-compat-27.0.0" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-basement-license-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-compat-27.0.0" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-basement-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-lite-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-basement-license-11.6.0" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-basement-11.6.0" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-lite-11.6.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-annotations:27.0.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-vector-drawable-27.0.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-v4-27.0.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-fragment-27.0.0" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-gass-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-license-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-gass-11.6.0" level="project" />
+    <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-license-11.6.0" level="project" />
   </component>
 </module>

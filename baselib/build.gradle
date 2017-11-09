@@ -28,7 +28,7 @@ dependencies {
     compile 'com.android.support:support-annotations:27.0.0'
     compile 'com.android.support:appcompat-v7:27.0.0'
     compile 'com.android.support:support-v4:27.0.0'
-    compile 'com.google.android.gms:play-services-ads:11.4.2'
+    compile 'com.google.android.gms:play-services-ads:11.6.0'
 }
 
 apply plugin: 'maven'
