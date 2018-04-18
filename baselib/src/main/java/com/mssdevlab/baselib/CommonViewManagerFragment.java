@@ -47,7 +47,7 @@ public class CommonViewManagerFragment extends Fragment implements ConfiguratorL
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onActivityCreated entered.");
-        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
 
         Bundle args = getArguments();
         if (args != null) {

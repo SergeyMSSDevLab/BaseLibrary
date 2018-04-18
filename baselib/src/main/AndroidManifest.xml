@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mssdevlab.baselib">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application>
         <activity
             android:label="@string/common_error_report_email_subject"
