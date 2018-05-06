@@ -19,7 +19,7 @@ import java.util.Map;
 public class CommonViewProviders {
     private static final String LOG_TAG = "CommonViewProviders";
     private static final Map<String, CommonViewProvider> sConfigurationMap = new ArrayMap<>(4);
-    private static MutableLiveData<Boolean> sInitCompleted = new MutableLiveData<Boolean>();
+    private static MutableLiveData<Boolean> sInitCompleted = new MutableLiveData<>();
 
     public static final String ARG_PROVIDER_TAG = "CommonViewProviders.parProviderTag";
     public static final String ARG_INSTANCE_TAG = "CommonViewProviders.parInstanceTag";
@@ -29,6 +29,7 @@ public class CommonViewProviders {
         sConfigurationMap.put(providerTag, provider);
         Log.v(LOG_TAG, "CommonViewProvider added: " + providerTag);
     }
+
     public static void setInitCompleted() {
         Log.v(LOG_TAG, "setInitCompleted");
         sInitCompleted.postValue(true);
@@ -37,14 +38,14 @@ public class CommonViewProviders {
     public static void createCommonView(@NonNull final BaseActivity activity, @NonNull final Bundle args) {
         Boolean r = sInitCompleted.getValue();
         if (r != null && r){
-            addFragment(activity, args);
+            addComonView(activity, args);
         } else {
             // Create observer to add common view fragment
             sInitCompleted.observe(activity, new Observer<Boolean>() {
                 @Override
                 public void onChanged( final Boolean initCompleted) {
                     if (initCompleted){
-                        addFragment(activity, args);
+                        addComonView(activity, args);
                         sInitCompleted.removeObserver(this);
                     }
                 }
@@ -52,20 +53,11 @@ public class CommonViewProviders {
         }
     }
 
-    private static void addFragment(@NonNull final BaseActivity activity, @NonNull final Bundle args){
-        String instanceTag = args.getString(ARG_INSTANCE_TAG);
-        if (instanceTag != null){
-            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            Fragment fragment = fragmentManager.findFragmentByTag(instanceTag);
-            if (fragment == null) {
-                String configTag = args.getString(ARG_PROVIDER_TAG);
-                CommonViewProvider provider = sConfigurationMap.get(configTag);
-                if (provider != null){
-                    fragment = provider.getFragment(args);
-                    fragmentManager.beginTransaction().add(fragment, instanceTag)
-                            .commit();
-                }
-            }
+    private static void addComonView(@NonNull final BaseActivity activity, @NonNull final Bundle args) {
+        String configTag = args.getString(ARG_PROVIDER_TAG);
+        CommonViewProvider provider = sConfigurationMap.get(configTag);
+        if (provider != null){
+            provider.createView(activity, args);
         }
     }
 }

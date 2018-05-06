@@ -9,6 +9,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -123,6 +125,29 @@ public class Helper {
         } catch (Exception ex) {
             Log.e(LOG_TAG, "openURL fails: " + ex.getMessage());
         }
+    }
+
+    private static ViewGroup getParent(View view) {
+        return (ViewGroup)view.getParent();
+    }
+
+    private static void removeView(View view) {
+        ViewGroup parent = getParent(view);
+        if(parent != null) {
+            parent.removeView(view);
+        }
+    }
+
+    public static void replaceView(View currentView, View newView) {
+        final ViewGroup parent = getParent(currentView);
+        if(parent == null) {
+            return;
+        }
+        final int index = parent.indexOfChild(currentView);
+        newView.setId(currentView.getId());
+        removeView(currentView);
+        removeView(newView);
+        parent.addView(newView, index);
     }
 
 }
