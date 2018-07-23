@@ -12,4 +12,6 @@ import com.mssdevlab.baselib.BaseActivity;
 public abstract class CommonViewProvider {
 
     public abstract void createView(@NonNull final BaseActivity activity, @NonNull final Bundle args);
+
+    public abstract CommonViewModel getViewModel(@NonNull final BaseActivity activity);
 }

@@ -1,5 +1,6 @@
 package com.mssdevlab.baselib.factory;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.os.Bundle;
@@ -30,34 +31,17 @@ public class CommonViewProviders {
         Log.v(LOG_TAG, "CommonViewProvider added: " + providerTag);
     }
 
+    public static CommonViewProvider getProvider(@NonNull String providerTag){
+        return sConfigurationMap.get(providerTag);
+    }
+
     public static void setInitCompleted() {
         Log.v(LOG_TAG, "setInitCompleted");
         sInitCompleted.postValue(true);
     }
 
-    public static void createCommonView(@NonNull final BaseActivity activity, @NonNull final Bundle args) {
-        Boolean r = sInitCompleted.getValue();
-        if (r != null && r){
-            addComonView(activity, args);
-        } else {
-            // Create observer to add common view fragment
-            sInitCompleted.observe(activity, new Observer<Boolean>() {
-                @Override
-                public void onChanged( final Boolean initCompleted) {
-                    if (initCompleted){
-                        addComonView(activity, args);
-                        sInitCompleted.removeObserver(this);
-                    }
-                }
-            });
-        }
-    }
-
-    private static void addComonView(@NonNull final BaseActivity activity, @NonNull final Bundle args) {
-        String configTag = args.getString(ARG_PROVIDER_TAG);
-        CommonViewProvider provider = sConfigurationMap.get(configTag);
-        if (provider != null){
-            provider.createView(activity, args);
-        }
+    public static LiveData<Boolean> getInitCompleted()
+    {
+        return sInitCompleted;
     }
 }

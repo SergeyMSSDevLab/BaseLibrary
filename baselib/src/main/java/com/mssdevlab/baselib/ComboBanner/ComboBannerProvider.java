@@ -1,11 +1,13 @@
 package com.mssdevlab.baselib.ComboBanner;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.factory.CommonViewModel;
 import com.mssdevlab.baselib.factory.CommonViewProvider;
 
 /**
@@ -32,6 +34,16 @@ public class ComboBannerProvider extends CommonViewProvider {
         args.putString(ComboBannerObserver.ARG_AD_UNIT_ID, this.adUnitId);
         args.putString(ComboBannerObserver.ARG_APP_NAME, this.appName);
 
-        activity.getLifecycle().addObserver(new ComboBannerObserver(activity, args));
+        // TODO: Get view model and replace view
+        ComboBannerObserver observer = new ComboBannerObserver(args);
+        activity.getLifecycle().addObserver(observer);
+        observer.updateView(activity);
+    }
+
+    @Override
+    public CommonViewModel getViewModel(@NonNull final BaseActivity activity) {
+        ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
+        model.checkState();
+        return model;
     }
 }

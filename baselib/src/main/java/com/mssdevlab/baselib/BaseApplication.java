@@ -10,6 +10,7 @@ import android.util.Log;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
 import com.mssdevlab.baselib.common.PromoteManager;
+import com.mssdevlab.baselib.factory.CommonViewProviders;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -53,6 +54,9 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
             public void run() {
                 try {
                     initApplicationInBacground();
+
+                    // Inform observers that configuration finished
+                    CommonViewProviders.setInitCompleted();
                 } catch (Throwable ex) {
                     try {
                         createReportFile(ex);

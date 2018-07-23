@@ -26,9 +26,6 @@ public class ComboBannerObserver implements LifecycleObserver {
     public static final String ARG_DEV_EMAIL = "ComboBannerFragment.param2";
     public static final String ARG_AD_UNIT_ID = "ComboBannerFragment.param3";
 
-    private BaseActivity mActivity;
-    private Lifecycle mLifecycle;
-
     private AdView mAdView;
     private View mPromoView;
 
@@ -37,24 +34,20 @@ public class ComboBannerObserver implements LifecycleObserver {
 
     private String mInstanceTag;
 
-    ComboBannerObserver(@NonNull BaseActivity activity, @NonNull Bundle args) {
+    ComboBannerObserver(@NonNull Bundle args) {
         Log.v(LOG_TAG, "Constructor");
-        this.mActivity = activity;
-        this.mLifecycle = activity.getLifecycle();
         this.mInstanceTag = args.getString(CommonViewProviders.ARG_INSTANCE_TAG);
         this.mAdUnitId = args.getString(ARG_AD_UNIT_ID);
         this.mViewStubId = args.getInt(CommonViewProviders.ARG_VIEWSTUB_TAG);
-
-        ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
-        model.updateView().observe(activity, this::updateView);
-        model.checkState();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
         Log.v(LOG_TAG, "onResume");
         if (this.mAdView != null) {
-            this.mAdView.resume();
+            if (this.mAdView.getVisibility() == View.VISIBLE){
+                this.mAdView.resume();
+            }
         }
     }
 
@@ -62,7 +55,9 @@ public class ComboBannerObserver implements LifecycleObserver {
     public void onPause() {
         Log.v(LOG_TAG, "onPause");
         if (this.mAdView != null) {
-            this.mAdView.pause();
+            if (this.mAdView.getVisibility() == View.VISIBLE){
+                this.mAdView.pause();
+            }
         }
     }
 
@@ -75,34 +70,35 @@ public class ComboBannerObserver implements LifecycleObserver {
         }
     }
 
-    private void updateView(ComboBannerUpdateLiveData.ShowView data){
-        if (this.mLifecycle.getCurrentState().isAtLeast(Lifecycle.State.STARTED)){
-            // update UI
-            if (data == ComboBannerUpdateLiveData.ShowView.NOTHING){
-                Log.v(LOG_TAG, "ComboBannerViewModel: nothing");
-                if (this.mPromoView != null){
-                    this.mPromoView.setVisibility(View.GONE);
-                }
-                if (this.mAdView != null){
-                    this.mAdView.pause();
-                    this.mAdView.setVisibility(View.GONE);
-                }
-            } else if (data == ComboBannerUpdateLiveData.ShowView.ADS){
-                Log.v(LOG_TAG, "ComboBannerViewModel: ads");
-                this.ensureAdView();
-                this.mAdView.setVisibility(View.VISIBLE);
-            } else if (data == ComboBannerUpdateLiveData.ShowView.PROMO){
-                Log.v(LOG_TAG, "ComboBannerViewModel: promo");
-                this.ensurePromoView();
-                this.mPromoView.setVisibility(View.VISIBLE);
+    public void updateView(@NonNull BaseActivity activity){
+        Log.v(LOG_TAG, "updateView");
+        ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
+        ComboBannerUpdateLiveData.ShowView data = model.updateView().getValue();
+        // update UI
+        if (data == ComboBannerUpdateLiveData.ShowView.NOTHING){
+            Log.v(LOG_TAG, "ComboBannerViewModel: nothing");
+            if (this.mPromoView != null){
+                this.mPromoView.setVisibility(View.GONE);
             }
+            if (this.mAdView != null){
+                this.mAdView.pause();
+                this.mAdView.setVisibility(View.GONE);
+            }
+        } else if (data == ComboBannerUpdateLiveData.ShowView.ADS){
+            Log.v(LOG_TAG, "ComboBannerViewModel: ads");
+            this.ensureAdView(activity);
+            this.mAdView.setVisibility(View.VISIBLE);
+        } else if (data == ComboBannerUpdateLiveData.ShowView.PROMO){
+            Log.v(LOG_TAG, "ComboBannerViewModel: promo");
+            this.ensurePromoView(activity);
+            this.mPromoView.setVisibility(View.VISIBLE);
         }
     }
 
-    private void ensureAdView(){
+    private void ensureAdView(@NonNull BaseActivity activity){
         Log.v(LOG_TAG, "ensureAdView");
         if (this.mAdView == null) {
-            this.mAdView = new AdView(this.mActivity);
+            this.mAdView = new AdView(activity);
             this.mAdView.setAdSize(AdSize.SMART_BANNER);
             this.mAdView.setAdUnitId(this.mAdUnitId);
             this.mAdView.setVisibility(View.GONE);
@@ -126,7 +122,7 @@ public class ComboBannerObserver implements LifecycleObserver {
                     Log.v(LOG_TAG, "onAdLoaded: replace promo");
                 } else if (mViewStubId > 0){
                     // Replace stub
-                    ViewStub vStub = mActivity.findViewById(mViewStubId);
+                    ViewStub vStub = activity.findViewById(mViewStubId);
                     mViewStubId = -1;
                     if(vStub != null){
                         vStub.setLayoutResource(R.layout.stub_view);
@@ -138,7 +134,7 @@ public class ComboBannerObserver implements LifecycleObserver {
                 }
 
                 if (viewAdded){
-                    mActivity.onCommonViewCreated(mAdView, mInstanceTag);
+                    activity.onCommonViewCreated(mAdView, mInstanceTag);
                     mAdView.setVisibility(View.VISIBLE);
                 }
             }
@@ -156,7 +152,7 @@ public class ComboBannerObserver implements LifecycleObserver {
         this.mAdView.loadAd(adRequest);
     }
 
-    private void ensurePromoView(){
+    private void ensurePromoView(@NonNull BaseActivity activity){
 
     }
 }
