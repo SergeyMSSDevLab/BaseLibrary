@@ -1,11 +1,10 @@
 package com.mssdevlab.baselib;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class ErrorActivity extends AppCompatActivity {
     static final String ERROR_REPORT_CONTENT = "ErrorActivity.report.content";
@@ -22,19 +21,15 @@ public class ErrorActivity extends AppCompatActivity {
         dialog.setMessage(res.getString(R.string.common_error_report_dialog_text));
 
         final ErrorActivity activity = this;
-        dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                BaseApplication.reportSender.send(activity, message);
-                activity.finish();
-            }
+        dialog.setPositiveButton(android.R.string.yes, (dialog1, id) -> {
+            dialog1.dismiss();
+            BaseApplication.reportSender.send(activity, message);
+            activity.finish();
         });
 
-        dialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-                activity.finish();
-            }
+        dialog.setNegativeButton(android.R.string.no, (dialog12, id) -> {
+            dialog12.dismiss();
+            activity.finish();
         });
         dialog.create().show();
     }

@@ -75,23 +75,27 @@ public class ComboBannerObserver implements LifecycleObserver {
         ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
         ComboBannerUpdateLiveData.ShowView data = model.updateView().getValue();
         // update UI
-        if (data == ComboBannerUpdateLiveData.ShowView.NOTHING){
-            Log.v(LOG_TAG, "ComboBannerViewModel: nothing");
-            if (this.mPromoView != null){
-                this.mPromoView.setVisibility(View.GONE);
-            }
-            if (this.mAdView != null){
-                this.mAdView.pause();
-                this.mAdView.setVisibility(View.GONE);
-            }
-        } else if (data == ComboBannerUpdateLiveData.ShowView.ADS){
-            Log.v(LOG_TAG, "ComboBannerViewModel: ads");
-            this.ensureAdView(activity);
-            this.mAdView.setVisibility(View.VISIBLE);
-        } else if (data == ComboBannerUpdateLiveData.ShowView.PROMO){
-            Log.v(LOG_TAG, "ComboBannerViewModel: promo");
-            this.ensurePromoView(activity);
-            this.mPromoView.setVisibility(View.VISIBLE);
+        switch (data) {
+            case NOTHING:
+                Log.v(LOG_TAG, "ComboBannerViewModel: nothing");
+                if (this.mPromoView != null) {
+                    this.mPromoView.setVisibility(View.GONE);
+                }
+                if (this.mAdView != null) {
+                    this.mAdView.pause();
+                    this.mAdView.setVisibility(View.GONE);
+                }
+                break;
+            case ADS:
+                Log.v(LOG_TAG, "ComboBannerViewModel: ads");
+                this.ensureAdView(activity);
+                this.mAdView.setVisibility(View.VISIBLE);
+                break;
+            case PROMO:
+                Log.v(LOG_TAG, "ComboBannerViewModel: promo");
+                this.ensurePromoView(activity);
+                this.mPromoView.setVisibility(View.VISIBLE);
+                break;
         }
     }
 

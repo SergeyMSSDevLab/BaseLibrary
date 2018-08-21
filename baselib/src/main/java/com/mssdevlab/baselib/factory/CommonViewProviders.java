@@ -2,15 +2,9 @@ package com.mssdevlab.baselib.factory;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
-
-import com.mssdevlab.baselib.BaseActivity;
 
 import java.util.Map;
 

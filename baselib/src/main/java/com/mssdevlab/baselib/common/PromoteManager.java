@@ -14,7 +14,7 @@ import com.mssdevlab.baselib.BaseApplication;
 @SuppressWarnings("unused")
 public class PromoteManager {
     private static final String LOG_TAG = PromoteManager.class.getCanonicalName();
-    private static final Long DAY_MS = 1000l * 60 * 60 * 24;
+    private static final Long DAY_MS = 1000L * 60 * 60 * 24;
     private static final String SHARED_PREF = "PromoteApp";
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private static final String PREF_LAUNCHES = "Launches";

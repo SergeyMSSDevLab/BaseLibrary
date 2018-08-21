@@ -35,14 +35,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void onChanged( final Boolean initCompleted) {
                 if (initCompleted){
-                    addComonViewInternal(providerTag, instanceTag, idViewStub);
+                    addCommonViewInternal(providerTag, instanceTag, idViewStub);
                     CommonViewProviders.getInitCompleted().removeObserver(this);
                 }
             }
         });
     }
 
-    private void addComonViewInternal(String providerTag, String instanceTag, int idViewStub) {
+    private void addCommonViewInternal(String providerTag, String instanceTag, int idViewStub) {
 
         final Bundle args = new Bundle();
         args.putString(CommonViewProviders.ARG_PROVIDER_TAG, providerTag);
@@ -52,12 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final BaseActivity instance = this;
         final CommonViewProvider provider = CommonViewProviders.getProvider(providerTag);
         if (provider != null){
-            provider.getViewModel(this).updateCommonView().observe(this, new Observer<Integer>() {
-                @Override
-                public void onChanged(@Nullable Integer counter) {
-                    provider.createView(instance, args);
-                }
-            });
+            provider.getViewModel(this).updateCommonView().observe(this, counter -> provider.createView(instance, args));
         }
     }
 }

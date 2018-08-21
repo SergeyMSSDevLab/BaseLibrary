@@ -50,26 +50,24 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    initApplicationInBacground();
+        new Thread(() -> {
+            try {
+                initApplicationInBackground();
 
-                    // Inform observers that configuration finished
-                    CommonViewProviders.setInitCompleted();
-                } catch (Throwable ex) {
-                    try {
-                        createReportFile(ex);
-                    } catch (Exception e) {
-                        Log.v(LOG_TAG, e.getMessage());
-                    }
+                // Inform observers that configuration finished
+                CommonViewProviders.setInitCompleted();
+            } catch (Throwable ex) {
+                try {
+                    createReportFile(ex);
+                } catch (Exception e) {
+                    Log.v(LOG_TAG, e.getMessage());
                 }
             }
         }).start();
     }
 
     @CallSuper
-    protected void initApplicationInBacground(){
+    protected void initApplicationInBackground(){
         PromoteManager.markStarting();
     }
 
