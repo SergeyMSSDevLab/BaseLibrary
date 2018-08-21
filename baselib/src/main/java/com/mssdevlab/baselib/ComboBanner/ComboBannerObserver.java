@@ -89,12 +89,10 @@ public class ComboBannerObserver implements LifecycleObserver {
             case ADS:
                 Log.v(LOG_TAG, "ComboBannerViewModel: ads");
                 this.ensureAdView(activity);
-                this.mAdView.setVisibility(View.VISIBLE);
                 break;
             case PROMO:
                 Log.v(LOG_TAG, "ComboBannerViewModel: promo");
                 this.ensurePromoView(activity);
-                this.mPromoView.setVisibility(View.VISIBLE);
                 break;
         }
     }
