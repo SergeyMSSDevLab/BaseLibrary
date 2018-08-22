@@ -19,7 +19,7 @@ import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.factory.CommonViewProviders;
 
-public class ComboBannerObserver implements LifecycleObserver {
+class ComboBannerObserver implements LifecycleObserver {
     private static final String LOG_TAG = "ComboBannerObserver";
 
     public static final String ARG_APP_NAME = "ComboBannerFragment.param1";
@@ -30,9 +30,9 @@ public class ComboBannerObserver implements LifecycleObserver {
     private View mPromoView;
 
     private int mViewStubId;
-    private String mAdUnitId;
+    private final String mAdUnitId;
 
-    private String mInstanceTag;
+    private final String mInstanceTag;
 
     ComboBannerObserver(@NonNull Bundle args) {
         Log.v(LOG_TAG, "Constructor");
@@ -75,6 +75,7 @@ public class ComboBannerObserver implements LifecycleObserver {
         ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
         ComboBannerUpdateLiveData.ShowView data = model.updateView().getValue();
         // update UI
+        assert data != null;
         switch (data) {
             case NOTHING:
                 Log.v(LOG_TAG, "ComboBannerViewModel: nothing");

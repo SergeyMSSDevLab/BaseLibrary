@@ -28,6 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract void onCommonViewCreated(@NonNull View view, @NonNull String instanceTag);
 
+    @SuppressWarnings("unused")
     protected void addCommonView(String providerTag, String instanceTag, int idViewStub){
         Log.v(LOG_TAG, "addCommonView: provider=" + providerTag + "; instance=" + instanceTag);
 

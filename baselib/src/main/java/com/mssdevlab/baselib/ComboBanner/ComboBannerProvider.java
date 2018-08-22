@@ -15,9 +15,9 @@ import com.mssdevlab.baselib.factory.CommonViewProvider;
 public class ComboBannerProvider extends CommonViewProvider {
     private static final String LOG_TAG = "ComboBannerProvider";
 
-    private String developerEmail;
-    private String adUnitId;
-    private String appName;
+    private final String developerEmail;
+    private final String adUnitId;
+    private final String appName;
 
     public ComboBannerProvider(String developerEmail, String adUnitId, String appName) {
         Log.v(LOG_TAG, "Constructor");

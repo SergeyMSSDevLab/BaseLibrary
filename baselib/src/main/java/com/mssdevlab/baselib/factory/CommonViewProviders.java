@@ -14,7 +14,7 @@ import java.util.Map;
 public class CommonViewProviders {
     private static final String LOG_TAG = "CommonViewProviders";
     private static final Map<String, CommonViewProvider> sConfigurationMap = new ArrayMap<>(4);
-    private static MutableLiveData<Boolean> sInitCompleted = new MutableLiveData<>();
+    private static final MutableLiveData<Boolean> sInitCompleted = new MutableLiveData<>();
 
     public static final String ARG_PROVIDER_TAG = "CommonViewProviders.parProviderTag";
     public static final String ARG_INSTANCE_TAG = "CommonViewProviders.parInstanceTag";

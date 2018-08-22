@@ -7,9 +7,9 @@ import com.mssdevlab.baselib.factory.CommonViewModel;
 
 public class ComboBannerViewModel extends CommonViewModel {
 
-    private MediatorLiveData<Integer> _updateCommonView = new MediatorLiveData<>();
+    private final MediatorLiveData<Integer> _updateCommonView = new MediatorLiveData<>();
 
-    private ComboBannerUpdateLiveData shouldUpdate = new ComboBannerUpdateLiveData();
+    private final ComboBannerUpdateLiveData shouldUpdate = new ComboBannerUpdateLiveData();
 
     public ComboBannerViewModel() {
         _updateCommonView.addSource(shouldUpdate, showView -> {
