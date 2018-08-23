@@ -3,7 +3,8 @@ package com.mssdevlab.baselib.ComboBanner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-class ComboBannerViewModel extends ViewModel {
+@SuppressWarnings("WeakerAccess")
+public class ComboBannerViewModel extends ViewModel {
 
     private final ComboBannerUpdateLiveData _updateView;
 
