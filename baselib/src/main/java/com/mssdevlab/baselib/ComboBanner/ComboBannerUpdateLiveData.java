@@ -23,6 +23,6 @@ public class ComboBannerUpdateLiveData extends LiveData<ComboBannerUpdateLiveDat
 
     public void checkState(){
         Log.v(LOG_TAG, "checkState");
-        this.setValue(ShowView.ADS); // TODO: replace with real checking
+        this.setValue(ShowView.PROMO); // TODO: replace with real checking
     }
 }

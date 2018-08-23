@@ -36,7 +36,7 @@
 //            if (this.mView == null && this.mViewStub != null) {
 //                this.mViewStub.setLayoutResource(R.layout.promote_view);
 //                this.mView = this.mViewStub.inflate();
-//                this.setUpView(this.mView);
+//                this.setUpPromoView(this.mView);
 //            }
 //            if (this.mView != null) {
 //                this.mView.setVisibility(View.VISIBLE);
@@ -51,8 +51,8 @@
 //    }
 //
 //    @Override
-//    protected void setUpView(@NonNull View view){
-//        Log.v(LOG_TAG, "setUpView: view == null: " + (view == null));
+//    protected void setUpPromoView(@NonNull View view){
+//        Log.v(LOG_TAG, "setUpPromoView: view == null: " + (view == null));
 //        if (this.mArguments != null){
 //            this.mAppName = this.mArguments.getString(ARG_APP_NAME);
 //            this.mDevEmail = this.mArguments.getString(ARG_DEV_EMAIL);
@@ -80,7 +80,7 @@
 //            }
 //        });
 //
-//        super.setUpView(view);
+//        super.setUpPromoView(view);
 //    }
 //
 //    void userEnjoy() {
