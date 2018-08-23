@@ -44,16 +44,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void addCommonViewInternal(String providerTag, String instanceTag, int idViewStub) {
-
-        final Bundle args = new Bundle();
-        args.putString(CommonViewProviders.ARG_PROVIDER_TAG, providerTag);
-        args.putString(CommonViewProviders.ARG_INSTANCE_TAG, instanceTag);
-        args.putInt(CommonViewProviders.ARG_VIEWSTUB_TAG, idViewStub);
-
-        final BaseActivity instance = this;
-        final CommonViewProvider provider = CommonViewProviders.getProvider(providerTag);
+        CommonViewProvider provider = CommonViewProviders.getProvider(providerTag);
         if (provider != null){
-            provider.getViewModel(this).updateCommonView().observe(this, counter -> provider.createView(instance, args));
+            Bundle args = new Bundle();
+            args.putString(CommonViewProviders.ARG_INSTANCE_TAG, instanceTag);
+            args.putInt(CommonViewProviders.ARG_VIEWSTUB_TAG, idViewStub);
+
+            provider.attachToActivity(this, args);
         }
     }
 }

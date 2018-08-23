@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="common_view_vertical_margin">12dp</dimen>
-    <dimen name="common_view_horizontal_margin_text">60dp</dimen>
 </resources>

@@ -3,11 +3,7 @@ package com.mssdevlab.baselib.ComboBanner;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
-public class ComboBannerUpdateLiveData extends LiveData<ComboBannerUpdateLiveData.ShowView> {
-    public enum ShowView {
-        NOTHING, PROMO, ADS
-    }
-
+class ComboBannerUpdateLiveData extends LiveData<ShowView> {
     private static final String LOG_TAG = "ComboBannerU_LiveData";
 
     ComboBannerUpdateLiveData() {
@@ -18,11 +14,7 @@ public class ComboBannerUpdateLiveData extends LiveData<ComboBannerUpdateLiveDat
     @Override
     protected void onActive() {
         Log.v(LOG_TAG, "onActive");
-        this.checkState();
-    }
-
-    public void checkState(){
-        Log.v(LOG_TAG, "checkState");
         this.setValue(ShowView.PROMO); // TODO: replace with real checking
     }
+
 }

@@ -6,12 +6,13 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseActivity;
-import com.mssdevlab.baselib.factory.CommonViewModel;
 import com.mssdevlab.baselib.factory.CommonViewProvider;
+import com.mssdevlab.baselib.factory.CommonViewProviders;
 
 /**
  * Provider for both ads banner and promotion dialog in the same view
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ComboBannerProvider extends CommonViewProvider {
     private static final String LOG_TAG = "ComboBannerProvider";
 
@@ -27,22 +28,18 @@ public class ComboBannerProvider extends CommonViewProvider {
     }
 
     @Override
-    public void createView(@NonNull BaseActivity activity, @NonNull Bundle args) {
-        Log.v(LOG_TAG, "createView");
-        args.putString(ComboBannerObserver.ARG_DEV_EMAIL, this.developerEmail);
-        args.putString(ComboBannerObserver.ARG_AD_UNIT_ID, this.adUnitId);
-        args.putString(ComboBannerObserver.ARG_APP_NAME, this.appName);
+    public void attachToActivity(final @NonNull BaseActivity activity, final @NonNull Bundle args) {
+        Log.v(LOG_TAG, "attachToActivity");
 
-        // TODO: Get view model and replace view
-        ComboBannerObserver observer = new ComboBannerObserver(args);
-        activity.getLifecycle().addObserver(observer);
-        observer.updateView(activity);
-    }
-
-    @Override
-    public CommonViewModel getViewModel(@NonNull final BaseActivity activity) {
         ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
-        model.checkState();
-        return model;
+        model.viewStubId = args.getInt(CommonViewProviders.ARG_VIEWSTUB_TAG);
+        model.instanceTag = args.getString(CommonViewProviders.ARG_INSTANCE_TAG);
+        model.adUnitId = this.adUnitId;
+        model.appName = this.appName;
+        model.devEmail = this.developerEmail;
+
+        final ComboBannerObserver observer = new ComboBannerObserver(activity);
+        activity.getLifecycle().addObserver(observer);
+        model.updateView().observe(activity, observer::updateView);
     }
 }
