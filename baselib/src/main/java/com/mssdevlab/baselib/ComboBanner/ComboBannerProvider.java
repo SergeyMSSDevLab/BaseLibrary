@@ -40,6 +40,5 @@ public class ComboBannerProvider extends CommonViewProvider {
 
         final ComboBannerObserver observer = new ComboBannerObserver(activity);
         activity.getLifecycle().addObserver(observer);
-        model.updateView().observe(activity, observer::updateView);
     }
 }

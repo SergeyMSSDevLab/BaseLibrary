@@ -34,6 +34,8 @@ class ComboBannerObserver implements LifecycleObserver {
 
     ComboBannerObserver(@NonNull BaseActivity activity) {
         this.mActivity = activity;
+        ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
+        model.updateView().observe(activity, this::updateView);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -67,7 +69,7 @@ class ComboBannerObserver implements LifecycleObserver {
         this.mActivity = null;
     }
 
-    public void updateView(ShowView showWhat){
+    private void updateView(ShowView showWhat){
         Log.v(LOG_TAG, "updateView");
 
         if (this.mActivity != null &&
