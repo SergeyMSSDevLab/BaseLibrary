@@ -1,9 +1,13 @@
 package com.mssdevlab.baselib.common;
 
+import android.arch.core.executor.ArchTaskExecutor;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Looper;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseApplication;
@@ -27,6 +31,27 @@ public class PromoteManager {
     private static final int sDaysBeforeShowRate = 3;
     private static final int sLaunchesBeforeShowRate = 10;
 
+    private static final MutableLiveData<Boolean> sShowPromo = new MutableLiveData<>();
+
+    public static LiveData<Boolean> showPromoDialog(){
+        Boolean val = sShowPromo.getValue();
+        if (val == null){
+            sShowPromo.setValue(false);
+        }
+        return sShowPromo;
+    }
+
+    /*
+    * Update the showPromoDialog state
+     */
+    private static void checkShowPromoDialog(){
+        if (Looper.myLooper() == Looper.getMainLooper()){
+            sShowPromo.setValue(isTimeToShowPromoScreen());
+        } else {
+            sShowPromo.postValue(isTimeToShowPromoScreen());
+        }
+    }
+
     /*
     * Stores information about launches of application
     */
@@ -49,6 +74,7 @@ public class PromoteManager {
 
             spEditor.apply();
         }
+        checkShowPromoDialog();
     }
 
     /*
@@ -106,6 +132,7 @@ public class PromoteManager {
             Log.v(LOG_TAG, "MarkRateNotNow");
             setLaunchesBeforeShowRate(getLaunchesFromInstall() + 5);
         }
+        checkShowPromoDialog();
     }
 
     /*
@@ -119,10 +146,11 @@ public class PromoteManager {
             spEditor.putBoolean(PREF_NEVER_SHOW, true);
             spEditor.apply();
         }
+        checkShowPromoDialog();
     }
 
     /*
-    * Sets conditions that to never show the promotion screen
+    * Sets conditions that to show the promotion screen
     */
     public static void setPromoScreenEnabled(boolean enabled) {
         synchronized (lockObj) {
@@ -132,6 +160,7 @@ public class PromoteManager {
             spEditor.putBoolean(PREF_NEVER_SHOW, !enabled);
             spEditor.apply();
         }
+        checkShowPromoDialog();
     }
 
     public static int getDaysFromInstall(){
