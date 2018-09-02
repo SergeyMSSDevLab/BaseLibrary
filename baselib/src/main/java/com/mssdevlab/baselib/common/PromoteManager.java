@@ -36,7 +36,11 @@ public class PromoteManager {
     public static LiveData<Boolean> showPromoDialog(){
         Boolean val = sShowPromo.getValue();
         if (val == null){
-            sShowPromo.setValue(false);
+            if (Looper.myLooper() == Looper.getMainLooper()){
+                sShowPromo.setValue(false);
+            } else {
+                sShowPromo.postValue(false);
+            }
         }
         return sShowPromo;
     }
@@ -45,10 +49,12 @@ public class PromoteManager {
     * Update the showPromoDialog state
      */
     private static void checkShowPromoDialog(){
+        boolean showPromo = isTimeToShowPromoScreen();
+        Log.v(LOG_TAG, "checkShowPromoDialog showPromo: " + Boolean.toString(showPromo));
         if (Looper.myLooper() == Looper.getMainLooper()){
-            sShowPromo.setValue(isTimeToShowPromoScreen());
+            sShowPromo.setValue(showPromo);
         } else {
-            sShowPromo.postValue(isTimeToShowPromoScreen());
+            sShowPromo.postValue(showPromo);
         }
     }
 
@@ -92,8 +98,11 @@ public class PromoteManager {
                 Long curMs = System.currentTimeMillis();
                 Long firstLaunch = sharedPref.getLong(PREF_FIRST_LAUNCH, curMs);
                 int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
+                Log.v(LOG_TAG, "IsTimeToShowRate launches: " + Integer.toString(launches));
 
-                return (((firstLaunch + reqDays * DAY_MS) < curMs) && (launches > reqLaunches));
+                boolean ret = (((firstLaunch + reqDays * DAY_MS) < curMs) && (launches > reqLaunches));
+                Log.v(LOG_TAG, "IsTimeToShowRate: " + Boolean.toString(ret));
+                return ret;
             }
         } else {
             return false;
@@ -103,7 +112,9 @@ public class PromoteManager {
     public static boolean isPromoScreenEnabled(){
         synchronized (lockObj) {
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            return !sharedPref.getBoolean(PREF_NEVER_SHOW, false);
+            boolean ret = !sharedPref.getBoolean(PREF_NEVER_SHOW, false);
+            Log.v(LOG_TAG, "isPromoScreenEnabled: " + Boolean.toString(ret));
+            return ret;
         }
     }
 
@@ -183,7 +194,9 @@ public class PromoteManager {
     public static int getDaysBeforeShowRate() {
         synchronized (lockObj) {
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            return sharedPref.getInt(PREF_DAYS_BEFORE_SHOW_RATE, PromoteManager.sDaysBeforeShowRate);
+            int ret = sharedPref.getInt(PREF_DAYS_BEFORE_SHOW_RATE, PromoteManager.sDaysBeforeShowRate);
+            Log.v(LOG_TAG, "getDaysBeforeShowRate: " + ret);
+            return ret;
         }
     }
 
