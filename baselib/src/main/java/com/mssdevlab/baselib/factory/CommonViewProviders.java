@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.Map;
 
 /**
- * Holds all configurations for application
+ * Holds all common view configurations for an application
  */
 public class CommonViewProviders {
     private static final String LOG_TAG = "CommonViewProviders";

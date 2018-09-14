@@ -11,6 +11,7 @@ import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
 import com.mssdevlab.baselib.common.PromoteManager;
 import com.mssdevlab.baselib.factory.CommonViewProviders;
+import com.mssdevlab.baselib.factory.MenuItemProviders;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -56,6 +57,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
                 // Inform observers that configuration finished
                 CommonViewProviders.setInitCompleted();
+                MenuItemProviders.setInitCompleted();
             } catch (Throwable ex) {
                 try {
                     createReportFile(ex);

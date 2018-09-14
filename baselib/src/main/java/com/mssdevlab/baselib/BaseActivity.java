@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import com.mssdevlab.baselib.factory.CommonViewProvider;
 import com.mssdevlab.baselib.factory.CommonViewProviders;
+import com.mssdevlab.baselib.factory.MenuItemProviders;
 
 /**
  * Class connects child activity with baselib stuff
@@ -17,13 +19,21 @@ import com.mssdevlab.baselib.factory.CommonViewProviders;
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BaseActivity";
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.v(LOG_TAG, "onCreate");
+    protected void addCommonMenuItems(Menu menu, @Nullable String[] tags){
+        final BaseActivity self = this;
+        MenuItemProviders.getInitCompleted().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable final Boolean initCompleted) {
+                if (initCompleted != null && initCompleted){
+                    MenuItemProviders.attachToActivity(self, menu, tags);
+                    MenuItemProviders.getInitCompleted().removeObserver(this);
+                }
+            }
+        });
+    }
 
-        //AdsObserver observer = new AdsObserver(getLifecycle());
-        //final AdsObserver viewModel = ViewModelProviders.of(this).get(AdsObserver.class);
+    protected void onMenuItemSelected(int menuItemId){
+        MenuItemProviders.setMenuItemSelected(menuItemId);
     }
 
     public abstract void onCommonViewCreated(@NonNull View view, @NonNull String instanceTag);
@@ -34,8 +44,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         CommonViewProviders.getInitCompleted().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged( final Boolean initCompleted) {
-                if (initCompleted){
+            public void onChanged(@Nullable  final Boolean initCompleted) {
+                if (initCompleted != null && initCompleted){
                     addCommonViewInternal(providerTag, instanceTag, idViewStub);
                     CommonViewProviders.getInitCompleted().removeObserver(this);
                 }
@@ -44,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void addCommonViewInternal(String providerTag, String instanceTag, int idViewStub) {
+        Log.v(LOG_TAG, "addCommonViewInternal: provider=" + providerTag + "; instance=" + instanceTag);
         CommonViewProvider provider = CommonViewProviders.getProvider(providerTag);
         if (provider != null){
             Bundle args = new Bundle();
