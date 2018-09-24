@@ -2,6 +2,8 @@ package com.mssdevlab.baselib;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -26,6 +28,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     private static final String NAME_FILE_DATA = "error.data";
     private static BaseApplication curInstance;
     private static Thread.UncaughtExceptionHandler originalHandler;
+    private static Class<?> upgradeActivityClass;
 
     public static MessageSender reportSender = null;
 
@@ -161,4 +164,15 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         Log.v(LOG_TAG, "CreateReport4Throwable");
         return Helper.CreateReport4Throwable(e, this);
     }
+
+    protected void setUpgradeActivity(Class<?> cls) {
+        upgradeActivityClass = cls;
+    }
+
+    public static void startUpgradeScreen(Activity ctx){
+        Intent intent = new Intent(ctx, upgradeActivityClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        ctx.startActivity(intent);
+    }
+
 }

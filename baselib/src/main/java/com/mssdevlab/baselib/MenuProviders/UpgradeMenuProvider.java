@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.factory.MenuItemProvider;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
@@ -38,7 +39,7 @@ public class UpgradeMenuProvider extends MenuItemProvider {
                 @Override
                 public void onChanged(@Nullable final Integer menuId) {
                     if (menuId != null && menuId == resId){
-                        Helper.openUrl(resLink, activity);
+                        BaseApplication.startUpgradeScreen(activity);
                     }
                 }
             });
