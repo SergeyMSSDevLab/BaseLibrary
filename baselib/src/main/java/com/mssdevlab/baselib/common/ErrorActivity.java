@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib;
+package com.mssdevlab.baselib.common;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -6,8 +6,11 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mssdevlab.baselib.BaseApplication;
+import com.mssdevlab.baselib.R;
+
 public class ErrorActivity extends AppCompatActivity {
-    static final String ERROR_REPORT_CONTENT = "ErrorActivity.report.content";
+    public static final String ERROR_REPORT_CONTENT = "ErrorActivity.report.content";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

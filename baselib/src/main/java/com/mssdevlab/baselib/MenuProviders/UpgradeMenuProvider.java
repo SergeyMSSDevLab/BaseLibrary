@@ -10,18 +10,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
-import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.factory.MenuItemProvider;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
 
-public class LinkMenuProvider extends MenuItemProvider {
+public class UpgradeMenuProvider extends MenuItemProvider {
     @StringRes private final int resTitle;
     @IdRes private final int resId;
     @StringRes private final int resLink;
     @DrawableRes private final int resIcon;
 
-    public LinkMenuProvider(@StringRes int title, @IdRes int id, @StringRes int link, @DrawableRes int icon) {
+    public UpgradeMenuProvider(@StringRes int title, @IdRes int id, @StringRes int link, @DrawableRes int icon) {
         this.resId = id;
         this.resTitle = title;
         this.resLink = link;

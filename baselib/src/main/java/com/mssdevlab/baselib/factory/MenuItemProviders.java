@@ -2,6 +2,7 @@ package com.mssdevlab.baselib.factory;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -26,19 +27,22 @@ public class MenuItemProviders {
         Log.v(LOG_TAG, "MenuItemProvider added: " + providerTag);
     }
 
-    public static void attachToActivity(@NonNull final BaseActivity activity, @NonNull final Menu menu, @Nullable String[] tags){
+    public static void attachToActivity(@NonNull final BaseActivity activity,
+                                        @NonNull final Menu menu,
+                                        @IdRes final int groupId,
+                                        @Nullable final String[] tags){
         if (sConfigurationMap.entrySet().size() > 0){
             if (tags != null && tags.length > 0){
                 // add passed set of items
                 for(int i=0; i < tags.length; i++) {
                     MenuItemProvider p = sConfigurationMap.get(tags[i]);
-                    p.attachToActivity(activity, menu);
+                    p.attachToActivity(activity, menu, groupId);
                 }
             } else {
                 // add all items from the map
                 for (MenuItemProvider p : sConfigurationMap.values())
                 {
-                    p.attachToActivity(activity, menu);
+                    p.attachToActivity(activity, menu, groupId);
                 }
             }
         }

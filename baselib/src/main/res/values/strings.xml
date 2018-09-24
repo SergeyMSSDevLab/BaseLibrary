@@ -5,6 +5,7 @@
     <string name="common_error_report_choose_title">Choose an email provider</string>
 
     <string name="common_menu_play_apps">Applications</string>
+    <string name="common_menu_upgrade">Upgrade</string>
 
     <string name="common_enjoy_prompt">Enjoying %s?</string>
     <string name="common_enjoy_yes">Yes</string>

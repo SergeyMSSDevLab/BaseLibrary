@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="menu_action_play_app" type="id"/>
+    <item name="menu_action_upgrade" type="id"/>
     <item name="combo_banner_promo" type="id"/>
     <item name="combo_banner_ads" type="id"/>
 </resources>

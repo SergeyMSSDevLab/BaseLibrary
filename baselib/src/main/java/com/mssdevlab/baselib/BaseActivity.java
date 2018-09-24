@@ -2,6 +2,7 @@ package com.mssdevlab.baselib;
 
 import android.arch.lifecycle.Observer;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,14 +20,16 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BaseActivity";
 
-    protected void addCommonMenuItems(Menu menu, @Nullable String[] tags){
+    protected void addCommonMenuItems(final Menu menu,
+                                      @IdRes final int groupId,
+                                      @Nullable final String[] tags){
         final BaseActivity self = this;
         MenuItemProviders.getInitCompleted().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable final Boolean initCompleted) {
                 if (initCompleted != null && initCompleted){
-                    MenuItemProviders.attachToActivity(self, menu, tags);
                     MenuItemProviders.getInitCompleted().removeObserver(this);
+                    MenuItemProviders.attachToActivity(self, menu, groupId, tags);
                 }
             }
         });

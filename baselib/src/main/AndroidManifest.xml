@@ -8,7 +8,7 @@
     <application>
         <activity
             android:label="@string/common_error_report_email_subject"
-            android:name=".ErrorActivity">
+            android:name=".common.ErrorActivity">
         </activity>
     </application>
 

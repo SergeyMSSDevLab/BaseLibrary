@@ -7,6 +7,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
 import com.mssdevlab.baselib.common.PromoteManager;
@@ -26,7 +27,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     private static BaseApplication curInstance;
     private static Thread.UncaughtExceptionHandler originalHandler;
 
-    static MessageSender reportSender = null;
+    public static MessageSender reportSender = null;
 
     private final Object syncObject = new Object();
 
