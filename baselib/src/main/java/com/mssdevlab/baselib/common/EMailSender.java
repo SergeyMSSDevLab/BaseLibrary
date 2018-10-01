@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import java.util.List;
 

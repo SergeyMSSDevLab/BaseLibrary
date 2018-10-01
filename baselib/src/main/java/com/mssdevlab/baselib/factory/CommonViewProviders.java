@@ -1,9 +1,9 @@
 package com.mssdevlab.baselib.factory;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
+import androidx.collection.ArrayMap;
 import android.util.Log;
 
 import java.util.Map;

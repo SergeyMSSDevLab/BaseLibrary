@@ -1,8 +1,8 @@
 package com.mssdevlab.baselib.common;
 
-import android.arch.core.executor.ArchTaskExecutor;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.arch.core.executor.ArchTaskExecutor;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

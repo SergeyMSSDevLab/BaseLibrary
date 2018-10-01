@@ -1,6 +1,6 @@
 package com.mssdevlab.baselib.common;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.os.Looper;
 
 public class ApplicationModeLiveData extends LiveData<AppMode> {

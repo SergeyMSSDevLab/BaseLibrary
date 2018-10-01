@@ -1,6 +1,6 @@
 package com.mssdevlab.baselib.ComboBanner;
 
-import android.arch.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MediatorLiveData;
 import android.os.Looper;
 import android.util.Log;
 

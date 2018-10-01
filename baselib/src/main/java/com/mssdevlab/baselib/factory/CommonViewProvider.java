@@ -1,7 +1,7 @@
 package com.mssdevlab.baselib.factory;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mssdevlab.baselib.BaseActivity;
 

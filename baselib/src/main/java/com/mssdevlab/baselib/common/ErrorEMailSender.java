@@ -1,9 +1,8 @@
 package com.mssdevlab.baselib.common;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import com.mssdevlab.baselib.R;
-import com.mssdevlab.baselib.common.EMailSender;
 
 /**
  * Error report e-mail sender

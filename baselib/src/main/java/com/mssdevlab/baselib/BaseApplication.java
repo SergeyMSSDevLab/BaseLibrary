@@ -2,11 +2,9 @@ package com.mssdevlab.baselib;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.mssdevlab.baselib.common.ErrorActivity;

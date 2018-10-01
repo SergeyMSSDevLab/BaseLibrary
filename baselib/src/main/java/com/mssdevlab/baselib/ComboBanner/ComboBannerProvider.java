@@ -1,8 +1,8 @@
 package com.mssdevlab.baselib.ComboBanner;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseActivity;

@@ -1,16 +1,15 @@
 package com.mssdevlab.baselib.MenuProviders;
 
-import android.arch.lifecycle.Observer;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.lifecycle.Observer;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
-import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.factory.MenuItemProvider;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
