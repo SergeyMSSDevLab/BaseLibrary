@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.ComboBanner;
+package com.mssdevlab.baselib.combobanner;
 
 import androidx.lifecycle.MediatorLiveData;
 import android.os.Looper;
@@ -8,10 +8,10 @@ import com.mssdevlab.baselib.common.AppMode;
 import com.mssdevlab.baselib.common.ApplicationModeLiveData;
 import com.mssdevlab.baselib.common.PromoteManager;
 
-class ComboBannerUpdateLiveData extends MediatorLiveData<ShowView> {
+public class ComboBannerUpdateLiveData extends MediatorLiveData<ShowView> {
     private static final String LOG_TAG = "ComboBannerU_LiveData";
 
-    ComboBannerUpdateLiveData() {
+    public ComboBannerUpdateLiveData() {
         Log.v(LOG_TAG, "Constructor");
         this.setValueInternal(ShowView.NOTHING);
 

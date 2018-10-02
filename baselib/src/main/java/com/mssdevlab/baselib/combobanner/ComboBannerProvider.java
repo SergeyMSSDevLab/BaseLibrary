@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.ComboBanner;
+package com.mssdevlab.baselib.combobanner;
 
 import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.ComboBannerViewModel;
 import com.mssdevlab.baselib.factory.CommonViewProvider;
 import com.mssdevlab.baselib.factory.CommonViewProviders;
 
@@ -34,9 +35,9 @@ public class ComboBannerProvider extends CommonViewProvider {
         ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
         model.viewStubId = args.getInt(CommonViewProviders.ARG_VIEWSTUB_TAG);
         model.instanceTag = args.getString(CommonViewProviders.ARG_INSTANCE_TAG);
-        model.adUnitId = this.adUnitId;
-        model.appName = this.appName;
-        model.devEmail = this.developerEmail;
+        model.setAdUnitId(this.adUnitId);
+        model.setAppName(this.appName);
+        model.setDevEmail(this.developerEmail);
 
         final ComboBannerObserver observer = new ComboBannerObserver(activity);
         activity.getLifecycle().addObserver(observer);

@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.ComboBanner;
+package com.mssdevlab.baselib.combobanner;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -21,6 +21,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.ComboBannerViewModel;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.PromoteManager;
@@ -116,7 +117,7 @@ class ComboBannerObserver implements LifecycleObserver {
         if (this.mAdView == null) {
             this.mAdView = new AdView(this.mActivity);
             this.mAdView.setAdSize(AdSize.SMART_BANNER);
-            this.mAdView.setAdUnitId(model.adUnitId);
+            this.mAdView.setAdUnitId(model.adUnitId().getValue());
             this.mAdView.setVisibility(View.GONE);
             Log.v(LOG_TAG, "ensureAdView: mAdView created");
         }
@@ -213,7 +214,7 @@ class ComboBannerObserver implements LifecycleObserver {
         final TextView tvPrompt = this.mPromoView.findViewById(R.id.tvPromptQuestion);
 
         String text = res.getString(R.string.common_enjoy_prompt,
-                model.appName == null ? "application": model.appName);
+                model.appName().getValue() == null ? "application": model.appName().getValue());
         tvPrompt.setText(text);
         btnYes.setText(R.string.common_enjoy_yes);
         btnNot.setText(R.string.common_enjoy_not);
@@ -241,8 +242,8 @@ class ComboBannerObserver implements LifecycleObserver {
 
             btnYes.setOnClickListener(v12 -> {
 
-                String uriText = "mailto:" + (model.devEmail == null ? "": model.devEmail) + "?subject="
-                        + Uri.encode(model.appName == null ? "application": model.appName) + "&body=" + " ... ";
+                String uriText = "mailto:" + (model.devEmail().getValue() == null ? "": model.devEmail().getValue()) + "?subject="
+                        + Uri.encode(model.appName().getValue() == null ? "application": model.appName().getValue()) + "&body=" + " ... ";
                 Uri uri = Uri.parse(uriText);
 
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);

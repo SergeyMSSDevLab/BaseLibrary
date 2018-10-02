@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.ComboBanner;
+package com.mssdevlab.baselib.combobanner;
 
 public enum ShowView {
     NOTHING,

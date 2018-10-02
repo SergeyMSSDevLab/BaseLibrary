@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.MenuProviders;
+package com.mssdevlab.baselib.menuproviders;
 
 import androidx.lifecycle.Observer;
 import androidx.annotation.DrawableRes;
