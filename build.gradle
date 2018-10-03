@@ -15,6 +15,7 @@ buildscript {
         supportLibraryVersion = '1.0.0'
         annotationVersion = '1.0.0'
         playServicesVersion = '15.0.1'
+        constraintlayoutVersion = '2.0.0-alpha2'
     }
 
     repositories {
