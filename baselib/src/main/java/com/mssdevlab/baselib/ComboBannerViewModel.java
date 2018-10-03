@@ -24,7 +24,7 @@ public class ComboBannerViewModel extends ViewModel {
         this._updateView = new ComboBannerUpdateLiveData();
     }
 
-    public LiveData<ShowView> updateView(){
+    public LiveData<ShowView> getUpdateView(){
         return _updateView;
     }
 

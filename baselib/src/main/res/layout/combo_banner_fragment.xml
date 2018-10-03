@@ -6,6 +6,7 @@
         <variable name="viewModel" type="com.mssdevlab.baselib.ComboBannerViewModel"/>
     </data>
 
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

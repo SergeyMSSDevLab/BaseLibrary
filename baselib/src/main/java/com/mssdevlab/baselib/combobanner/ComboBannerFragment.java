@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,22 @@ public class ComboBannerFragment extends Fragment {
         return new ComboBannerFragment();
     }
 
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        Log.v(LOG_TAG, "onInflate");
+        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
+        if (arr != null) {
+//            for(int i = 0; i < arr.length(); i++){
+//                TypedValue val = arr.peekValue(i);
+//                Log.v(LOG_TAG, "onInflate attribute: " + val.toString());
+//            }
+            this.mAdUnitId = arr.getString(R.styleable.ComboBannerFragment_ad_unit_id);
+            this.mAppName = arr.getString(R.styleable.ComboBannerFragment_app_name);
+            this.mDevEmail = arr.getString(R.styleable.ComboBannerFragment_developer_email);
+            arr.recycle();
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -96,45 +111,28 @@ public class ComboBannerFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.v(LOG_TAG, "onActivityCreated");
-        mViewModel.updateView().observe(getActivity(), this::updateView);
+        mViewModel.getUpdateView().observe(getActivity(), this::updateView);
 
-    }
-
-    @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-        Log.v(LOG_TAG, "onInflate");
-        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
-        if (arr != null) {
-//            for(int i = 0; i < arr.length(); i++){
-//                TypedValue val = arr.peekValue(i);
-//                Log.v(LOG_TAG, "onInflate attribute: " + val.toString());
-//            }
-            this.mAdUnitId = arr.getString(R.styleable.ComboBannerFragment_ad_unit_id);
-            this.mAppName = arr.getString(R.styleable.ComboBannerFragment_app_name);
-            this.mDevEmail = arr.getString(R.styleable.ComboBannerFragment_developer_email);
-            arr.recycle();
-        }
     }
 
     private void updateView(ShowView showWhat){
-        Log.v(LOG_TAG, "updateView");
+        Log.v(LOG_TAG, "getUpdateView");
 
         assert showWhat != null;
         // update UI
         switch (showWhat) {
             case NOTHING:
-                Log.v(LOG_TAG, "updateView: nothing");
+                Log.v(LOG_TAG, "getUpdateView: nothing");
                 this.hidePromoView();
                 this.hideAdView();
                 break;
             case ADS:
-                Log.v(LOG_TAG, "updateView: ads");
+                Log.v(LOG_TAG, "getUpdateView: ads");
                 this.hidePromoView();
                 this.ensureAdView();
                 break;
             case PROMO:
-                Log.v(LOG_TAG, "updateView: promo");
+                Log.v(LOG_TAG, "getUpdateView: promo");
                 this.hideAdView();
                 this.ensurePromoView();
                 break;
