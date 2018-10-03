@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +25,27 @@ public class ComboBannerFragment extends Fragment {
     private static final String LOG_TAG = "ComboBannerFragment";
 
     private ComboBannerViewModel mViewModel;
+    private String mAdUnitId;
+    private String mDevEmail;
+    private String mAppName;
 
     public static ComboBannerFragment newInstance() {
         return new ComboBannerFragment();
     }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.v(LOG_TAG, "onAttach");
         this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
+        this.mViewModel.setAdUnitId(this.mAdUnitId);
+        this.mViewModel.setAppName(this.mAppName);
+        this.mViewModel.setDevEmail(this.mDevEmail);
+        Log.v(LOG_TAG, "onInflate data set:" +
+                " mAdUnitId: " + this.mViewModel.getAdUnitId().getValue() +
+                " appName: " + this.mViewModel.getAppName().getValue() +
+                " devEmail: " + this.mViewModel.getDevEmail().getValue());
     }
 
     @Override
@@ -94,11 +106,13 @@ public class ComboBannerFragment extends Fragment {
         Log.v(LOG_TAG, "onInflate");
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
         if (arr != null) {
-            if (this.mViewModel != null){
-                this.mViewModel.setAdUnitId(arr.getString (R.styleable.ComboBannerFragment_ad_unit_id));
-                this.mViewModel.setAppName(arr.getString (R.styleable.ComboBannerFragment_app_name));
-                this.mViewModel.setDevEmail(arr.getString (R.styleable.ComboBannerFragment_developer_email));
-            }
+//            for(int i = 0; i < arr.length(); i++){
+//                TypedValue val = arr.peekValue(i);
+//                Log.v(LOG_TAG, "onInflate attribute: " + val.toString());
+//            }
+            this.mAdUnitId = arr.getString(R.styleable.ComboBannerFragment_ad_unit_id);
+            this.mAppName = arr.getString(R.styleable.ComboBannerFragment_app_name);
+            this.mDevEmail = arr.getString(R.styleable.ComboBannerFragment_developer_email);
             arr.recycle();
         }
     }
@@ -148,7 +162,7 @@ public class ComboBannerFragment extends Fragment {
 //        if (this.mAdView == null) {
 //            this.mAdView = new AdView(this.getActivity());
 //            this.mAdView.setAdSize(AdSize.SMART_BANNER);
-//            this.mAdView.setAdUnitId(model.adUnitId);
+//            this.mAdView.setAdUnitId(model.mAdUnitId);
 //            this.mAdView.setVisibility(View.GONE);
 //            Log.v(LOG_TAG, "ensureAdView: mAdView created");
 //        }

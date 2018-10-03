@@ -28,11 +28,11 @@ public class ComboBannerViewModel extends ViewModel {
         return _updateView;
     }
 
-    public LiveData<String> adUnitId() { return this.mAdUnitId; }
+    public LiveData<String> getAdUnitId() { return this.mAdUnitId; }
 
-    public LiveData<String> appName() { return this.mAppName; }
+    public LiveData<String> getAppName() { return this.mAppName; }
 
-    public LiveData<String> devEmail() { return this.mDevEmail; }
+    public LiveData<String> getDevEmail() { return this.mDevEmail; }
 
     public void setAdUnitId(String value){ this.setValue(this.mAdUnitId, value); }
 

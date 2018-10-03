@@ -117,7 +117,7 @@ class ComboBannerObserver implements LifecycleObserver {
         if (this.mAdView == null) {
             this.mAdView = new AdView(this.mActivity);
             this.mAdView.setAdSize(AdSize.SMART_BANNER);
-            this.mAdView.setAdUnitId(model.adUnitId().getValue());
+            this.mAdView.setAdUnitId(model.getAdUnitId().getValue());
             this.mAdView.setVisibility(View.GONE);
             Log.v(LOG_TAG, "ensureAdView: mAdView created");
         }
@@ -214,7 +214,7 @@ class ComboBannerObserver implements LifecycleObserver {
         final TextView tvPrompt = this.mPromoView.findViewById(R.id.tvPromptQuestion);
 
         String text = res.getString(R.string.common_enjoy_prompt,
-                model.appName().getValue() == null ? "application": model.appName().getValue());
+                model.getAppName().getValue() == null ? "application": model.getAppName().getValue());
         tvPrompt.setText(text);
         btnYes.setText(R.string.common_enjoy_yes);
         btnNot.setText(R.string.common_enjoy_not);
@@ -242,8 +242,8 @@ class ComboBannerObserver implements LifecycleObserver {
 
             btnYes.setOnClickListener(v12 -> {
 
-                String uriText = "mailto:" + (model.devEmail().getValue() == null ? "": model.devEmail().getValue()) + "?subject="
-                        + Uri.encode(model.appName().getValue() == null ? "application": model.appName().getValue()) + "&body=" + " ... ";
+                String uriText = "mailto:" + (model.getDevEmail().getValue() == null ? "": model.getDevEmail().getValue()) + "?subject="
+                        + Uri.encode(model.getAppName().getValue() == null ? "application": model.getAppName().getValue()) + "&body=" + " ... ";
                 Uri uri = Uri.parse(uriText);
 
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
