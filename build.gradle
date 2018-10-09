@@ -14,8 +14,9 @@ buildscript {
         lifecycleVersion = '2.0.0'
         supportLibraryVersion = '1.0.0'
         annotationVersion = '1.0.0'
-        playServicesVersion = '17.0.0'
+        mobileAdsVersion = '17.0.0'
         constraintlayoutVersion = '2.0.0-alpha2'
+        materialVersion = '1.0.0'
     }
 
     repositories {

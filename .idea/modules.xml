@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BaseLibrary.iml" filepath="$PROJECT_DIR$/BaseLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/admonster/admonster.iml" filepath="$PROJECT_DIR$/admonster/admonster.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselib/baselib.iml" filepath="$PROJECT_DIR$/baselib/baselib.iml" />
     </modules>
   </component>
