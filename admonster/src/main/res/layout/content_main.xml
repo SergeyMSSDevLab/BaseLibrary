@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_DEMO.name().replace("MODE_", "")}'
-                    android:checked="@{viewModelMain.isModeDemo}"
+                    android:checked="@{safeUnbox(viewModelMain.isModeDemo)}"
                     android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_DEMO)}"
                     />
                 <RadioButton
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_EVALUATION.name().replace("MODE_", "")}'
-                    android:checked="@{viewModelMain.isModeEval}"
+                    android:checked="@{safeUnbox(viewModelMain.isModeEval)}"
                     android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_EVALUATION)}"
                     />
                 <RadioButton
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_NO_ADS.name().replace("MODE_", "")}'
-                    android:checked="@{viewModelMain.isModeNoAds}"
+                    android:checked="@{safeUnbox(viewModelMain.isModeNoAds)}"
                     android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_NO_ADS)}"
                     />
                 <RadioButton
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_PRO.name().replace("MODE_", "")}'
-                    android:checked="@{viewModelMain.isModePro}"
+                    android:checked="@{safeUnbox(viewModelMain.isModePro)}"
                     android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_PRO)}"
                     />
             </RadioGroup>
@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{ShowView.NOTHING.name()}'
-                    android:checked="@{viewModelMain.isShowNothing}"
+                    android:checked="@{safeUnbox(viewModelMain.isShowNothing)}"
                     android:onClick="@{() -> viewModelMain.setShowMode(false)}"
                     />
 
@@ -112,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{ShowView.PROMO.name()}'
-                    android:checked="@{viewModelMain.isShowPromo}"
+                    android:checked="@{safeUnbox(viewModelMain.isShowPromo)}"
                     android:onClick="@{() -> viewModelMain.setShowMode(true)}"
                     />
 
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text='@{ShowView.ADS.name()}'
-                    android:checked="@{viewModelMain.isShowAds}"
+                    android:checked="@{safeUnbox(viewModelMain.isShowAds)}"
                     android:onClick="@{() -> viewModelMain.setShowMode(false)}"
                     />
             </RadioGroup>
