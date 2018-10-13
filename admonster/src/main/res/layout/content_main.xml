@@ -16,7 +16,7 @@
         tools:context=".MainActivity"
         tools:showIn="@layout/app_bar_main">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/mcvAppMode"
             style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
@@ -73,9 +73,9 @@
                     />
             </RadioGroup>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/mcvShowView"
             style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
@@ -126,7 +126,16 @@
                     />
             </RadioGroup>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvSeparator1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mcvShowView"
+            android:text='@{"==== Start of combo fragment ===="}'/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvCombo_fragment"
@@ -135,7 +144,7 @@
             android:layout_margin="@dimen/item_spacing_vertical_4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mcvShowView">
+            app:layout_constraintTop_toBottomOf="@+id/tvSeparator1">
 
             <fragment
                 android:id="@+id/combo_fragment"
@@ -148,12 +157,21 @@
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/tvSeparator2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cvCombo_fragment"
+            android:text='@{"==== End of combo fragment ===="}'/>
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvCombo_fragment" >
+            app:layout_constraintTop_toBottomOf="@+id/tvSeparator2" >
 
             <ViewStub
                 android:id="@+id/vsBottomPanel"
