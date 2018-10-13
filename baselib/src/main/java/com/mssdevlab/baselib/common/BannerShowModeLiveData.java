@@ -1,22 +1,17 @@
-package com.mssdevlab.baselib.combobanner;
+package com.mssdevlab.baselib.common;
 
 import androidx.lifecycle.MediatorLiveData;
 import android.os.Looper;
 import android.util.Log;
 
-import com.mssdevlab.baselib.common.AppMode;
-import com.mssdevlab.baselib.common.ApplicationModeLiveData;
-import com.mssdevlab.baselib.common.PromoteManager;
+public class BannerShowModeLiveData extends MediatorLiveData<ShowView> {
+    private static final String LOG_TAG = "BannerShowModeLiveData";
 
-public class ComboBannerLiveData extends MediatorLiveData<ShowView> {
-    private static final String LOG_TAG = "ComboBannerLiveData";
-
-    public ComboBannerLiveData() {
+    public BannerShowModeLiveData() {
         Log.v(LOG_TAG, "Constructor");
-        this.setValueInternal(ShowView.NOTHING);
 
         this.addSource(PromoteManager.getShowPromo(), this::onShowPromoDialog);
-        this.addSource(ApplicationModeLiveData.applicationMode(), this::onAppMode);
+        this.addSource(ApplicationData.getApplicationMode(), this::onAppMode);
     }
 
     private void onShowPromoDialog(Boolean isTimeToShow){
@@ -24,7 +19,7 @@ public class ComboBannerLiveData extends MediatorLiveData<ShowView> {
             this.setValueInternal(ShowView.PROMO);
         } else {
             this.setValueInternal(ShowView.NOTHING);
-            this.onAppMode(ApplicationModeLiveData.applicationMode().getValue());
+            this.onAppMode(ApplicationData.getApplicationMode().getValue());
         }
     }
 

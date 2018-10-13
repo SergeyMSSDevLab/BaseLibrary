@@ -21,10 +21,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.mssdevlab.baselib.BaseActivity;
-import com.mssdevlab.baselib.ComboBannerViewModel;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.PromoteManager;
+import com.mssdevlab.baselib.common.ShowView;
 
 class ComboBannerObserver implements LifecycleObserver {
     private static final String LOG_TAG = "ComboBannerObserver";
@@ -36,7 +36,7 @@ class ComboBannerObserver implements LifecycleObserver {
     ComboBannerObserver(@NonNull BaseActivity activity) {
         this.mActivity = activity;
         ComboBannerViewModel model = ViewModelProviders.of(activity).get(ComboBannerViewModel.class);
-        model.getCbData().observe(activity, this::updateView);
+        model.getBannerShowMode().observe(activity, this::updateView);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -71,7 +71,7 @@ class ComboBannerObserver implements LifecycleObserver {
     }
 
     private void updateView(ShowView showWhat){
-        Log.v(LOG_TAG, "getCbData");
+        Log.v(LOG_TAG, "getBannerShowMode");
 
         if (this.mActivity != null &&
             this.mActivity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){

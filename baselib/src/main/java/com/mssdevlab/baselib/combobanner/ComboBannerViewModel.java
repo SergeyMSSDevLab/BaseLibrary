@@ -1,10 +1,11 @@
-package com.mssdevlab.baselib;
+package com.mssdevlab.baselib.combobanner;
 
 import android.os.Looper;
 import android.util.Log;
 
-import com.mssdevlab.baselib.combobanner.ComboBannerLiveData;
-import com.mssdevlab.baselib.combobanner.ShowView;
+import com.mssdevlab.baselib.common.ApplicationData;
+import com.mssdevlab.baselib.common.BannerShowModeLiveData;
+import com.mssdevlab.baselib.common.ShowView;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -14,8 +15,6 @@ import androidx.lifecycle.ViewModel;
 public class ComboBannerViewModel extends ViewModel {
     private static final String LOG_TAG = "ComboBannerViewModel";
 
-    private final ComboBannerLiveData mCbData;
-
     public int viewStubId;  // TODO: remove
     public String instanceTag;  // TODO: remove
     private final MutableLiveData<String> mAdUnitId = new MutableLiveData<>();
@@ -23,11 +22,11 @@ public class ComboBannerViewModel extends ViewModel {
     private final MutableLiveData<String> mDevEmail = new MutableLiveData<>();
 
     public ComboBannerViewModel() {
-        this.mCbData = new ComboBannerLiveData();
+
     }
 
-    public LiveData<ShowView> getCbData(){
-        return mCbData;
+    public LiveData<ShowView> getBannerShowMode(){
+        return ApplicationData.getBannerShowMode();
     }
 
     public LiveData<String> getAdUnitId() {

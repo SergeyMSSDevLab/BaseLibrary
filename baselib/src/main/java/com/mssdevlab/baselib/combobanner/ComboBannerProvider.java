@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseActivity;
-import com.mssdevlab.baselib.ComboBannerViewModel;
 import com.mssdevlab.baselib.factory.CommonViewProvider;
 import com.mssdevlab.baselib.factory.CommonViewProviders;
 

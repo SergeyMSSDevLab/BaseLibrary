@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mssdevlab.baselib.ComboBannerViewModel;
 import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.common.ShowView;
 import com.mssdevlab.baselib.databinding.ComboBannerFragmentBinding;
 
 import androidx.annotation.NonNull;
@@ -110,28 +110,28 @@ public class ComboBannerFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.v(LOG_TAG, "onActivityCreated");
-        mViewModel.getCbData().observe(getActivity(), this::updateView);
+        mViewModel.getBannerShowMode().observe(getActivity(), this::updateView);
 
     }
 
     private void updateView(ShowView showWhat){
-        Log.v(LOG_TAG, "getCbData");
+        Log.v(LOG_TAG, "getBannerShowMode");
 
         assert showWhat != null;
         // update UI
         switch (showWhat) {
             case NOTHING:
-                Log.v(LOG_TAG, "getCbData: nothing");
+                Log.v(LOG_TAG, "getBannerShowMode: nothing");
                 this.hidePromoView();
                 this.hideAdView();
                 break;
             case ADS:
-                Log.v(LOG_TAG, "getCbData: ads");
+                Log.v(LOG_TAG, "getBannerShowMode: ads");
                 this.hidePromoView();
                 this.ensureAdView();
                 break;
             case PROMO:
-                Log.v(LOG_TAG, "getCbData: promo");
+                Log.v(LOG_TAG, "getBannerShowMode: promo");
                 this.hideAdView();
                 this.ensurePromoView();
                 break;
