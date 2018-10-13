@@ -34,7 +34,6 @@ public class ComboBannerFragment extends Fragment {
 
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
         Log.v(LOG_TAG, "onInflate");
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
         if (arr != null) {
@@ -47,18 +46,18 @@ public class ComboBannerFragment extends Fragment {
             this.mDevEmail = arr.getString(R.styleable.ComboBannerFragment_developer_email);
             arr.recycle();
         }
+        ensureViewModel();
+        super.onInflate(context, attrs, savedInstanceState);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.v(LOG_TAG, "onAttach");
+    // We should call this method as early as possible (onInflate or onAttach)
+    private void ensureViewModel(){
         this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
         this.mViewModel.setAdUnitId(this.mAdUnitId);
         this.mViewModel.setAppName(this.mAppName);
         this.mViewModel.setDevEmail(this.mDevEmail);
-        Log.v(LOG_TAG, "onInflate data set:" +
-                " mAdUnitId: " + this.mViewModel.getAdUnitId().getValue() +
+        Log.v(LOG_TAG, "ensureViewModel data set:" +
+                " adUnitId: " + this.mViewModel.getAdUnitId().getValue() +
                 " appName: " + this.mViewModel.getAppName().getValue() +
                 " devEmail: " + this.mViewModel.getDevEmail().getValue());
     }
@@ -111,28 +110,28 @@ public class ComboBannerFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.v(LOG_TAG, "onActivityCreated");
-        mViewModel.getUpdateView().observe(getActivity(), this::updateView);
+        mViewModel.getCbData().observe(getActivity(), this::updateView);
 
     }
 
     private void updateView(ShowView showWhat){
-        Log.v(LOG_TAG, "getUpdateView");
+        Log.v(LOG_TAG, "getCbData");
 
         assert showWhat != null;
         // update UI
         switch (showWhat) {
             case NOTHING:
-                Log.v(LOG_TAG, "getUpdateView: nothing");
+                Log.v(LOG_TAG, "getCbData: nothing");
                 this.hidePromoView();
                 this.hideAdView();
                 break;
             case ADS:
-                Log.v(LOG_TAG, "getUpdateView: ads");
+                Log.v(LOG_TAG, "getCbData: ads");
                 this.hidePromoView();
                 this.ensureAdView();
                 break;
             case PROMO:
-                Log.v(LOG_TAG, "getUpdateView: promo");
+                Log.v(LOG_TAG, "getCbData: promo");
                 this.hideAdView();
                 this.ensurePromoView();
                 break;

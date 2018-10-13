@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
 
     <data>
@@ -13,44 +13,47 @@
         android:paddingTop="@dimen/bl_item_spacing_vertical_2"
         android:paddingBottom="@dimen/bl_item_spacing_vertical_2">
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/avComboBanner"
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/grPromo"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tvPromptQuestion,btnYes,btnNot" />
+
+        <FrameLayout
+            android:id="@+id/flAdFrame"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            ads:adSize="BANNER"
-            ads:adUnitId="@{viewModel.adUnitId}"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toTopOf="parent"/>
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tvPromptQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:enabled="true"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/common_enjoy_prompt"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/avComboBanner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flAdFrame"
             tools:text="Enjoy question" />
 
         <Button
             android:id="@+id/btnYes"
-            style="?android:attr/positiveButtonText"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -58,15 +61,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="51dp"
             android:layout_marginRight="51dp"
-            android:layout_weight="1"
             android:text="@string/common_enjoy_yes"
-            ads:layout_constraintEnd_toStartOf="@+id/btnNot"
-            ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/tvPromptQuestion" />
+            app:layout_constraintEnd_toStartOf="@+id/btnNot"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPromptQuestion" />
 
         <Button
             android:id="@+id/btnNot"
-            style="?android:attr/negativeButtonText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -74,11 +75,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_weight="1"
             android:text="@string/common_enjoy_not"
-            ads:layout_constraintEnd_toEndOf="parent"
-            ads:layout_constraintStart_toEndOf="@+id/btnYes"
-            ads:layout_constraintTop_toBottomOf="@+id/tvPromptQuestion" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnYes"
+            app:layout_constraintTop_toBottomOf="@+id/tvPromptQuestion"
+            tools:style="@style/Widget.AppCompat.Button.Colored" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

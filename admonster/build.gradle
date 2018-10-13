@@ -36,8 +36,10 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.legacy:legacy-support-v4:$rootProject.supportLibraryVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
-    implementation "com.google.android.material:material:$rootProject.materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
     implementation "com.google.android.gms:play-services-ads:$rootProject.mobileAdsVersion"
     implementation project(':baselib')
 

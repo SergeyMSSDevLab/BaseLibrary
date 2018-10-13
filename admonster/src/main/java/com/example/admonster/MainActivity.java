@@ -2,9 +2,11 @@ package com.example.admonster;
 
 import android.os.Bundle;
 
+import com.example.admonster.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
@@ -12,10 +14,14 @@ import com.mssdevlab.baselib.BaseActivity;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +36,11 @@ public class MainActivity extends BaseActivity
         AmApp.getInstance().handleLastError(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setLifecycleOwner(this);
+        MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        binding.setViewModelMain(viewModel);
 
         this.addCommonView(AmApp.COMBO_CONFIG_TAG, COMBO_SCREEN_TAG, R.id.vsBottomPanel);
 

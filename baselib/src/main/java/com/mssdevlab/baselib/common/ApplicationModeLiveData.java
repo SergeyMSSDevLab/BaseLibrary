@@ -1,26 +1,30 @@
 package com.mssdevlab.baselib.common;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import android.os.Looper;
+import android.util.Log;
 
 public class ApplicationModeLiveData extends LiveData<AppMode> {
+    private static final String LOG_TAG = "ApplicationModeLiveData";
 
-    private static final ApplicationModeLiveData sAppMode = new ApplicationModeLiveData();
+    private static final MutableLiveData<AppMode> sAppMode = new MutableLiveData<>();
 
     private ApplicationModeLiveData() {
-        this.setValueInternal(AppMode.MODE_DEMO);
-        // TODO: complete
     }
 
-    private void setValueInternal(AppMode val){
+    public static void setMode(AppMode val){
+        Log.v(LOG_TAG, "setValueInternal: " + val);
         if (Looper.myLooper() == Looper.getMainLooper()){
-            this.setValue(val);
+            sAppMode.setValue(val);
         } else {
-            this.postValue(val);
+            sAppMode.postValue(val);
         }
     }
 
     public static LiveData<AppMode> applicationMode(){
+        Log.v(LOG_TAG, "applicationMode hasActiveObservers: " + sAppMode.hasActiveObservers());
         return sAppMode;
     }
 }

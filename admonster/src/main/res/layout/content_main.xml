@@ -1,51 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    xmlns:tools="http://schemas.android.com/tools" >
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvCombo_fragment"
+    <data>
+        <import type="com.mssdevlab.baselib.common.AppMode"/>
+        <variable name="viewModelMain" type="com.example.admonster.MainActivityViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/item_spacing_vertical_4"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        app:cardCornerRadius="@dimen/card_radius"
-        app:cardElevation="@dimen/card_elevation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".MainActivity"
+        tools:showIn="@layout/app_bar_main">
 
-        <fragment
-            android:id="@+id/combo_fragment"
-            android:name="com.mssdevlab.baselib.combobanner.ComboBannerFragment"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvAppMode"
+            style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:ad_unit_id="ca-app-pub-3940256099942544/6300978111"
-            app:app_name="@string/app_name"
-            app:developer_email="@string/developers_email_address" />
+            android:layout_margin="@dimen/item_spacing_vertical_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.cardview.widget.CardView>
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/item_spacing_vertical_4"
+                android:orientation="horizontal">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cvCombo_fragment" >
+                <TextView
+                    android:id="@+id/tvAppMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Current mode is undefined"
+                    android:text='@{"Mode: "}'/>
 
-        <ViewStub
-            android:id="@+id/vsBottomPanel"
+                <RadioButton
+                    android:id="@+id/radio_demo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{AppMode.MODE_DEMO.name().replace("MODE_", "")}'
+                    android:checked="@{viewModelMain.isModeDemo}"
+                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_DEMO)}"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_eval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{AppMode.MODE_EVALUATION.name().replace("MODE_", "")}'
+                    android:checked="@{viewModelMain.isModeEval}"
+                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_EVALUATION)}"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_no_ads"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{AppMode.MODE_NO_ADS.name().replace("MODE_", "")}'
+                    android:checked="@{viewModelMain.isModeNoAds}"
+                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_NO_ADS)}"
+                    />
+                <RadioButton
+                    android:id="@+id/radio_pro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{AppMode.MODE_PRO.name().replace("MODE_", "")}'
+                    android:checked="@{viewModelMain.isModePro}"
+                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_PRO)}"
+                    />
+            </RadioGroup>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvCombo_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/item_spacing_vertical_4"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mcvAppMode">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <fragment
+                android:id="@+id/combo_fragment"
+                android:name="com.mssdevlab.baselib.combobanner.ComboBannerFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ad_unit_id="ca-app-pub-3940256099942544/6300978111"
+                app:app_name="@string/app_name"
+                app:developer_email="@string/developers_email_address" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cvCombo_fragment" >
+
+            <ViewStub
+                android:id="@+id/vsBottomPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

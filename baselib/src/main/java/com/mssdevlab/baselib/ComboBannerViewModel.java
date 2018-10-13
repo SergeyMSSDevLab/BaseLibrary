@@ -1,8 +1,9 @@
 package com.mssdevlab.baselib;
 
 import android.os.Looper;
+import android.util.Log;
 
-import com.mssdevlab.baselib.combobanner.ComboBannerUpdateLiveData;
+import com.mssdevlab.baselib.combobanner.ComboBannerLiveData;
 import com.mssdevlab.baselib.combobanner.ShowView;
 
 import androidx.lifecycle.LiveData;
@@ -11,8 +12,9 @@ import androidx.lifecycle.ViewModel;
 
 @SuppressWarnings("WeakerAccess")
 public class ComboBannerViewModel extends ViewModel {
+    private static final String LOG_TAG = "ComboBannerViewModel";
 
-    private final ComboBannerUpdateLiveData _updateView;
+    private final ComboBannerLiveData mCbData;
 
     public int viewStubId;  // TODO: remove
     public String instanceTag;  // TODO: remove
@@ -21,14 +23,17 @@ public class ComboBannerViewModel extends ViewModel {
     private final MutableLiveData<String> mDevEmail = new MutableLiveData<>();
 
     public ComboBannerViewModel() {
-        this._updateView = new ComboBannerUpdateLiveData();
+        this.mCbData = new ComboBannerLiveData();
     }
 
-    public LiveData<ShowView> getUpdateView(){
-        return _updateView;
+    public LiveData<ShowView> getCbData(){
+        return mCbData;
     }
 
-    public LiveData<String> getAdUnitId() { return this.mAdUnitId; }
+    public LiveData<String> getAdUnitId() {
+        Log.v(LOG_TAG, "getAdUnitId: " + this.mAdUnitId.getValue());
+        return this.mAdUnitId;
+    }
 
     public LiveData<String> getAppName() { return this.mAppName; }
 

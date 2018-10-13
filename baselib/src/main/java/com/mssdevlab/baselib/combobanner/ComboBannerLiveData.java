@@ -8,14 +8,14 @@ import com.mssdevlab.baselib.common.AppMode;
 import com.mssdevlab.baselib.common.ApplicationModeLiveData;
 import com.mssdevlab.baselib.common.PromoteManager;
 
-public class ComboBannerUpdateLiveData extends MediatorLiveData<ShowView> {
-    private static final String LOG_TAG = "ComboBannerU_LiveData";
+public class ComboBannerLiveData extends MediatorLiveData<ShowView> {
+    private static final String LOG_TAG = "ComboBannerLiveData";
 
-    public ComboBannerUpdateLiveData() {
+    public ComboBannerLiveData() {
         Log.v(LOG_TAG, "Constructor");
         this.setValueInternal(ShowView.NOTHING);
 
-        this.addSource(PromoteManager.showPromoDialog(), this::onShowPromoDialog);
+        this.addSource(PromoteManager.getShowPromo(), this::onShowPromoDialog);
         this.addSource(ApplicationModeLiveData.applicationMode(), this::onAppMode);
     }
 
@@ -29,7 +29,7 @@ public class ComboBannerUpdateLiveData extends MediatorLiveData<ShowView> {
     }
 
     private void onAppMode(AppMode newMode){
-        Boolean curValueIsPromo = PromoteManager.showPromoDialog().getValue();
+        Boolean curValueIsPromo = PromoteManager.getShowPromo().getValue();
         if (curValueIsPromo == null || !curValueIsPromo){
             if (newMode != null){
                 if (newMode == AppMode.MODE_DEMO){

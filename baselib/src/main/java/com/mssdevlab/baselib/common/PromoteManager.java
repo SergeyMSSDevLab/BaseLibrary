@@ -33,20 +33,24 @@ public class PromoteManager {
 
     private static final MutableLiveData<Boolean> sShowPromo = new MutableLiveData<>();
 
-    public static LiveData<Boolean> showPromoDialog(){
+    public static LiveData<Boolean> getShowPromo(){
         Boolean val = sShowPromo.getValue();
         if (val == null){
-            if (Looper.myLooper() == Looper.getMainLooper()){
-                sShowPromo.setValue(false);
-            } else {
-                sShowPromo.postValue(false);
-            }
+            setShowPromo(false);
         }
         return sShowPromo;
     }
 
+    public static void setShowPromo(boolean value){
+        if (Looper.myLooper() == Looper.getMainLooper()){
+            sShowPromo.setValue(value);
+        } else {
+            sShowPromo.postValue(value);
+        }
+    }
+
     /*
-    * Update the showPromoDialog state
+    * Update the getShowPromo state
      */
     private static void checkShowPromoDialog(){
         boolean showPromo = isTimeToShowPromoScreen();
