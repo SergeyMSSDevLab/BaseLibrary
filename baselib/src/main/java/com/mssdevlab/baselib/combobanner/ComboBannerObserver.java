@@ -117,7 +117,7 @@ class ComboBannerObserver implements LifecycleObserver {
         if (this.mAdView == null) {
             this.mAdView = new AdView(this.mActivity);
             this.mAdView.setAdSize(AdSize.SMART_BANNER);
-            this.mAdView.setAdUnitId(model.getAdUnitId().getValue());
+            this.mAdView.setAdUnitId(model.getAdUnitId());
             this.mAdView.setVisibility(View.GONE);
             Log.v(LOG_TAG, "ensureAdView: mAdView created");
         }

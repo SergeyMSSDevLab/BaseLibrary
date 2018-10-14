@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <data>
+        <import type="android.view.View"/>
+
         <variable name="viewModel" type="com.mssdevlab.baselib.combobanner.ComboBannerViewModel"/>
     </data>
 
@@ -17,15 +19,14 @@
             android:id="@+id/grPromo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="@{safeUnbox(viewModel.isShowPromo) ? View.VISIBLE : View.GONE}"
             app:constraint_referenced_ids="tvPromptQuestion,btnYes,btnNot" />
 
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
+        <FrameLayout
+            android:id="@+id/flBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId=""
+            android:visibility="@{safeUnbox(viewModel.isShowAd) ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -45,7 +46,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/adView"
+            app:layout_constraintTop_toBottomOf="@+id/flBanner"
             tools:text="Enjoy question" />
 
         <Button

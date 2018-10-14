@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity
         MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
         binding.setViewModelMain(viewModel);
 
-        this.addCommonView(AmApp.COMBO_CONFIG_TAG, COMBO_SCREEN_TAG, R.id.vsBottomPanel);
+        //this.addCommonView(AmApp.COMBO_CONFIG_TAG, COMBO_SCREEN_TAG, R.id.vsBottomPanel);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

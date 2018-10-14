@@ -9,7 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.ShowView;
 import com.mssdevlab.baselib.databinding.ComboBannerFragmentBinding;
@@ -24,42 +28,39 @@ public class ComboBannerFragment extends Fragment {
     private static final String LOG_TAG = "ComboBannerFragment";
 
     private ComboBannerViewModel mViewModel;
-    private String mAdUnitId;
-    private String mDevEmail;
-    private String mAppName;
+    private View mRoot;
+    private AdView mAdView;
 
     public static ComboBannerFragment newInstance() {
         return new ComboBannerFragment();
     }
 
+    /* This method is called first in lifecycle*/
     @Override
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onInflate");
+        this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
+
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
         if (arr != null) {
 //            for(int i = 0; i < arr.length(); i++){
 //                TypedValue val = arr.peekValue(i);
 //                Log.v(LOG_TAG, "onInflate attribute: " + val.toString());
 //            }
-            this.mAdUnitId = arr.getString(R.styleable.ComboBannerFragment_ad_unit_id);
-            this.mAppName = arr.getString(R.styleable.ComboBannerFragment_app_name);
-            this.mDevEmail = arr.getString(R.styleable.ComboBannerFragment_developer_email);
+            this.mViewModel.setAdUnitId(arr.getString(R.styleable.ComboBannerFragment_ad_unit_id));
+            this.mViewModel.setAppName(arr.getString(R.styleable.ComboBannerFragment_app_name));
+            this.mViewModel.setDevEmail(arr.getString(R.styleable.ComboBannerFragment_developer_email));
+            this.mViewModel.setmManageParent(arr.getBoolean(R.styleable.ComboBannerFragment_manage_parent, false));
+            this.mViewModel.setAdSize(AdSize.BANNER);
             arr.recycle();
         }
-        ensureViewModel();
-        super.onInflate(context, attrs, savedInstanceState);
-    }
-
-    // We should call this method as early as possible (onInflate or onAttach)
-    private void ensureViewModel(){
-        this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
-        this.mViewModel.setAdUnitId(this.mAdUnitId);
-        this.mViewModel.setAppName(this.mAppName);
-        this.mViewModel.setDevEmail(this.mDevEmail);
         Log.v(LOG_TAG, "ensureViewModel data set:" +
-                " adUnitId: " + this.mViewModel.getAdUnitId().getValue() +
+                " adUnitId: " + this.mViewModel.getAdUnitId() +
                 " appName: " + this.mViewModel.getAppName().getValue() +
+                " manageParent: " + this.mViewModel.getManageParent() +
                 " devEmail: " + this.mViewModel.getDevEmail().getValue());
+
+        super.onInflate(context, attrs, savedInstanceState);
     }
 
     @Override
@@ -70,48 +71,32 @@ public class ComboBannerFragment extends Fragment {
 
         binding.setLifecycleOwner(this);
         binding.setViewModel(this.mViewModel);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.v(LOG_TAG, "onResume");
-//        if (this.mAdView != null) {
-//            if (this.mAdView.getVisibility() == View.VISIBLE){
-//                this.mAdView.resume();
-//            }
-//        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.v(LOG_TAG, "onPause");
-//        if (this.mAdView != null) {
-//            if (this.mAdView.getVisibility() == View.VISIBLE){
-//                this.mAdView.pause();
-//            }
-//        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.v(LOG_TAG, "onDestroy");
-//        if (this.mAdView != null) {
-//            this.mAdView.destroy();
-//            this.mAdView = null;
-//        }
-//        this.mPromoView = null;
+        this.mRoot = binding.getRoot();
+        return this.mRoot;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.v(LOG_TAG, "onActivityCreated");
-        mViewModel.getBannerShowMode().observe(getActivity(), this::updateView);
+        Activity activity = this.getActivity();
+        if (activity != null){
+            this.mAdView = new AdView(activity);
+            this.mAdView.setAdSize(this.mViewModel.getAdSize());
+            this.mAdView.setAdUnitId(this.mViewModel.getAdUnitId());
+        }
 
+
+        FrameLayout amLayout = this.mRoot.findViewById(R.id.flBanner);
+        if (this.mAdView != null && amLayout != null) {
+            ViewGroup.LayoutParams params = amLayout.getLayoutParams();
+            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            amLayout.addView(this.mAdView, params);
+            Log.v(LOG_TAG, "onCreateView: mAdView done");
+        }
+
+        mViewModel.getBannerShowMode().observe(this, this::updateView);
     }
 
     private void updateView(ShowView showWhat){
@@ -122,48 +107,47 @@ public class ComboBannerFragment extends Fragment {
         switch (showWhat) {
             case NOTHING:
                 Log.v(LOG_TAG, "getBannerShowMode: nothing");
-                this.hidePromoView();
+                this.mViewModel.setIsShowPromo(false);
                 this.hideAdView();
+                this.ensureParentView(false);
                 break;
             case ADS:
                 Log.v(LOG_TAG, "getBannerShowMode: ads");
-                this.hidePromoView();
+                this.mViewModel.setIsShowPromo(false);
                 this.ensureAdView();
+                this.ensureParentView(true);
                 break;
             case PROMO:
                 Log.v(LOG_TAG, "getBannerShowMode: promo");
                 this.hideAdView();
                 this.ensurePromoView();
+                this.ensureParentView(true);
                 break;
         }
     }
 
-    private void hideAdView(){
-//        if (this.mAdView != null) {
-//            this.mAdView.pause();
-//            this.mAdView.setVisibility(View.GONE);
-//        }
+    private void ensureParentView(boolean show){
+        if (this.mViewModel.getManageParent()){
+            if (show){
+                // TODO: Show parent view
+            } else {
+                // TODO: Hide parent view
+            }
+        }
     }
 
-    private void hidePromoView(){
-//        if (this.mPromoView != null){
-//            this.mPromoView.setVisibility(View.GONE);
-//        }
+    private void hideAdView(){
+        this.mViewModel.setIsShowAd(false);
+        if (this.mAdView != null) {
+            this.mAdView.pause();
+        }
     }
 
     private void ensureAdView(){
         Log.v(LOG_TAG, "ensureAdView");
-        final Activity activity = getActivity();
-        //final ComboBannerViewModel model = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
 
-//        if (this.mAdView == null) {
-//            this.mAdView = new AdView(this.getActivity());
-//            this.mAdView.setAdSize(AdSize.SMART_BANNER);
-//            this.mAdView.setAdUnitId(model.mAdUnitId);
-//            this.mAdView.setVisibility(View.GONE);
-//            Log.v(LOG_TAG, "ensureAdView: mAdView created");
-//        }
-//
+        if (this.mAdView != null){
+
 //        this.mAdView.setAdListener(new AdListener() {
 //            @Override
 //            public void onAdLoaded() {
@@ -192,6 +176,7 @@ public class ComboBannerFragment extends Fragment {
 //                    if (viewAdded){
 //                        mActivity.onCommonViewCreated(mAdView, model.instanceTag);
 //                        mAdView.setVisibility(View.VISIBLE);
+        this.mViewModel.setIsShowAd(true);
 //                    }
 //                }
 //            }
@@ -204,11 +189,13 @@ public class ComboBannerFragment extends Fragment {
 //            }
 //        });
 //
-//        AdRequest adRequest = new AdRequest
-//                .Builder()
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-//                .build();
-//        this.mAdView.loadAd(adRequest);
+            AdRequest adRequest = new AdRequest
+                    .Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
+            this.mAdView.loadAd(adRequest);
+
+        }
     }
 
     private void ensurePromoView(){
@@ -244,6 +231,7 @@ public class ComboBannerFragment extends Fragment {
 //                this.mActivity.onCommonViewCreated(this.mPromoView, model.instanceTag);
 //            }
 //        }
+        this.mViewModel.setIsShowPromo(true);
     }
 
     private void setUpPromoView(ComboBannerViewModel model){
@@ -301,5 +289,34 @@ public class ComboBannerFragment extends Fragment {
 //                mPromoView.setVisibility(View.GONE);
 //            });
 //        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.v(LOG_TAG, "onResume");
+        if (this.mAdView != null) {
+            this.mAdView.resume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v(LOG_TAG, "onPause");
+        if (this.mAdView != null) {
+            this.mAdView.pause();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(LOG_TAG, "onDestroy");
+        if (this.mAdView != null) {
+            this.mAdView.destroy();
+            this.mAdView = null;
+        }
+//        this.mPromoView = null;
+        super.onDestroy();
     }
 }

@@ -1,6 +1,8 @@
 package com.mssdevlab.baselib.common;
 
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
+
 import android.os.Looper;
 import android.util.Log;
 
@@ -10,24 +12,16 @@ public class BannerShowModeLiveData extends MediatorLiveData<ShowView> {
     public BannerShowModeLiveData() {
         Log.v(LOG_TAG, "Constructor");
 
-        this.addSource(PromoteManager.getShowPromo(), this::onShowPromoDialog);
+        this.addSource(PromoteManager.getShowPromo(),
+                aBoolean -> onAppMode(ApplicationData.getApplicationMode().getValue()) );
         this.addSource(ApplicationData.getApplicationMode(), this::onAppMode);
-    }
-
-    private void onShowPromoDialog(Boolean isTimeToShow){
-        if (isTimeToShow != null && isTimeToShow){
-            this.setValueInternal(ShowView.PROMO);
-        } else {
-            this.setValueInternal(ShowView.NOTHING);
-            this.onAppMode(ApplicationData.getApplicationMode().getValue());
-        }
     }
 
     private void onAppMode(AppMode newMode){
         Boolean curValueIsPromo = PromoteManager.getShowPromo().getValue();
         if (curValueIsPromo == null || !curValueIsPromo){
             if (newMode != null){
-                if (newMode == AppMode.MODE_DEMO){
+                if (newMode == AppMode.MODE_DEMO || newMode == AppMode.MODE_EVALUATION){
                     this.setValueInternal(ShowView.ADS);
                 } else {
                     this.setValueInternal(ShowView.NOTHING);

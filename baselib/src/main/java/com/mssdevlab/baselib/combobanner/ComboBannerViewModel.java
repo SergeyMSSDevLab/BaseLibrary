@@ -3,6 +3,7 @@ package com.mssdevlab.baselib.combobanner;
 import android.os.Looper;
 import android.util.Log;
 
+import com.google.android.gms.ads.AdSize;
 import com.mssdevlab.baselib.common.ApplicationData;
 import com.mssdevlab.baselib.common.BannerShowModeLiveData;
 import com.mssdevlab.baselib.common.ShowView;
@@ -17,9 +18,13 @@ public class ComboBannerViewModel extends ViewModel {
 
     public int viewStubId;  // TODO: remove
     public String instanceTag;  // TODO: remove
-    private final MutableLiveData<String> mAdUnitId = new MutableLiveData<>();
     private final MutableLiveData<String> mAppName = new MutableLiveData<>();
     private final MutableLiveData<String> mDevEmail = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mIsShowPromo = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mIsShowAd = new MutableLiveData<>();
+    private AdSize mAdSize = AdSize.BANNER;
+    private String mAdUnitId;
+    private boolean mManageParent = false;
 
     public ComboBannerViewModel() {
 
@@ -29,20 +34,33 @@ public class ComboBannerViewModel extends ViewModel {
         return ApplicationData.getBannerShowMode();
     }
 
-    public LiveData<String> getAdUnitId() {
-        Log.v(LOG_TAG, "getAdUnitId: " + this.mAdUnitId.getValue());
-        return this.mAdUnitId;
-    }
+    public String getAdUnitId() { return this.mAdUnitId; }
+
+    public void setAdUnitId(String value){ this.mAdUnitId = value; }
+
+    public boolean getManageParent() { return this.mManageParent; }
+
+    public void setmManageParent(boolean val) { this.mManageParent = val; }
 
     public LiveData<String> getAppName() { return this.mAppName; }
 
-    public LiveData<String> getDevEmail() { return this.mDevEmail; }
-
-    public void setAdUnitId(String value){ this.setValue(this.mAdUnitId, value); }
-
     public void setAppName(String value){ this.setValue(this.mAppName, value); }
 
+    public LiveData<String> getDevEmail() { return this.mDevEmail; }
+
     public void setDevEmail(String value){ this.setValue(this.mDevEmail, value); }
+
+    public LiveData<Boolean> getIsShowPromo() { return this.mIsShowPromo; }
+
+    public void setIsShowPromo(Boolean val) { this.setValue(this.mIsShowPromo, val);}
+
+    public LiveData<Boolean> getIsShowAd() { return this.mIsShowAd; }
+
+    public void setIsShowAd(Boolean val) { this.setValue(this.mIsShowAd, val);}
+
+    public AdSize getAdSize() { return this.mAdSize; }
+
+    public void setAdSize(AdSize val) { this.mAdSize = val;}
 
     private <T> void setValue(MutableLiveData<T> field, T value){
         if (Looper.myLooper() == Looper.getMainLooper()){

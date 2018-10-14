@@ -4,5 +4,6 @@
         <attr name="developer_email" format="string"/>
         <attr name="app_name" format="string"/>
         <attr name="ad_unit_id" format="string"/>
+        <attr name="manage_parent" format="boolean"/>
     </declare-styleable>
 </resources>
