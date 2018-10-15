@@ -40,7 +40,7 @@ public class ComboBannerViewModel extends ViewModel {
 
     public boolean getManageParent() { return this.mManageParent; }
 
-    public void setmManageParent(boolean val) { this.mManageParent = val; }
+    public void setManageParent(boolean val) { this.mManageParent = val; }
 
     public LiveData<String> getAppName() { return this.mAppName; }
 

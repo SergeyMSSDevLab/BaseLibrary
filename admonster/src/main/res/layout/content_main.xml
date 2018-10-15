@@ -151,7 +151,8 @@
                 android:name="com.mssdevlab.baselib.combobanner.ComboBannerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:ad_unit_id="ca-app-pub-3940256099942544/6300978111"
+                app:manage_parent="true"
+                app:ad_unit_id="@string/ad_unit_id"
                 app:app_name="@string/app_name"
                 app:developer_email="@string/developers_email_address" />
 

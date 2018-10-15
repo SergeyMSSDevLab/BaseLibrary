@@ -2,19 +2,27 @@ package com.mssdevlab.baselib.combobanner;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.common.PromoteManager;
 import com.mssdevlab.baselib.common.ShowView;
 import com.mssdevlab.baselib.databinding.ComboBannerFragmentBinding;
 
@@ -22,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
 
 public class ComboBannerFragment extends Fragment {
@@ -30,10 +39,6 @@ public class ComboBannerFragment extends Fragment {
     private ComboBannerViewModel mViewModel;
     private View mRoot;
     private AdView mAdView;
-
-    public static ComboBannerFragment newInstance() {
-        return new ComboBannerFragment();
-    }
 
     /* This method is called first in lifecycle*/
     @Override
@@ -50,7 +55,7 @@ public class ComboBannerFragment extends Fragment {
             this.mViewModel.setAdUnitId(arr.getString(R.styleable.ComboBannerFragment_ad_unit_id));
             this.mViewModel.setAppName(arr.getString(R.styleable.ComboBannerFragment_app_name));
             this.mViewModel.setDevEmail(arr.getString(R.styleable.ComboBannerFragment_developer_email));
-            this.mViewModel.setmManageParent(arr.getBoolean(R.styleable.ComboBannerFragment_manage_parent, false));
+            this.mViewModel.setManageParent(arr.getBoolean(R.styleable.ComboBannerFragment_manage_parent, false));
             this.mViewModel.setAdSize(AdSize.BANNER);
             arr.recycle();
         }
@@ -85,7 +90,6 @@ public class ComboBannerFragment extends Fragment {
             this.mAdView.setAdSize(this.mViewModel.getAdSize());
             this.mAdView.setAdUnitId(this.mViewModel.getAdUnitId());
         }
-
 
         FrameLayout amLayout = this.mRoot.findViewById(R.id.flBanner);
         if (this.mAdView != null && amLayout != null) {
@@ -128,10 +132,16 @@ public class ComboBannerFragment extends Fragment {
 
     private void ensureParentView(boolean show){
         if (this.mViewModel.getManageParent()){
-            if (show){
-                // TODO: Show parent view
-            } else {
-                // TODO: Hide parent view
+            if (this.mRoot != null){
+                ViewParent vp = this.mRoot.getParent();
+                if (vp instanceof ViewGroup){
+                    ViewGroup v = (ViewGroup) vp;
+                    if (show){
+                        v.setVisibility(View.VISIBLE);
+                    } else {
+                        v.setVisibility(View.GONE);
+                    }
+                }
             }
         }
     }
@@ -148,147 +158,90 @@ public class ComboBannerFragment extends Fragment {
 
         if (this.mAdView != null){
 
-//        this.mAdView.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                Log.v(LOG_TAG, "onAdLoaded");
-//                if (((FragmentActivity) activity).getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
-//                    boolean viewAdded = false;
-//                    if (mPromoView != null){
-//                        // Replace promotional view
-//                        Helper.replaceView(mPromoView, mAdView);
-//                        mPromoView = null;
-//                        viewAdded = true;
-//                        Log.v(LOG_TAG, "onAdLoaded: replace promo");
-//                    } else if (model.viewStubId > 0){
-//                        // Replace stub
-//                        ViewStub vStub = activity.findViewById(model.viewStubId);
-//                        model.viewStubId = -1;
-//                        if(vStub != null){
-//                            vStub.setLayoutResource(R.layout.stub_view);
-//                            View vTemp = vStub.inflate();
-//                            Helper.replaceView(vTemp, mAdView);
-//                            viewAdded = true;
-//                            Log.v(LOG_TAG, "onAdLoaded: replace stub");
-//                        }
-//                    }
-//
-//                    if (viewAdded){
-//                        mActivity.onCommonViewCreated(mAdView, model.instanceTag);
-//                        mAdView.setVisibility(View.VISIBLE);
-        this.mViewModel.setIsShowAd(true);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(int errorCode) {
-//                if (lifecycle.getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
-//                    mAdView.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-//
+            ensureParentView(false);
+            this.mAdView.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    Log.v(LOG_TAG, "onAdLoaded");
+                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
+                        mViewModel.setIsShowAd(true);
+                        ensureParentView(true);
+                    }
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    Log.v(LOG_TAG, "onAdFailedToLoad: error " + errorCode);
+                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
+                        mViewModel.setIsShowAd(false);
+                        ensureParentView(false);
+                    }
+                }
+            });
+
             AdRequest adRequest = new AdRequest
                     .Builder()
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .build();
             this.mAdView.loadAd(adRequest);
-
+            Log.v(LOG_TAG, "ensureAdView: loadAd started");
         }
     }
 
     private void ensurePromoView(){
         Log.v(LOG_TAG, "ensurePromoView");
-
-//        if (this.mPromoView != null){
-//            this.mPromoView.setVisibility(View.VISIBLE);
-//        } else {
-//            final ComboBannerViewModel model = ViewModelProviders.of(this.mActivity).get(ComboBannerViewModel.class);
-//            // get the root view
-//            View viewToReplace = null;
-//            if (this.mAdView != null){
-//                // Replace adview
-//                viewToReplace = this.mAdView;
-//                this.mAdView = null;
-//                Log.v(LOG_TAG, "ensurePromoView: replace adview");
-//            } else if (model.viewStubId > 0){
-//                // Replace stub
-//                ViewStub vStub = this.mActivity.findViewById(model.viewStubId);
-//                model.viewStubId = -1;
-//                if(vStub != null){
-//                    vStub.setLayoutResource(R.layout.stub_view);
-//                    viewToReplace = vStub.inflate();
-//                    Log.v(LOG_TAG, "ensurePromoView: replace stub");
-//                }
-//            }
-//
-//            if (viewToReplace != null){
-//                LayoutInflater factory = LayoutInflater.from(this.mActivity);
-//                this.mPromoView = factory.inflate(R.layout.promote_view, (ViewGroup)viewToReplace.getParent(), false);
-//                Helper.replaceView(viewToReplace, this.mPromoView);
-//                this.setUpPromoView(model);
-//                this.mActivity.onCommonViewCreated(this.mPromoView, model.instanceTag);
-//            }
-//        }
+        this.setUpPromoView();
         this.mViewModel.setIsShowPromo(true);
     }
 
-    private void setUpPromoView(ComboBannerViewModel model){
-//        Log.v(LOG_TAG, "setUpPromoView: view == null: " + (this.mPromoView == null));
-//
-//        final Resources res = this.mActivity.getResources();
-//        final Button btnYes = this.mPromoView.findViewById(R.id.btnYes);
-//        final Button btnNot = this.mPromoView.findViewById(R.id.btnNot);
-//        final TextView tvPrompt = this.mPromoView.findViewById(R.id.tvPromptQuestion);
-//
-//        String text = res.getString(R.string.common_enjoy_prompt,
-//                model.appName == null ? "application": model.appName);
-//        tvPrompt.setText(text);
-//        btnYes.setText(R.string.common_enjoy_yes);
-//        btnNot.setText(R.string.common_enjoy_not);
-//
-//        btnYes.setOnClickListener((View v) -> {
-//            tvPrompt.setText(R.string.common_enjoy_rate_prompt);
-//            btnYes.setText(R.string.common_enjoy_rate_yes);
-//            btnNot.setText(R.string.common_enjoy_rate_not);
-//
-//            btnYes.setOnClickListener(v14 -> {
-//                PromoteManager.goToPromoScreen(this.mActivity);
-//                mPromoView.setVisibility(View.GONE);
-//            });
-//
-//            btnNot.setOnClickListener(v13 -> {
-//                PromoteManager.markRateNotNow();
-//                mPromoView.setVisibility(View.GONE);
-//            });
-//        });
-//
-//        btnNot.setOnClickListener(v -> {
-//            tvPrompt.setText(R.string.common_enjoy_feedback_prompt);
-//            btnYes.setText(R.string.common_enjoy_feedback_yes);
-//            btnNot.setText(R.string.common_enjoy_feedback_not);
-//
-//            btnYes.setOnClickListener(v12 -> {
-//
-//                String uriText = "mailto:" + (model.devEmail == null ? "": model.devEmail) + "?subject="
-//                        + Uri.encode(model.appName == null ? "application": model.appName) + "&body=" + " ... ";
-//                Uri uri = Uri.parse(uriText);
-//
-//                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-//                sendIntent.setData(uri);
-//                this.mActivity.startActivity(Intent.createChooser(sendIntent,
-//                        res.getString(R.string.common_error_report_choose_title)));
-//
-//                PromoteManager.cancelPromoScreenPermanently();
-//                mPromoView.setVisibility(View.GONE);
-//            });
-//
-//            btnNot.setOnClickListener(v1 -> {
-//                PromoteManager.cancelPromoScreenPermanently();
-//                mPromoView.setVisibility(View.GONE);
-//            });
-//        });
+    private void setUpPromoView(){
+        Log.v(LOG_TAG, "setUpPromoView");
+
+        Resources res = this.getResources();
+        final Button btnYes = this.mRoot.findViewById(R.id.btnYes);
+        final Button btnNot = this.mRoot.findViewById(R.id.btnNot);
+        final TextView tvPrompt = this.mRoot.findViewById(R.id.tvPromptQuestion);
+
+        final String reportTitle = res.getString(R.string.common_error_report_choose_title);
+        String temp = this.mViewModel.getAppName().getValue();
+        final String appName = temp == null ? "application": temp;
+        temp = this.mViewModel.getDevEmail().getValue();
+        final String devEmail = temp == null ? "" : temp;
+
+        String promptText = res.getString(R.string.common_enjoy_prompt, appName );
+
+        tvPrompt.setText(promptText);
+        btnYes.setText(R.string.common_enjoy_yes);
+        btnNot.setText(R.string.common_enjoy_not);
+
+        btnYes.setOnClickListener((View v) -> {
+            tvPrompt.setText(R.string.common_enjoy_rate_prompt);
+            btnYes.setText(R.string.common_enjoy_rate_yes);
+            btnNot.setText(R.string.common_enjoy_rate_not);
+
+            btnYes.setOnClickListener(v14 -> PromoteManager.goToPromoScreen(getActivity()));
+
+            btnNot.setOnClickListener(v13 -> PromoteManager.markRateNotNow());
+        });
+
+        btnNot.setOnClickListener(v -> {
+            tvPrompt.setText(R.string.common_enjoy_feedback_prompt);
+            btnYes.setText(R.string.common_enjoy_feedback_yes);
+            btnNot.setText(R.string.common_enjoy_feedback_not);
+
+            btnYes.setOnClickListener(v12 -> {
+                String uriText = "mailto:" + devEmail + "?subject="
+                        + Uri.encode(appName) + "&body=" + " ... ";
+
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(Uri.parse(uriText));
+                startActivity(Intent.createChooser(sendIntent, reportTitle));
+
+                PromoteManager.cancelPromoScreenPermanently();
+            });
+
+            btnNot.setOnClickListener(v1 -> PromoteManager.cancelPromoScreenPermanently());
+        });
     }
 
     @Override
@@ -316,7 +269,8 @@ public class ComboBannerFragment extends Fragment {
             this.mAdView.destroy();
             this.mAdView = null;
         }
-//        this.mPromoView = null;
+        this.mRoot = null;
+        this.mViewModel = null;
         super.onDestroy();
     }
 }

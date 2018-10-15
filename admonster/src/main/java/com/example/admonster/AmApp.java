@@ -26,7 +26,7 @@ public class AmApp extends BaseApplication {
         super.initApplicationInBackground();
         Resources res = AmApp.getInstance().getResources();
 
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, res.getString(R.string.admob_app_id));
 
         this.setUpgradeActivity(UpgradeActivity.class);
 
