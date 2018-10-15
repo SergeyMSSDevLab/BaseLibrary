@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.StringRes;
 
 /**
  * Common Helpers
@@ -22,7 +22,7 @@ import java.util.Locale;
 public class Helper {
     private static final String LOG_TAG = "Helper";
 
-    public static String CreateReport4Throwable(final Throwable e, Application app) {
+    public static String CreateReport4Throwable(@NonNull final Throwable e, Application app) {
         Log.v(LOG_TAG, "CreateReport4Throwable");
         final String DOUBLE_LINE_SEP = "\n\n";
         final String SINGLE_LINE_SEP = "\n";
@@ -64,7 +64,11 @@ public class Helper {
         report.append(SINGLE_LINE_SEP);
         report.append(LINE_SEP);
         report.append("Package version code: ");
-        report.append(getVersion(app));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            report.append(getVersion28(app));
+        } else {
+            report.append(getVersion(app));
+        }
         report.append(SINGLE_LINE_SEP);
         report.append(LINE_SEP);
         report.append("Build.BRAND: ");
@@ -102,10 +106,22 @@ public class Helper {
         return rep;
     }
 
-    private static int getVersion(Application app) {
+    @SuppressWarnings("deprecation")
+    private static int getVersion(@NonNull final Application app) {
         int v = 0;
         try {
             v = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // Huh? Really?
+        }
+        return v;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    private static long getVersion28(@NonNull final Application app) {
+        long v = 0;
+        try {
+            v = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).getLongVersionCode();
         } catch (PackageManager.NameNotFoundException e) {
             // Huh? Really?
         }
@@ -126,28 +142,4 @@ public class Helper {
             Log.e(LOG_TAG, "openURL fails: " + ex.getMessage());
         }
     }
-
-    private static ViewGroup getParent(View view) {
-        return (ViewGroup)view.getParent();
-    }
-
-    private static void removeView(View view) {
-        ViewGroup parent = getParent(view);
-        if(parent != null) {
-            parent.removeView(view);
-        }
-    }
-
-    public static void replaceView(View currentView, View newView) {
-        final ViewGroup parent = getParent(currentView);
-        if(parent == null) {
-            return;
-        }
-        final int index = parent.indexOfChild(currentView);
-        newView.setId(currentView.getId());
-        removeView(currentView);
-        removeView(newView);
-        parent.addView(newView, index);
-    }
-
 }

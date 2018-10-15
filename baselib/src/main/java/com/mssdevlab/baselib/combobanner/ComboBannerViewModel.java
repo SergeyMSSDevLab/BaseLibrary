@@ -1,11 +1,9 @@
 package com.mssdevlab.baselib.combobanner;
 
 import android.os.Looper;
-import android.util.Log;
 
 import com.google.android.gms.ads.AdSize;
 import com.mssdevlab.baselib.common.ApplicationData;
-import com.mssdevlab.baselib.common.BannerShowModeLiveData;
 import com.mssdevlab.baselib.common.ShowView;
 
 import androidx.lifecycle.LiveData;
@@ -14,15 +12,12 @@ import androidx.lifecycle.ViewModel;
 
 @SuppressWarnings("WeakerAccess")
 public class ComboBannerViewModel extends ViewModel {
-    private static final String LOG_TAG = "ComboBannerViewModel";
 
-    public int viewStubId;  // TODO: remove
-    public String instanceTag;  // TODO: remove
     private final MutableLiveData<String> mAppName = new MutableLiveData<>();
     private final MutableLiveData<String> mDevEmail = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mIsShowPromo = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mIsShowAd = new MutableLiveData<>();
-    private AdSize mAdSize = AdSize.BANNER;
+    private AdSize mAdSize = AdSize.BANNER; // TODO: get from xml attributes
     private String mAdUnitId;
     private boolean mManageParent = false;
 
