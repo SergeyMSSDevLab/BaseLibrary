@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.combobanner;
+package com.mssdevlab.baselib.banners;
 
 import android.os.Looper;
 

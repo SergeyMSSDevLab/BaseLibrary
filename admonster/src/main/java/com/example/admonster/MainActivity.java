@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        this.addCommonMenuItems(navigationView.getMenu(), R.id.nav_common, null);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -117,15 +118,12 @@ public class MainActivity extends BaseActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else {
+            this.onMenuItemSelected(id);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onCommonViewCreated(@NonNull View view, @NonNull String instanceTag) {
-
     }
 }

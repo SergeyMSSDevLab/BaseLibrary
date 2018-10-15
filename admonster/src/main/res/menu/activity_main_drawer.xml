@@ -35,4 +35,10 @@
         </menu>
     </item>
 
+    <group
+        android:id="@+id/nav_common"
+        android:checkableBehavior="none">
+
+    </group>
+
 </menu>

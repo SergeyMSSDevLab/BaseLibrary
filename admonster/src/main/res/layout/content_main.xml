@@ -148,7 +148,7 @@
 
             <fragment
                 android:id="@+id/combo_fragment"
-                android:name="com.mssdevlab.baselib.combobanner.ComboBannerFragment"
+                android:name="com.mssdevlab.baselib.banners.ComboBannerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:manage_parent="true"
