@@ -16,13 +16,11 @@ import androidx.annotation.StringRes;
 public class UpgradeMenuProvider extends MenuItemProvider {
     @StringRes private final int resTitle;
     @IdRes private final int resId;
-    @StringRes private final int resLink;
     @DrawableRes private final int resIcon;
 
-    public UpgradeMenuProvider(@StringRes int title, @IdRes int id, @StringRes int link, @DrawableRes int icon) {
+    public UpgradeMenuProvider(@StringRes int title, @IdRes int id, @DrawableRes int icon) {
         this.resId = id;
         this.resTitle = title;
-        this.resLink = link;
         this.resIcon = icon;
     }
 

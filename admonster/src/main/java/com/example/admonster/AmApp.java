@@ -37,7 +37,6 @@ public class AmApp extends BaseApplication {
         MenuItemProviders.addProvider(UPGRADE_CONFIG_TAG, new UpgradeMenuProvider(
                 com.mssdevlab.baselib.R.string.common_menu_upgrade,
                 com.mssdevlab.baselib.R.id.menu_action_upgrade,
-                R.string.company_url,
                 com.mssdevlab.baselib.R.drawable.ic_app_update_black_24dp
         ));
     }
