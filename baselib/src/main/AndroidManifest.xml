@@ -9,10 +9,7 @@
             android:name=".common.ErrorActivity"
             android:label="@string/common_error_report_email_subject"></activity>
         <activity
-            android:name=".upgrade.UpgradeActivity1"
-            android:label="@string/common_menu_upgrade"></activity>
-        <activity
-            android:name=".upgrade.UpgradeActivity"
+            android:name=".upgrade.BaseUpgradeActivity"
             android:label="@string/title_activity_upgrade"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
