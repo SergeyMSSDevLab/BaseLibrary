@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mssdevlab.baselib">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
         <activity
-            android:label="@string/common_error_report_email_subject"
-            android:name=".common.ErrorActivity">
-        </activity>
+            android:name=".common.ErrorActivity"
+            android:label="@string/common_error_report_email_subject"></activity>
+        <activity
+            android:name=".upgrade.UpgradeActivity1"
+            android:label="@string/common_menu_upgrade"></activity>
+        <activity
+            android:name=".upgrade.UpgradeActivity"
+            android:label="@string/title_activity_upgrade"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

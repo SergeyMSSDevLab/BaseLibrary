@@ -10,4 +10,7 @@
     <dimen name="bl_item_spacing_horizontal">16dp</dimen>
     <dimen name="bl_item_spacing_horizontal_2">8dp</dimen>
     <dimen name="bl_item_spacing_horizontal_4">4dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

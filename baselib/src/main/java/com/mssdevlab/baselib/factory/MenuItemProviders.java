@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.common.Event;
 
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 public class MenuItemProviders {
     private static final String LOG_TAG = "MenuItemProviders";
     private static final Map<String, MenuItemProvider> sConfigurationMap = new ArrayMap<>(4);
-    private static final MutableLiveData<Integer> sMenuItemSelected = new MutableLiveData<>();
+    private static final MutableLiveData<Event<Integer>> sMenuItemSelected = new MutableLiveData<>();
     private static final MutableLiveData<Boolean> sInitCompleted = new MutableLiveData<>();
 
     public static void addProvider(@NonNull String providerTag, @NonNull MenuItemProvider provider){
@@ -34,9 +35,11 @@ public class MenuItemProviders {
         if (sConfigurationMap.entrySet().size() > 0){
             if (tags != null && tags.length > 0){
                 // add passed set of items
-                for(int i=0; i < tags.length; i++) {
-                    MenuItemProvider p = sConfigurationMap.get(tags[i]);
-                    p.attachToActivity(activity, menu, groupId);
+                for (String tag : tags) {
+                    MenuItemProvider p = sConfigurationMap.get(tag);
+                    if (p != null) {
+                        p.attachToActivity(activity, menu, groupId);
+                    }
                 }
             } else {
                 // add all items from the map
@@ -48,12 +51,12 @@ public class MenuItemProviders {
         }
     }
 
-    public static void setMenuItemSelected(int menuItemId) {
+    public static void setMenuItemSelected(@NonNull final Integer menuItem) {
         Log.v(LOG_TAG, "menuItemSelected");
-        sMenuItemSelected.setValue(menuItemId);
+        sMenuItemSelected.setValue(new Event<>(menuItem));
     }
 
-    public static LiveData<Integer> menuItemSelected()
+    public static LiveData<Event<Integer>> menuItemSelected()
     {
         return sMenuItemSelected;
     }

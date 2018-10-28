@@ -1,23 +1,23 @@
 package com.mssdevlab.baselib.upgrade;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.core.app.NavUtils;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.R;
 
-public abstract class BaseUpgradeActivity extends BaseActivity {
-    private static final String LOG_TAG = "BaseUpgradeActivity";
+public class UpgradeActivity1 extends BaseActivity {
+    private static final String LOG_TAG = "UpgradeActivity1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_baseupgrade);
+        setContentView(R.layout.activity_upgrade1);
     }
 
     @Override

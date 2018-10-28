@@ -1,11 +1,5 @@
 package com.mssdevlab.baselib.menuproviders;
 
-import androidx.lifecycle.Observer;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,6 +7,11 @@ import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.factory.MenuItemProvider;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 public class LinkMenuProvider extends MenuItemProvider {
     @StringRes private final int resTitle;
@@ -34,9 +33,13 @@ public class LinkMenuProvider extends MenuItemProvider {
             item = menu.add(groupId, resId, Menu.NONE, resTitle);
             item.setIcon(this.resIcon);
 
-            MenuItemProviders.menuItemSelected().observe(activity, new Observer<Integer>() {
-                @Override
-                public void onChanged(@Nullable final Integer menuId) {
+            MenuItemProviders.menuItemSelected().observe(activity, menuEvent -> {
+                if (menuEvent == null){
+                    return;
+                }
+                Integer menuId = menuEvent.peekValue();
+                if (menuId != null && menuId == resId){
+                    menuId = menuEvent.getValueIfNotHandled();
                     if (menuId != null && menuId == resId){
                         Helper.openUrl(resLink, activity);
                     }
