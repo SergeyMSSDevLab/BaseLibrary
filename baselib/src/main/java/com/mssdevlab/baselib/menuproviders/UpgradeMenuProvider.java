@@ -26,6 +26,7 @@ public class UpgradeMenuProvider extends MenuItemProvider {
 
     @Override
     public void attachToActivity(@NonNull final BaseActivity activity, @NonNull final Menu menu, @IdRes int groupId) {
+        // TODO: manage the menu according to the application mode
         MenuItem item = menu.findItem(this.resId);
         if (item == null){
             item = menu.add(groupId, resId, Menu.NONE, resTitle);
