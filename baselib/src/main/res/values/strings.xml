@@ -5,7 +5,7 @@
     <string name="common_error_report_choose_title">Choose an email provider</string>
 
     <string name="common_menu_play_apps">Applications</string>
-    <string name="common_menu_upgrade">Upgrade</string>
+    <string name="common_menu_upgrade">Upgrade app</string>
 
     <string name="common_enjoy_prompt">Enjoying %s?</string>
     <string name="common_enjoy_yes">Yes</string>
@@ -18,7 +18,6 @@
     <string name="common_enjoy_feedback_prompt">Would you mind giving us some feedback?</string>
     <string name="common_enjoy_feedback_yes">OK, sure</string>
     <string name="common_enjoy_feedback_not">No, thanks</string>
-    <string name="title_activity_upgrade">Upgrade</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
