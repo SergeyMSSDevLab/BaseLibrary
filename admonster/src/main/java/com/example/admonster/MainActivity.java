@@ -9,6 +9,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.ads.InterstitialManager;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -75,6 +76,8 @@ public class MainActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            // Demonstrate interestial
+            InterstitialManager.showInterstitialAd(this,true);
             return true;
         }
 

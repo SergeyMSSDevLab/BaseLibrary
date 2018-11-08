@@ -28,6 +28,8 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     private static Thread.UncaughtExceptionHandler originalHandler;
     private static Class<?> upgradeActivityClass;
 
+    public static final String SHARED_PREF = "PromoteApp";
+
     public static MessageSender reportSender = null;
 
     private final Object syncObject = new Object();

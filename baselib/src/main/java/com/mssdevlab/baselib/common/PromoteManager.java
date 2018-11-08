@@ -12,6 +12,8 @@ import android.util.Log;
 
 import com.mssdevlab.baselib.BaseApplication;
 
+import static com.mssdevlab.baselib.BaseApplication.SHARED_PREF;
+
 /**
  * Manages promote screen operations
  */
@@ -19,7 +21,6 @@ import com.mssdevlab.baselib.BaseApplication;
 public class PromoteManager {
     private static final String LOG_TAG = PromoteManager.class.getCanonicalName();
     private static final Long DAY_MS = 1000L * 60 * 60 * 24;
-    private static final String SHARED_PREF = "PromoteApp";
     private static final String PREF_FIRST_LAUNCH = "FirstLaunch";
     private static final String PREF_LAUNCHES = "Launches";
     private static final String PREF_NEVER_SHOW = "NeverShow";

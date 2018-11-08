@@ -4,6 +4,7 @@ import android.content.res.Resources;
 
 import com.google.android.gms.ads.MobileAds;
 import com.mssdevlab.baselib.BaseApplication;
+import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.common.ErrorEMailSender;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
 import com.mssdevlab.baselib.menuproviders.LinkMenuProvider;
@@ -24,6 +25,7 @@ public class AmApp extends BaseApplication {
         Resources res = AmApp.getInstance().getResources();
 
         MobileAds.initialize(this, res.getString(R.string.admob_app_id));
+        InterstitialManager.enableAds(R.string.ad_interestial_unit_id);
 
         this.setUpgradeActivity(UpgradeActivity.class);
 
