@@ -15,7 +15,7 @@ public class ApplicationData {
     private ApplicationData() {
     }
 
-    public static void setMode(AppMode val){
+    public static void setApplicationMode(AppMode val){
         Log.v(LOG_TAG, "setValueInternal: " + val);
         if (Looper.myLooper() == Looper.getMainLooper()){
             sAppMode.setValue(val);

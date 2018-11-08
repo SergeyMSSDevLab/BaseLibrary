@@ -23,7 +23,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void setAppMode(AppMode mode){
-        ApplicationData.setMode(mode);
+        ApplicationData.setApplicationMode(mode);
     }
 
     public LiveData<Boolean> getIsModeDemo(){

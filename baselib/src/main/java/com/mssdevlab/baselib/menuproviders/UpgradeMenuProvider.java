@@ -5,6 +5,9 @@ import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.BaseApplication;
+import com.mssdevlab.baselib.common.AppMode;
+import com.mssdevlab.baselib.common.ApplicationData;
+import com.mssdevlab.baselib.common.Event;
 import com.mssdevlab.baselib.factory.MenuItemProvider;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
 
@@ -12,6 +15,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.Observer;
 
 public class UpgradeMenuProvider extends MenuItemProvider {
     @StringRes private final int resTitle;
@@ -26,24 +30,33 @@ public class UpgradeMenuProvider extends MenuItemProvider {
 
     @Override
     public void attachToActivity(@NonNull final BaseActivity activity, @NonNull final Menu menu, @IdRes int groupId) {
-        // TODO: manage the menu according to the application mode
-        MenuItem item = menu.findItem(this.resId);
-        if (item == null){
-            item = menu.add(groupId, resId, Menu.NONE, resTitle);
-            item.setIcon(this.resIcon);
+        final Observer<Event<Integer>> menuObserver = menuEvent -> {
+            if (menuEvent == null){
+                return;
+            }
+            Integer menuId = menuEvent.peekValue();
+            if (menuId != null && menuId == resId){
+                menuId = menuEvent.getValueIfNotHandled();
+                if (menuId != null){
+                    BaseApplication.startUpgradeScreen(activity);
+                }
+            }
+        };
 
-            MenuItemProviders.menuItemSelected().observe(activity, menuEvent -> {
-                if (menuEvent == null){
-                    return;
+        ApplicationData.getApplicationMode().observe(activity, appMode -> {
+            MenuItem item = menu.findItem(this.resId);
+            if (appMode == AppMode.MODE_PRO){
+                if (item != null){
+                    menu.removeItem(this.resId);
+                    MenuItemProviders.menuItemSelected().removeObserver(menuObserver);
                 }
-                Integer menuId = menuEvent.peekValue();
-                if (menuId != null && menuId == resId){
-                    menuId = menuEvent.getValueIfNotHandled();
-                    if (menuId != null){
-                        BaseApplication.startUpgradeScreen(activity);
-                    }
+            } else {
+                if (item == null){
+                    item = menu.add(groupId, resId, Menu.NONE, resTitle);
+                    item.setIcon(this.resIcon);
+                    MenuItemProviders.menuItemSelected().observe(activity, menuObserver);
                 }
-            });
-        }
+            }
+        });
     }
 }
