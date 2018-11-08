@@ -19,6 +19,11 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BaseActivity";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        BaseApplication.getInstance().handleLastError(this);
+        super.onCreate(savedInstanceState);
+    }
 
     protected void addCommonMenuItems(final Menu menu,
                                       @IdRes final int groupId,
