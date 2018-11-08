@@ -36,7 +36,7 @@ public class UpgradeMenuProvider extends MenuItemProvider {
             }
             Integer menuId = menuEvent.peekValue();
             if (menuId != null && menuId == resId){
-                menuId = menuEvent.getValueIfNotHandled();
+                menuId = menuEvent.getValueIfNotHandled();  // Mark the event as handled
                 if (menuId != null){
                     BaseApplication.startUpgradeScreen(activity);
                 }
