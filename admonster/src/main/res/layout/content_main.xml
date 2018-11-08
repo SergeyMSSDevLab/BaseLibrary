@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:manage_parent="true"
-                app:ad_unit_id="@string/ad_unit_id"
+                app:ad_unit_id="@string/ad_banner_unit_id"
                 app:app_name="@string/app_name"
                 app:developer_email="@string/developers_email_address" />
 
