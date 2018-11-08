@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.banners;
+package com.mssdevlab.baselib.ads;
 
 import android.app.Activity;
 import android.content.Context;

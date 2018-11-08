@@ -6,7 +6,7 @@
     <data>
         <import type="android.view.View"/>
 
-        <variable name="viewModel" type="com.mssdevlab.baselib.banners.ComboBannerViewModel"/>
+        <variable name="viewModel" type="com.mssdevlab.baselib.ads.ComboBannerViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
