@@ -25,20 +25,20 @@ public class AmApp extends BaseApplication {
         Resources res = AmApp.getInstance().getResources();
 
         MobileAds.initialize(this, res.getString(R.string.admob_app_id));
-        InterstitialManager.enableAds(R.string.ad_interestial_unit_id);
+        InterstitialManager.enableAds(R.string.ad_interstitial_unit_id);
 
         this.setUpgradeActivity(UpgradeActivity.class);
 
         MenuItemProviders.addProvider(OUR_APPS_CONFIG_TAG, new LinkMenuProvider(
                 com.mssdevlab.baselib.R.string.common_menu_play_apps,
-                com.mssdevlab.baselib.R.id.menu_action_play_app,
+                R.id.menu_action_play_app,
                 R.string.company_url,
                 com.mssdevlab.baselib.R.drawable.ic_our_apps_black_24dp
         ));
 
         MenuItemProviders.addProvider(UPGRADE_CONFIG_TAG, new UpgradeMenuProvider(
                 com.mssdevlab.baselib.R.string.common_menu_upgrade,
-                com.mssdevlab.baselib.R.id.menu_action_upgrade,
+                R.id.menu_action_upgrade,
                 com.mssdevlab.baselib.R.drawable.ic_app_update_black_24dp
         ));
     }

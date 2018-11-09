@@ -2,13 +2,11 @@ package com.mssdevlab.baselib.ads;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -18,7 +16,6 @@ import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.AppMode;
 import com.mssdevlab.baselib.common.ApplicationData;
 
-import androidx.annotation.CallSuper;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 
@@ -29,9 +26,10 @@ public class InterstitialManager {
     private static final String PREF_LAUNCHES = "InterstitialManager.Launches";
     private static final String PREF_LAST_INDEX = "InterstitialManager.last.Index";
     private static final String PREF_LAST_LAUNCHES = "InterstitialManager.last.Launches";
+    private static final String PREF_SHOW_MODE_WARNING = "InterstitialManager.mode.warning";
     private static final long SHOWING_DELAY  = 1000L * 60 * 9;
 
-    private static int[] sScheduleArr = {0, 1, 3, 7};
+    private static int[] sScheduleArr = {1, 3, 5, 7};
     private static InterstitialAd sInterstitialAd;
     private static long sLastShownTime = 0L;
 
@@ -41,12 +39,21 @@ public class InterstitialManager {
             if (mode != AppMode.MODE_NO_ADS && mode != AppMode.MODE_PRO) {
                 long passedTime = System.currentTimeMillis() - sLastShownTime;
                 if (passedTime > SHOWING_DELAY){
-                    if (showWarning){
+                    SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+                    if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)){
                         showUpgradeWarning(activity);
                     } else {
                         sInterstitialAd.show();
                         sLastShownTime = System.currentTimeMillis();
-                        // TODO: save information for the next session
+                        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
+                        int lastIndex = sharedPref.getInt(PREF_LAST_INDEX, 0) + 1;
+                        if (lastIndex >= sScheduleArr.length){
+                            lastIndex = 0;
+                        }
+                        SharedPreferences.Editor spEditor = sharedPref.edit();
+                        spEditor.putInt(PREF_LAST_LAUNCHES, launches);
+                        spEditor.putInt(PREF_LAST_INDEX, lastIndex);
+                        spEditor.apply();
                     }
                 }
             }
@@ -54,34 +61,25 @@ public class InterstitialManager {
     }
 
     private static void showUpgradeWarning(Activity activity){
-        // TODO: complete
         View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
-        CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                // Save to shared preferences
-            }
+        CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences.Editor spEditor = sharedPref.edit();
+            spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
+            spEditor.apply();
         });
-        checkBox.setText("Text to the right of the check box.");
+        checkBox.setText("Don't show this message anymore.");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(" MY_TEXT");
-        builder.setMessage(" MY_TEXT ")
+        builder.setTitle("Notification");
+        builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown.")
                 .setView(checkBoxView)
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // TODO: go to upgrade
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // TODO: show ads
-                        dialog.cancel();
-                    }
+                .setPositiveButton("View upgrade options", (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
+                .setNegativeButton("Continue in demo mode", (dialog, id) -> {
+                    showInterstitialAd(activity, false);
+                    dialog.cancel();
                 }).show();
     }
 
@@ -104,7 +102,15 @@ public class InterstitialManager {
             spEditor.putInt(PREF_LAUNCHES, launches);
             spEditor.apply();
         }
-        setUpAd(ctx, adUnitId); // TODO: complete checking first
+        int lastIndex = sharedPref.getInt(PREF_LAST_INDEX, 0);
+        int difference = launches - sharedPref.getInt(PREF_LAST_LAUNCHES, 0);
+        Log.v(LOG_TAG, "enableAdsInBackground: launches=" + launches +
+                " lastIndex=" + lastIndex +
+                " difference=" + difference +
+                " schedule=" + sScheduleArr[lastIndex]);
+        if (difference >= sScheduleArr[lastIndex]){
+            setUpAd(ctx, adUnitId);
+        }
     }
 
     private static void setUpAd(Context ctx, @StringRes int adUnitId){

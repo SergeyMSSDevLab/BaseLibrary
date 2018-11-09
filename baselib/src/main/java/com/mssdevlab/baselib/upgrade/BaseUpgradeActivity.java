@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.ads.InterstitialManager;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -47,9 +48,18 @@ public class BaseUpgradeActivity extends BaseActivity {
                         // navigate up to the logical parent activity.
                         NavUtils.navigateUpTo(this, upIntent);
                     }
+                    InterstitialManager.showInterstitialAd(this,false);
                     return true;
                 }
+                InterstitialManager.showInterstitialAd(this,false);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        InterstitialManager.showInterstitialAd(this,false);
     }
 }

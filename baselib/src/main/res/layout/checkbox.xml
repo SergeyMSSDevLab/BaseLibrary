@@ -6,5 +6,5 @@
         style="?android:attr/textAppearanceMedium"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
+        android:layout_margin="@dimen/bl_item_spacing_vertical" />
 </FrameLayout>
