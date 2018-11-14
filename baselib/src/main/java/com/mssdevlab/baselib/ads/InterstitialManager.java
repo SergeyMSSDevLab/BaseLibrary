@@ -2,6 +2,7 @@ package com.mssdevlab.baselib.ads;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -44,15 +45,19 @@ public class InterstitialManager {
             return true;
         }
 
+        final Resources res = activity.getResources();
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Notification");
-        builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown."
-                + "\nThe command you are trying to perform is not allowed in the demo mode.")
+        builder.setTitle(R.string.ads_notification_title);
+        builder.setMessage(res.getString(R.string.ads_restriction_message,
+                    res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]))
                 .setCancelable(false)
-                .setPositiveButton("View upgrade options", (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
-                .setNegativeButton("Continue in demo mode", (dialog, id) -> {
-                    showInterstitialAd(activity, false);
-                    dialog.cancel();
+                .setPositiveButton(R.string.ads_upgrade_button_title,
+                        (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
+                .setNegativeButton(res.getString(R.string.ads_continue_button_title,
+                        res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]),
+                        (dialog, id) -> {
+                            showInterstitialAd(activity, false);
+                            dialog.cancel();
                 }).show();
 
         return false;
@@ -102,6 +107,7 @@ public class InterstitialManager {
             Log.v(LOG_TAG, "onAdLoadedInternal passedTime > SHOWING_DELAY:" + (passedTime > SHOWING_DELAY));
             if (passedTime > SHOWING_DELAY){
                 final SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+                final Resources res = activity.getResources();
                 if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)){
                     View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
                     CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
@@ -110,20 +116,23 @@ public class InterstitialManager {
                         spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
                         spEditor.apply();
                     });
-                    checkBox.setText("Don't show this message anymore.");
+                    checkBox.setText(R.string.ads_hide_checkbox_title);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle("Notification");
-                    builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown.")
+                    builder.setTitle(R.string.ads_notification_title);
+                    builder.setMessage(res.getString(R.string.ads_notification_message,
+                                res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]))
                             .setView(checkBoxView)
                             .setCancelable(false)
-                            .setPositiveButton("View upgrade options", (dialog, id) -> {
+                            .setPositiveButton(R.string.ads_upgrade_button_title, (dialog, id) -> {
                                 clearAdListener(ad);
                                 BaseApplication.startUpgradeScreen(activity);
                             })
-                            .setNegativeButton("Continue in demo mode", (dialog, id) -> {
-                                showAdScreen(ad, sharedPref);
-                                dialog.cancel();
+                            .setNegativeButton(res.getString(R.string.ads_continue_button_title,
+                                    res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]),
+                                (dialog, id) -> {
+                                    showAdScreen(ad, sharedPref);
+                                    dialog.cancel();
                             }).show();
                 } else {
                     showAdScreen(ad, sharedPref);
