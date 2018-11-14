@@ -1,9 +1,9 @@
 package com.mssdevlab.baselib.ads;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -19,6 +19,9 @@ import com.mssdevlab.baselib.common.ApplicationData;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import static com.mssdevlab.baselib.BaseApplication.SHARED_PREF;
 
@@ -31,10 +34,11 @@ public class InterstitialManager {
     private static final long SHOWING_DELAY  = 1000L * 60 * 9;
 
     private static int[] sScheduleArr = {1, 3, 5, 7};
-    private static InterstitialAd sInterstitialAd;
     private static long sLastShownTime = 0L;
+    private static final MutableLiveData<InterstitialAd> sInterstitialAd = new MutableLiveData<>();
+    private static Observer<InterstitialAd> sAdObserver;
 
-    public static boolean isAppModeAtLeast(Activity activity, @NonNull AppMode minMode) {
+    public static boolean isAppModeAtLeast(AppCompatActivity activity, @NonNull AppMode minMode) {
         AppMode mode = ApplicationData.getCurrentApplicationMode();
         if (mode.ordinal() >= minMode.ordinal() ){
             return true;
@@ -54,58 +58,124 @@ public class InterstitialManager {
         return false;
     }
 
-    public static void showInterstitialAd(Activity activity, boolean showWarning){
-        // TODO: wait until enable ads finishes
-        Log.v(LOG_TAG, "showInterstitialAd sInterstitialAd != null: " + (sInterstitialAd != null));
-        if (sInterstitialAd != null && sInterstitialAd.isLoaded()) {
-            AppMode mode = ApplicationData.getCurrentApplicationMode();
-            if (mode.ordinal() < AppMode.MODE_NO_ADS.ordinal()) {
-                long passedTime = System.currentTimeMillis() - sLastShownTime;
-                if (passedTime > SHOWING_DELAY){
-                    SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-                    if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)){
-                        View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
-                        CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
-                        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                            SharedPreferences.Editor spEditor = sharedPref.edit();
-                            spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
-                            spEditor.apply();
-                        });
-                        checkBox.setText("Don't show this message anymore.");
+    public static void showInterstitialAd(final AppCompatActivity activity, boolean showWarning){
+        Log.v(LOG_TAG, "showInterstitialAd");
+        if (!sInterstitialAd.hasActiveObservers()){
+            Log.v(LOG_TAG, "showInterstitialAd adding observer");
+            sAdObserver = interstitialAd -> showAd(activity, interstitialAd, showWarning);
+            sInterstitialAd.observe(activity, sAdObserver);
+        }
+    }
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("Notification");
-                        builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown.")
-                                .setView(checkBoxView)
-                                .setCancelable(false)
-                                .setPositiveButton("View upgrade options", (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
-                                .setNegativeButton("Continue in demo mode", (dialog, id) -> {
-                                    showInterstitialAd(activity, false);
-                                    dialog.cancel();
-                                }).show();
-                    } else {
-                        sInterstitialAd.show();
-                        sLastShownTime = System.currentTimeMillis();
-                        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
-                        int lastIndex = sharedPref.getInt(PREF_LAST_INDEX, 0) + 1;
-                        if (lastIndex >= sScheduleArr.length){
-                            lastIndex = 0;
-                        }
-                        SharedPreferences.Editor spEditor = sharedPref.edit();
-                        spEditor.putInt(PREF_LAST_LAUNCHES, launches);
-                        spEditor.putInt(PREF_LAST_INDEX, lastIndex);
-                        spEditor.apply();
+    private static void showAd(final AppCompatActivity activity, final InterstitialAd ad, boolean showWarning){
+        Log.v(LOG_TAG, "showAd ad != null:" + (ad != null));
+        if (sAdObserver != null){
+            sInterstitialAd.removeObserver(sAdObserver);
+            sAdObserver = null;
+            Log.v(LOG_TAG, "showAd observer removed");
+        }
+        if (ad != null) {
+            if (ad.isLoaded()){
+                Log.v(LOG_TAG, "showAd isLoaded:true");
+                onAdLoadedInternal(activity, ad, showWarning);
+            } else {
+                Log.v(LOG_TAG, "showAd adding listener");
+                ad.setAdListener(new AdListener(){
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+                        onAdLoadedInternal(activity, ad, showWarning);
                     }
+                });
+                if (!ad.isLoading()) {
+                    Log.v(LOG_TAG, "showAd request ads");
+                    ad.loadAd(new AdRequest.Builder().build());
                 }
             }
         }
     }
 
+    private static void onAdLoadedInternal(final AppCompatActivity activity, final InterstitialAd ad, boolean showWarning){
+        AppMode mode = ApplicationData.getCurrentApplicationMode();
+        if (mode.ordinal() < AppMode.MODE_NO_ADS.ordinal()) {
+            long passedTime = System.currentTimeMillis() - sLastShownTime;
+            Log.v(LOG_TAG, "onAdLoadedInternal passedTime > SHOWING_DELAY:" + (passedTime > SHOWING_DELAY));
+            if (passedTime > SHOWING_DELAY){
+                final SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+                if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)){
+                    View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
+                    CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+                    checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        SharedPreferences.Editor spEditor = sharedPref.edit();
+                        spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
+                        spEditor.apply();
+                    });
+                    checkBox.setText("Don't show this message anymore.");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle("Notification");
+                    builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown.")
+                            .setView(checkBoxView)
+                            .setCancelable(false)
+                            .setPositiveButton("View upgrade options", (dialog, id) -> {
+                                clearAdListener(ad, sharedPref);
+                                BaseApplication.startUpgradeScreen(activity);
+                            })
+                            .setNegativeButton("Continue in demo mode", (dialog, id) -> {
+                                showAdScreen(ad, sharedPref);
+                                dialog.cancel();
+                            }).show();
+                } else {
+                    showAdScreen(ad, sharedPref);
+                }
+            }
+        }
+    }
+
+    // Shows ad and remove listeners
+    private static void showAdScreen(InterstitialAd ad, SharedPreferences sharedPref){
+        ad.show();
+        clearAdListener(ad, sharedPref);
+    }
+
+    private static void clearAdListener(InterstitialAd ad, SharedPreferences sharedPref){
+        ad.setAdListener(null);
+        ad.loadAd(new AdRequest.Builder().build());
+        sLastShownTime = System.currentTimeMillis();
+        int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
+        int lastIndex = sharedPref.getInt(PREF_LAST_INDEX, 0) + 1;
+        if (lastIndex >= sScheduleArr.length){
+            lastIndex = 0;
+        }
+        SharedPreferences.Editor spEditor = sharedPref.edit();
+        spEditor.putInt(PREF_LAST_LAUNCHES, launches);
+        spEditor.putInt(PREF_LAST_INDEX, lastIndex);
+        spEditor.apply();
+    }
+
     public static void enableAds(@StringRes int adUnitId){
         Log.v(LOG_TAG, "enableAds");
+        Context ctx = BaseApplication.getInstance();
+        Handler mainHandler = new Handler(ctx.getMainLooper());
+        mainHandler.post(() -> {
+            ApplicationData.getApplicationMode().observeForever(appMode -> enableDisableAds(appMode, adUnitId));
+            Log.v(LOG_TAG, "enableAds() appMode observer added");
+        });
+    }
 
-        // TODO: enable add only for corresponding application mode
-        new Thread(() -> enableAdsInBackground(adUnitId)).start();
+    private static void enableDisableAds(AppMode mode, int adUnitId){
+        Log.v(LOG_TAG, "enableDisableAds");
+        if (mode == null){
+            mode = AppMode.MODE_DEMO;
+        }
+        if (mode.ordinal() < AppMode.MODE_NO_ADS.ordinal()){
+            if (sInterstitialAd.getValue() == null){
+                new Thread(() -> enableAdsInBackground(adUnitId)).start();
+            }
+        } else {
+            setInterstitialAd(null);
+            Log.v(LOG_TAG, "enableDisableAds: InterstitialAd disabled");
+        }
     }
 
     private static void enableAdsInBackground(@StringRes int adUnitId){
@@ -134,20 +204,24 @@ public class InterstitialManager {
 
     private static void setUpAd(Context ctx, @StringRes int adUnitId){
         Log.v(LOG_TAG, "setUpAd");
-        sInterstitialAd = new InterstitialAd(ctx);
-        sInterstitialAd.setAdUnitId(ctx.getResources().getString(adUnitId));
+        final InterstitialAd ad = new InterstitialAd(ctx);
+        ad.setAdUnitId(ctx.getResources().getString(adUnitId));
+        setInterstitialAd(ad);
         // Load ads in the main thread
         Handler mainHandler = new Handler(ctx.getMainLooper());
         mainHandler.post(() -> {
-            sInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    // Load the next interstitial.
-                    sInterstitialAd.loadAd(new AdRequest.Builder().build());
-                }
-            });
-            sInterstitialAd.loadAd(new AdRequest.Builder().build());
+            ad.loadAd(new AdRequest.Builder().build());
             Log.v(LOG_TAG, "loadAd() executed");
         });
     }
+
+    private static void setInterstitialAd(InterstitialAd val){
+        Log.v(LOG_TAG, "setValueInternal: " + val);
+        if (Looper.myLooper() == Looper.getMainLooper()){
+            sInterstitialAd.setValue(val);
+        } else {
+            sInterstitialAd.postValue(val);
+        }
+    }
+
 }
