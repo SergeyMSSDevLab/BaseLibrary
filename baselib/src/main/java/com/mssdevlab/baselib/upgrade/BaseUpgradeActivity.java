@@ -9,11 +9,12 @@ import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.InterstitialManager;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.core.app.TaskStackBuilder;
 
-public class BaseUpgradeActivity extends BaseActivity {
+public class BaseUpgradeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

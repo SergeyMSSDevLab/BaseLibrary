@@ -118,7 +118,7 @@ public class InterstitialManager {
                             .setView(checkBoxView)
                             .setCancelable(false)
                             .setPositiveButton("View upgrade options", (dialog, id) -> {
-                                clearAdListener(ad, sharedPref);
+                                clearAdListener(ad);
                                 BaseApplication.startUpgradeScreen(activity);
                             })
                             .setNegativeButton("Continue in demo mode", (dialog, id) -> {
@@ -135,12 +135,7 @@ public class InterstitialManager {
     // Shows ad and remove listeners
     private static void showAdScreen(InterstitialAd ad, SharedPreferences sharedPref){
         ad.show();
-        clearAdListener(ad, sharedPref);
-    }
-
-    private static void clearAdListener(InterstitialAd ad, SharedPreferences sharedPref){
-        ad.setAdListener(null);
-        ad.loadAd(new AdRequest.Builder().build());
+        clearAdListener(ad);
         sLastShownTime = System.currentTimeMillis();
         int launches = sharedPref.getInt(PREF_LAUNCHES, 0);
         int lastIndex = sharedPref.getInt(PREF_LAST_INDEX, 0) + 1;
@@ -151,6 +146,11 @@ public class InterstitialManager {
         spEditor.putInt(PREF_LAST_LAUNCHES, launches);
         spEditor.putInt(PREF_LAST_INDEX, lastIndex);
         spEditor.apply();
+    }
+
+    private static void clearAdListener(InterstitialAd ad){
+        ad.setAdListener(null);
+        ad.loadAd(new AdRequest.Builder().build());
     }
 
     public static void enableAds(@StringRes int adUnitId){
