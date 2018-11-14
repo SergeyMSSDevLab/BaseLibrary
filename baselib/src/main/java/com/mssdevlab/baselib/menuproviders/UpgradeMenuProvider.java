@@ -5,8 +5,8 @@ import android.view.MenuItem;
 
 import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.BaseApplication;
-import com.mssdevlab.baselib.common.AppMode;
-import com.mssdevlab.baselib.common.ApplicationData;
+import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
 import com.mssdevlab.baselib.common.Event;
 import com.mssdevlab.baselib.factory.MenuItemProvider;
 import com.mssdevlab.baselib.factory.MenuItemProviders;

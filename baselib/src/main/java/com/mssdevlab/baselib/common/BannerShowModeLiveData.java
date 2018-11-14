@@ -1,10 +1,12 @@
 package com.mssdevlab.baselib.common;
 
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 
 import android.os.Looper;
 import android.util.Log;
+
+import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
 
 public class BannerShowModeLiveData extends MediatorLiveData<ShowView> {
     private static final String LOG_TAG = "BannerShowModeLiveData";

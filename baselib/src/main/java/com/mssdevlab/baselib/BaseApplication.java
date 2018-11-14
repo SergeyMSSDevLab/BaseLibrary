@@ -7,6 +7,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
 import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
@@ -57,6 +58,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         new Thread(() -> {
             try {
+                AppModeManager.checkAppMode();
                 initApplicationInBackground();
 
                 // Inform observers that configuration finished

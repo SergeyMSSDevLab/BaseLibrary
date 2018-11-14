@@ -3,8 +3,8 @@ package com.example.admonster;
 import android.util.Log;
 
 import com.mssdevlab.baselib.common.ShowView;
-import com.mssdevlab.baselib.common.AppMode;
-import com.mssdevlab.baselib.common.ApplicationData;
+import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
 import com.mssdevlab.baselib.common.PromoteManager;
 
 import androidx.lifecycle.LiveData;

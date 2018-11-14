@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <data>
-        <import type="com.mssdevlab.baselib.common.AppMode"/>
+        <import type="com.mssdevlab.baselib.ApplicationMode.AppMode"/>
         <import type="com.mssdevlab.baselib.common.ShowView"/>
         <variable name="viewModelMain" type="com.example.admonster.MainActivityViewModel"/>
     </data>

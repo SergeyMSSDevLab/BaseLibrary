@@ -3,7 +3,7 @@ package com.mssdevlab.baselib.ads;
 import android.os.Looper;
 
 import com.google.android.gms.ads.AdSize;
-import com.mssdevlab.baselib.common.ApplicationData;
+import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
 import com.mssdevlab.baselib.common.ShowView;
 
 import androidx.lifecycle.LiveData;

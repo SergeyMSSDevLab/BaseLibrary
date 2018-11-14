@@ -13,8 +13,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
-import com.mssdevlab.baselib.common.AppMode;
-import com.mssdevlab.baselib.common.ApplicationData;
+import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;

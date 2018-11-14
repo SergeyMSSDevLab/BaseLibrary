@@ -9,9 +9,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.mssdevlab.baselib.BaseActivity;
-import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.ads.InterstitialManager;
-import com.mssdevlab.baselib.common.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.AppMode;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;

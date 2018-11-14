@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.common;
+package com.mssdevlab.baselib.ApplicationMode;
 
 // Ordinal is important, it is used in comparing
 public enum AppMode {

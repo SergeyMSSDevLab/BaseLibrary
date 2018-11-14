@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.common;
+package com.mssdevlab.baselib.ApplicationMode;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import android.os.Looper;
 import android.util.Log;
+
+import com.mssdevlab.baselib.common.BannerShowModeLiveData;
+import com.mssdevlab.baselib.common.ShowView;
 
 public class ApplicationData {
     private static final String LOG_TAG = "ApplicationData";
