@@ -9,9 +9,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.mssdevlab.baselib.BaseActivity;
+import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.ads.InterstitialManager;
+import com.mssdevlab.baselib.common.AppMode;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -90,14 +93,34 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        if (id == R.id.nav_eval) {
+            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_EVALUATION)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Restricted feature");
+                builder.setMessage("Application mode allows to run an Evaluation feature.")
+                        .setCancelable(true).show();
+            }
+        } else if (id == R.id.nav_no_ads) {
+            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_NO_ADS)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Restricted feature");
+                builder.setMessage("Application mode allows to run a NoAds feature.")
+                        .setCancelable(true).show();
+            }
+        } else if (id == R.id.nav_pro) {
+            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_PRO)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Restricted feature");
+                builder.setMessage("Application mode allows to run a Pro feature.")
+                        .setCancelable(true).show();
+            }
+        } else if (id == R.id.nav_demo) {
+            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_DEMO)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Restricted feature");
+                builder.setMessage("Application mode allows to run a Demo feature.")
+                        .setCancelable(true).show();
+            }
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

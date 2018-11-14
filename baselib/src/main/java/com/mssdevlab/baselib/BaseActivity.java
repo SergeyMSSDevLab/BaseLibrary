@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.factory.CommonViewProvider;
 import com.mssdevlab.baselib.factory.CommonViewProviders;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
@@ -23,6 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         BaseApplication.getInstance().handleLastError(this);
         super.onCreate(savedInstanceState);
+        InterstitialManager.showInterstitialAd(this,true);
     }
 
     protected void addCommonMenuItems(final Menu menu,

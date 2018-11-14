@@ -1,5 +1,6 @@
 package com.mssdevlab.baselib.common;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -22,6 +23,15 @@ public class ApplicationData {
         } else {
             sAppMode.postValue(val);
         }
+    }
+
+    @NonNull
+    public static AppMode getCurrentApplicationMode(){
+        AppMode mode = sAppMode.getValue();
+        if (mode == null){
+            mode = AppMode.MODE_DEMO;
+        }
+        return mode;
     }
 
     public static LiveData<AppMode> getApplicationMode(){

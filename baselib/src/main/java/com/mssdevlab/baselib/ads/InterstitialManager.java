@@ -16,6 +16,7 @@ import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.AppMode;
 import com.mssdevlab.baselib.common.ApplicationData;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 
@@ -33,15 +34,55 @@ public class InterstitialManager {
     private static InterstitialAd sInterstitialAd;
     private static long sLastShownTime = 0L;
 
+    public static boolean isAppModeAtLeast(Activity activity, @NonNull AppMode minMode) {
+        AppMode mode = ApplicationData.getCurrentApplicationMode();
+        if (mode.ordinal() >= minMode.ordinal() ){
+            return true;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Notification");
+        builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown."
+                + "\nThe command you are trying to perform is not allowed in the demo mode.")
+                .setCancelable(false)
+                .setPositiveButton("View upgrade options", (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
+                .setNegativeButton("Continue in demo mode", (dialog, id) -> {
+                    showInterstitialAd(activity, false);
+                    dialog.cancel();
+                }).show();
+
+        return false;
+    }
+
     public static void showInterstitialAd(Activity activity, boolean showWarning){
+        // TODO: wait until enable ads finishes
+        Log.v(LOG_TAG, "showInterstitialAd sInterstitialAd != null: " + (sInterstitialAd != null));
         if (sInterstitialAd != null && sInterstitialAd.isLoaded()) {
-            AppMode mode = ApplicationData.getApplicationMode().getValue();
-            if (mode != AppMode.MODE_NO_ADS && mode != AppMode.MODE_PRO) {
+            AppMode mode = ApplicationData.getCurrentApplicationMode();
+            if (mode.ordinal() < AppMode.MODE_NO_ADS.ordinal()) {
                 long passedTime = System.currentTimeMillis() - sLastShownTime;
                 if (passedTime > SHOWING_DELAY){
                     SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
                     if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)){
-                        showUpgradeWarning(activity);
+                        View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
+                        CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+                        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                            SharedPreferences.Editor spEditor = sharedPref.edit();
+                            spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
+                            spEditor.apply();
+                        });
+                        checkBox.setText("Don't show this message anymore.");
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("Notification");
+                        builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown.")
+                                .setView(checkBoxView)
+                                .setCancelable(false)
+                                .setPositiveButton("View upgrade options", (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
+                                .setNegativeButton("Continue in demo mode", (dialog, id) -> {
+                                    showInterstitialAd(activity, false);
+                                    dialog.cancel();
+                                }).show();
                     } else {
                         sInterstitialAd.show();
                         sLastShownTime = System.currentTimeMillis();
@@ -60,32 +101,10 @@ public class InterstitialManager {
         }
     }
 
-    private static void showUpgradeWarning(Activity activity){
-        View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
-        CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            SharedPreferences.Editor spEditor = sharedPref.edit();
-            spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
-            spEditor.apply();
-        });
-        checkBox.setText("Don't show this message anymore.");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Notification");
-        builder.setMessage("The application works in demo mode. Some features are limited and advertisements are shown.")
-                .setView(checkBoxView)
-                .setCancelable(false)
-                .setPositiveButton("View upgrade options", (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
-                .setNegativeButton("Continue in demo mode", (dialog, id) -> {
-                    showInterstitialAd(activity, false);
-                    dialog.cancel();
-                }).show();
-    }
-
     public static void enableAds(@StringRes int adUnitId){
         Log.v(LOG_TAG, "enableAds");
 
+        // TODO: enable add only for corresponding application mode
         new Thread(() -> enableAdsInBackground(adUnitId)).start();
     }
 

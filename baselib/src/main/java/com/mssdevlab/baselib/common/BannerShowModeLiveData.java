@@ -13,7 +13,7 @@ public class BannerShowModeLiveData extends MediatorLiveData<ShowView> {
         Log.v(LOG_TAG, "Constructor");
 
         this.addSource(PromoteManager.getShowPromo(),
-                aBoolean -> onAppMode(ApplicationData.getApplicationMode().getValue()) );
+                aBoolean -> onAppMode(ApplicationData.getCurrentApplicationMode()) );
         this.addSource(ApplicationData.getApplicationMode(), this::onAppMode);
     }
 
@@ -21,7 +21,7 @@ public class BannerShowModeLiveData extends MediatorLiveData<ShowView> {
         Boolean curValueIsPromo = PromoteManager.getShowPromo().getValue();
         if (curValueIsPromo == null || !curValueIsPromo){
             if (newMode != null){
-                if (newMode == AppMode.MODE_DEMO || newMode == AppMode.MODE_EVALUATION){
+                if (newMode.ordinal() < AppMode.MODE_NO_ADS.ordinal()){
                     this.setValueInternal(ShowView.ADS);
                 } else {
                     this.setValueInternal(ShowView.NOTHING);
