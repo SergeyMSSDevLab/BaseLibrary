@@ -47,13 +47,13 @@ public class InterstitialManager {
 
         final Resources res = activity.getResources();
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(R.string.ads_notification_title);
-        builder.setMessage(res.getStringArray(R.array.ads_restriction_message_array)[mode.ordinal()])
+        builder.setTitle(R.string.bl_ads_notification_title);
+        builder.setMessage(res.getStringArray(R.array.bl_ads_restriction_message_array)[mode.ordinal()])
                 .setCancelable(false)
-                .setPositiveButton(R.string.ads_upgrade_button_title,
+                .setPositiveButton(R.string.bl_ads_upgrade_button_title,
                         (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
-                .setNegativeButton(res.getString(R.string.ads_continue_button_title,
-                        res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]),
+                .setNegativeButton(res.getString(R.string.bl_ads_continue_button_title,
+                        res.getStringArray(R.array.bl_common_app_mode_array)[mode.ordinal()]),
                         (dialog, id) -> {
                             showInterstitialAd(activity, false);
                             dialog.cancel();
@@ -115,19 +115,19 @@ public class InterstitialManager {
                         spEditor.putBoolean(PREF_SHOW_MODE_WARNING, !isChecked);
                         spEditor.apply();
                     });
-                    checkBox.setText(R.string.ads_hide_checkbox_title);
+                    checkBox.setText(R.string.bl_ads_hide_checkbox_title);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(R.string.ads_notification_title);
-                    builder.setMessage(res.getStringArray(R.array.ads_notification_message_array)[mode.ordinal()])
+                    builder.setTitle(R.string.bl_ads_notification_title);
+                    builder.setMessage(res.getStringArray(R.array.bl_ads_notification_message_array)[mode.ordinal()])
                             .setView(checkBoxView)
                             .setCancelable(false)
-                            .setPositiveButton(R.string.ads_upgrade_button_title, (dialog, id) -> {
+                            .setPositiveButton(R.string.bl_ads_upgrade_button_title, (dialog, id) -> {
                                 clearAdListener(ad);
                                 BaseApplication.startUpgradeScreen(activity);
                             })
-                            .setNegativeButton(res.getString(R.string.ads_continue_button_title,
-                                    res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]),
+                            .setNegativeButton(res.getString(R.string.bl_ads_continue_button_title,
+                                    res.getStringArray(R.array.bl_common_app_mode_array)[mode.ordinal()]),
                                 (dialog, id) -> {
                                     showAdScreen(ad, sharedPref);
                                     dialog.cancel();

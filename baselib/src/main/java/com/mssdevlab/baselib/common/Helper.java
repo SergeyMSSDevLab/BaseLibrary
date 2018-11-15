@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Looper;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -15,6 +16,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.MutableLiveData;
 
 /**
  * Common Helpers
@@ -140,6 +142,14 @@ public class Helper {
 
         } catch (Exception ex) {
             Log.e(LOG_TAG, "openURL fails: " + ex.getMessage());
+        }
+    }
+
+    public static <T> void setValue(MutableLiveData<T> field, T value){
+        if (Looper.myLooper() == Looper.getMainLooper()){
+            field.setValue(value);
+        } else {
+            field.postValue(value);
         }
     }
 }

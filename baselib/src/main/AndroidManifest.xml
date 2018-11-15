@@ -7,7 +7,7 @@
     <application>
         <activity
             android:name=".common.ErrorActivity"
-            android:label="@string/common_error_report_email_subject"></activity>
+            android:label="@string/bl_common_error_report_email_subject"></activity>
         <activity
             android:name=".upgrade.BaseUpgradeActivity"
             android:label="@string/title_activity_upgrade"

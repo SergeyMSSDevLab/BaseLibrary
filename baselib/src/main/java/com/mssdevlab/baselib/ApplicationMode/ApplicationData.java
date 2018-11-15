@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.mssdevlab.baselib.common.BannerShowModeLiveData;
+import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.ShowView;
 
 public class ApplicationData {
@@ -15,17 +16,30 @@ public class ApplicationData {
 
     private static final MutableLiveData<AppMode> sAppMode = new MutableLiveData<>();
     private static final BannerShowModeLiveData sBannerShowMode = new BannerShowModeLiveData();
+    private static final MutableLiveData<Boolean> sAllowTrackingParticipated = new MutableLiveData<>();
+    private static final MutableLiveData<Boolean> sAllowTracking = new MutableLiveData<>();
 
     private ApplicationData() {
     }
 
+    public static LiveData<Boolean> getAllowTracking(){
+        return sAllowTracking;
+    }
+
+    public static void setAllowTracking(Boolean val){
+        Helper.setValue(sAllowTracking, val);
+    }
+
+    public static LiveData<Boolean> getAllowTrackingParticipated(){
+        return sAllowTrackingParticipated;
+    }
+
+    public static void setAllowTrackingParticipated(Boolean val){
+        Helper.setValue(sAllowTrackingParticipated, val);
+    }
+
     public static void setApplicationMode(AppMode val){
-        Log.v(LOG_TAG, "setValueInternal: " + val);
-        if (Looper.myLooper() == Looper.getMainLooper()){
-            sAppMode.setValue(val);
-        } else {
-            sAppMode.postValue(val);
-        }
+        Helper.setValue(sAppMode, val);
     }
 
     @NonNull

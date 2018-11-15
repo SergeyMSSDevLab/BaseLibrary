@@ -1,9 +1,13 @@
 package com.mssdevlab.baselib.upgrade;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.Switch;
 
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
 import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
+import com.mssdevlab.baselib.R;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
@@ -16,9 +20,22 @@ public class BaseUpgradeActivityViewModel extends ViewModel {
         Log.v(LOG_TAG, "Constructor");
     }
 
+    public LiveData<Integer> getAllowTrackingText(){
+        return Transformations.map(ApplicationData.getAllowTrackingParticipated(),
+            val -> {
+                if (val) {
+                    return R.string.bl_upgrade_track_value_done;
+                }
+                return R.string.bl_upgrade_track_value;
+            });
+    }
+
     public LiveData<Boolean> getAllowTracking(){
-        return Transformations.map(ApplicationData.getApplicationMode(),
-                val -> val == AppMode.MODE_EVALUATION);
+        return ApplicationData.getAllowTracking();
+    }
+
+    public void setAllowTracking(View view){
+        AppModeManager.setAllowTracking(((Switch) view).isChecked());
     }
 
 }

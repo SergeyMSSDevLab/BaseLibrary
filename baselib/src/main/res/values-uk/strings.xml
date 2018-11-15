@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common_error_report_email_subject">Звіт про помилку</string>
-    <string name="common_error_report_dialog_text">Сталася помилка в програмі. Бажаєте послати звіт розробникам? У Вас буде можливість відредагувати повідомлення.</string>
-    <string name="common_error_report_choose_title">Виберіть службу для відправки</string>
+    <string name="bl_common_error_report_email_subject">Звіт про помилку</string>
+    <string name="bl_common_error_report_dialog_text">Сталася помилка в програмі. Бажаєте послати звіт розробникам? У Вас буде можливість відредагувати повідомлення.</string>
+    <string name="bl_common_error_report_choose_title">Виберіть службу для відправки</string>
 
-    <string name="common_menu_play_apps">Програми</string>
+    <string name="bl_common_menu_play_apps">Програми</string>
 
-    <string name="common_enjoy_prompt">Подобається %s?</string>
-    <string name="common_enjoy_yes">Так</string>
-    <string name="common_enjoy_not">Не зовсім</string>
+    <string name="bl_common_enjoy_prompt">Подобається %s?</string>
+    <string name="bl_common_enjoy_yes">Так</string>
+    <string name="bl_common_enjoy_not">Не зовсім</string>
 
-    <string name="common_enjoy_rate_prompt">Може тоді підвищимо рейтинг програми?</string>
-    <string name="common_enjoy_rate_yes">Так, звісно</string>
-    <string name="common_enjoy_rate_not">Не зараз</string>
+    <string name="bl_common_enjoy_rate_prompt">Може тоді підвищимо рейтинг програми?</string>
+    <string name="bl_common_enjoy_rate_yes">Так, звісно</string>
+    <string name="bl_common_enjoy_rate_not">Не зараз</string>
 
-    <string name="common_enjoy_feedback_prompt">Порадите щось розробникам?</string>
-    <string name="common_enjoy_feedback_yes">Так, звісно</string>
-    <string name="common_enjoy_feedback_not">Не зараз</string>
+    <string name="bl_common_enjoy_feedback_prompt">Порадите щось розробникам?</string>
+    <string name="bl_common_enjoy_feedback_yes">Так, звісно</string>
+    <string name="bl_common_enjoy_feedback_not">Не зараз</string>
 
 </resources>

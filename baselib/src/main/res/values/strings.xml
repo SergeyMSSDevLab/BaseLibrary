@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_error_report_email_subject">Error report</string>
-    <string name="common_error_report_dialog_text">An error appeared in the application. Would you like to email an error report to developers?  You will be able to edit message before sending.</string>
-    <string name="common_error_report_choose_title">Choose an email provider</string>
+    <string name="bl_common_error_report_email_subject">Error report</string>
+    <string name="bl_common_error_report_dialog_text">An error appeared in the application. Would you like to email an error report to developers?  You will be able to edit message before sending.</string>
+    <string name="bl_common_error_report_choose_title">Choose an email provider</string>
 
-    <string name="common_menu_play_apps">Applications</string>
-    <string name="common_menu_upgrade">Upgrade the app</string>
+    <string name="bl_common_menu_play_apps">Applications</string>
+    <string name="bl_common_menu_upgrade">Upgrade the app</string>
 
-    <string name="common_enjoy_prompt">Enjoying %s?</string>
-    <string name="common_enjoy_yes">Yes</string>
-    <string name="common_enjoy_not">Not really</string>
+    <string name="bl_common_enjoy_prompt">Enjoying %s?</string>
+    <string name="bl_common_enjoy_yes">Yes</string>
+    <string name="bl_common_enjoy_not">Not really</string>
 
-    <string name="common_enjoy_rate_prompt">How about a rating on the store, then?</string>
-    <string name="common_enjoy_rate_yes">OK, sure</string>
-    <string name="common_enjoy_rate_not">No, thanks</string>
+    <string name="bl_common_enjoy_rate_prompt">How about a rating on the store, then?</string>
+    <string name="bl_common_enjoy_rate_yes">OK, sure</string>
+    <string name="bl_common_enjoy_rate_not">No, thanks</string>
 
-    <string name="common_enjoy_feedback_prompt">Would you mind giving us some feedback?</string>
-    <string name="common_enjoy_feedback_yes">OK, sure</string>
-    <string name="common_enjoy_feedback_not">No, thanks</string>
+    <string name="bl_common_enjoy_feedback_prompt">Would you mind giving us some feedback?</string>
+    <string name="bl_common_enjoy_feedback_yes">OK, sure</string>
+    <string name="bl_common_enjoy_feedback_not">No, thanks</string>
 
-    <string name="ads_hide_checkbox_title">Don\'t show this message anymore.</string>
-    <string name="ads_notification_title">Notification</string>
-    <string name="ads_upgrade_button_title">View upgrade options</string>
-    <string name="ads_continue_button_title">Continue in the %1$s mode</string>
+    <string name="bl_ads_hide_checkbox_title">Don\'t show this message anymore.</string>
+    <string name="bl_ads_notification_title">Notification</string>
+    <string name="bl_ads_upgrade_button_title">View upgrade options</string>
+    <string name="bl_ads_continue_button_title">Continue in the %1$s mode</string>
 
-    <string-array name="common_app_mode_array">
+    <string-array name="bl_common_app_mode_array">
         <item>Demo</item>
         <item>Evaluation</item>
         <item>No ads</item>
         <item>Pro</item>
     </string-array>
 
-    <string-array name="ads_restriction_message_array">
+    <string-array name="bl_ads_restriction_message_array">
         <item>"The application works in Demo mode. Some features are limited and advertisements are shown."
             "\nThe command you are trying to perform is not allowed in the Demo mode."
         </item>
@@ -44,20 +44,21 @@
         <item>You see this message due to an app bug. Please inform the developers.</item>
     </string-array>
 
-    <string-array name="ads_notification_message_array">
+    <string-array name="bl_ads_notification_message_array">
         <item>The application works in the Demo mode. Some features are limited and advertisements are shown.</item>
         <item>The application works in the Evaluation mode. All the features are allowed and advertisements are shown.</item>
         <item>The application works in the No Ads mode. All the features are allowed and advertisements are disabled.</item>
         <item>You see this message due to an app bug. Please inform the developers.</item>
     </string-array>
 
-    <string name="upgrade_track_title">Anonymous statistics</string>
-    <string name="upgrade_track_value">Allow the application to collect anonymous statistics and get a seven-day free trial estimate.</string>
-    <string name="upgrade_invite_title">Invite friends</string>
-    <string name="upgrade_invite_value">Invite a friend and you both get a two-weeks free trial estimate.</string>
-    <string name="upgrade_see_ads_title">See advertising</string>
-    <string name="upgrade_see_ads_value">Visit our sponsor\'s site and get free 36 hours without ads and limits.</string>
-    <string name="upgrade_buy_title">Upgrade</string>
-    <string name="upgrade_buy_value">Upgrade the application and enjoy it without limits and without ads.</string>
+    <string name="bl_upgrade_track_title">Anonymous statistics</string>
+    <string name="bl_upgrade_track_value">Allow the application to collect anonymous statistics and get a seven-day free trial estimate.</string>
+    <string name="bl_upgrade_track_value_done">Allow the application to collect anonymous statistics. This data helps developers fix bugs and make the app better.</string>
+    <string name="bl_upgrade_invite_title">Invite friends</string>
+    <string name="bl_upgrade_invite_value">Invite a friend and you both get a two-weeks free trial estimate.</string>
+    <string name="bl_upgrade_see_ads_title">See advertising</string>
+    <string name="bl_upgrade_see_ads_value">Visit our sponsor\'s site and get free 36 hours without ads and limits.</string>
+    <string name="bl_upgrade_buy_title">Upgrade</string>
+    <string name="bl_upgrade_buy_value">Upgrade the application and enjoy it without limits and without ads.</string>
 
 </resources>

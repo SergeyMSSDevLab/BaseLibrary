@@ -20,8 +20,8 @@ public class ErrorActivity extends AppCompatActivity {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         final Resources res = this.getResources();
-        dialog.setTitle(res.getString(R.string.common_error_report_email_subject));
-        dialog.setMessage(res.getString(R.string.common_error_report_dialog_text));
+        dialog.setTitle(res.getString(R.string.bl_common_error_report_email_subject));
+        dialog.setMessage(res.getString(R.string.bl_common_error_report_dialog_text));
 
         final ErrorActivity activity = this;
         dialog.setPositiveButton(android.R.string.yes, (dialog1, id) -> {

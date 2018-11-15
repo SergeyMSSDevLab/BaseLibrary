@@ -1,9 +1,8 @@
 package com.mssdevlab.baselib.ads;
 
-import android.os.Looper;
-
 import com.google.android.gms.ads.AdSize;
 import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
+import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.ShowView;
 
 import androidx.lifecycle.LiveData;
@@ -39,29 +38,21 @@ public class ComboBannerViewModel extends ViewModel {
 
     public LiveData<String> getAppName() { return this.mAppName; }
 
-    public void setAppName(String value){ this.setValue(this.mAppName, value); }
+    public void setAppName(String value){ Helper.setValue(this.mAppName, value); }
 
     public LiveData<String> getDevEmail() { return this.mDevEmail; }
 
-    public void setDevEmail(String value){ this.setValue(this.mDevEmail, value); }
+    public void setDevEmail(String value){ Helper.setValue(this.mDevEmail, value); }
 
     public LiveData<Boolean> getIsShowPromo() { return this.mIsShowPromo; }
 
-    public void setIsShowPromo(Boolean val) { this.setValue(this.mIsShowPromo, val);}
+    public void setIsShowPromo(Boolean val) { Helper.setValue(this.mIsShowPromo, val);}
 
     public LiveData<Boolean> getIsShowAd() { return this.mIsShowAd; }
 
-    public void setIsShowAd(Boolean val) { this.setValue(this.mIsShowAd, val);}
+    public void setIsShowAd(Boolean val) { Helper.setValue(this.mIsShowAd, val);}
 
     public AdSize getAdSize() { return this.mAdSize; }
 
     public void setAdSize(AdSize val) { this.mAdSize = val;}
-
-    private <T> void setValue(MutableLiveData<T> field, T value){
-        if (Looper.myLooper() == Looper.getMainLooper()){
-            field.setValue(value);
-        } else {
-            field.postValue(value);
-        }
-    }
 }

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common_error_report_email_subject">Poruka o pogrešci</string>
-    <string name="common_error_report_dialog_text">Pojavila pogreška u aplikaciji. Želite li na e-mail izvješća o pogrešci programere? Vi ćete biti u mogućnosti urediti poruku prije slanja.</string>
-    <string name="common_error_report_choose_title">Odaberite email provider</string>
+    <string name="bl_common_error_report_email_subject">Poruka o pogrešci</string>
+    <string name="bl_common_error_report_dialog_text">Pojavila pogreška u aplikaciji. Želite li na e-mail izvješća o pogrešci programere? Vi ćete biti u mogućnosti urediti poruku prije slanja.</string>
+    <string name="bl_common_error_report_choose_title">Odaberite email provider</string>
 
-    <string name="common_menu_play_apps">Softver</string>
+    <string name="bl_common_menu_play_apps">Softver</string>
 
-    <string name="common_enjoy_prompt">Vam se sviđa %s?</string>
-    <string name="common_enjoy_yes">Da</string>
-    <string name="common_enjoy_not">Ne baš</string>
+    <string name="bl_common_enjoy_prompt">Vam se sviđa %s?</string>
+    <string name="bl_common_enjoy_yes">Da</string>
+    <string name="bl_common_enjoy_not">Ne baš</string>
 
-    <string name="common_enjoy_rate_prompt">Kako o ocjeni o trgovini, onda?</string>
-    <string name="common_enjoy_rate_yes">Da naravno</string>
-    <string name="common_enjoy_rate_not">Ne hvala</string>
+    <string name="bl_common_enjoy_rate_prompt">Kako o ocjeni o trgovini, onda?</string>
+    <string name="bl_common_enjoy_rate_yes">Da naravno</string>
+    <string name="bl_common_enjoy_rate_not">Ne hvala</string>
 
-    <string name="common_enjoy_feedback_prompt">Možete li nam dati neke povratne informacije?</string>
-    <string name="common_enjoy_feedback_yes">Da naravno</string>
-    <string name="common_enjoy_feedback_not">Ne hvala</string>
+    <string name="bl_common_enjoy_feedback_prompt">Možete li nam dati neke povratne informacije?</string>
+    <string name="bl_common_enjoy_feedback_yes">Da naravno</string>
+    <string name="bl_common_enjoy_feedback_not">Ne hvala</string>
 
 </resources>

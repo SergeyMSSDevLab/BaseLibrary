@@ -202,22 +202,22 @@ public class ComboBannerFragment extends Fragment {
         final Button btnNot = this.mRoot.findViewById(R.id.btnNot);
         final TextView tvPrompt = this.mRoot.findViewById(R.id.tvPromptQuestion);
 
-        final String reportTitle = res.getString(R.string.common_error_report_choose_title);
+        final String reportTitle = res.getString(R.string.bl_common_error_report_choose_title);
         String temp = this.mViewModel.getAppName().getValue();
         final String appName = temp == null ? "application": temp;
         temp = this.mViewModel.getDevEmail().getValue();
         final String devEmail = temp == null ? "" : temp;
 
-        String promptText = res.getString(R.string.common_enjoy_prompt, appName );
+        String promptText = res.getString(R.string.bl_common_enjoy_prompt, appName );
 
         tvPrompt.setText(promptText);
-        btnYes.setText(R.string.common_enjoy_yes);
-        btnNot.setText(R.string.common_enjoy_not);
+        btnYes.setText(R.string.bl_common_enjoy_yes);
+        btnNot.setText(R.string.bl_common_enjoy_not);
 
         btnYes.setOnClickListener((View v) -> {
-            tvPrompt.setText(R.string.common_enjoy_rate_prompt);
-            btnYes.setText(R.string.common_enjoy_rate_yes);
-            btnNot.setText(R.string.common_enjoy_rate_not);
+            tvPrompt.setText(R.string.bl_common_enjoy_rate_prompt);
+            btnYes.setText(R.string.bl_common_enjoy_rate_yes);
+            btnNot.setText(R.string.bl_common_enjoy_rate_not);
 
             btnYes.setOnClickListener(v14 -> PromoteManager.goToPromoScreen(getActivity()));
 
@@ -225,9 +225,9 @@ public class ComboBannerFragment extends Fragment {
         });
 
         btnNot.setOnClickListener(v -> {
-            tvPrompt.setText(R.string.common_enjoy_feedback_prompt);
-            btnYes.setText(R.string.common_enjoy_feedback_yes);
-            btnNot.setText(R.string.common_enjoy_feedback_not);
+            tvPrompt.setText(R.string.bl_common_enjoy_feedback_prompt);
+            btnYes.setText(R.string.bl_common_enjoy_feedback_yes);
+            btnNot.setText(R.string.bl_common_enjoy_feedback_not);
 
             btnYes.setOnClickListener(v12 -> {
                 String uriText = "mailto:" + devEmail + "?subject="
