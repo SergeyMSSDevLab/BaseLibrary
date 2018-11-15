@@ -5,7 +5,7 @@
     <string name="common_error_report_choose_title">Choose an email provider</string>
 
     <string name="common_menu_play_apps">Applications</string>
-    <string name="common_menu_upgrade">Upgrade app</string>
+    <string name="common_menu_upgrade">Upgrade the app</string>
 
     <string name="common_enjoy_prompt">Enjoying %s?</string>
     <string name="common_enjoy_yes">Yes</string>
@@ -19,6 +19,11 @@
     <string name="common_enjoy_feedback_yes">OK, sure</string>
     <string name="common_enjoy_feedback_not">No, thanks</string>
 
+    <string name="ads_hide_checkbox_title">Don\'t show this message anymore.</string>
+    <string name="ads_notification_title">Notification</string>
+    <string name="ads_upgrade_button_title">View upgrade options</string>
+    <string name="ads_continue_button_title">Continue in the %1$s mode</string>
+
     <string-array name="common_app_mode_array">
         <item>Demo</item>
         <item>Evaluation</item>
@@ -26,13 +31,24 @@
         <item>Pro</item>
     </string-array>
 
-    <string name="ads_hide_checkbox_title">Don\'t show this message anymore.</string>
-    <string name="ads_notification_title">Notification</string>
-    <string name="ads_upgrade_button_title">View upgrade options</string>
-    <string name="ads_continue_button_title">Continue in %1$s mode</string>
-    <string name="ads_notification_message">The application works in %1$s mode. Some features are limited and advertisements are shown.</string>
-    <string name="ads_restriction_message">"The application works in %1$s mode. Some features are limited and advertisements are shown."
-        "\nThe command you are trying to perform is not allowed in the %1$s mode."</string>
+    <string-array name="ads_restriction_message_array">
+        <item>"The application works in Demo mode. Some features are limited and advertisements are shown."
+            "\nThe command you are trying to perform is not allowed in the Demo mode."
+        </item>
+        <item>"The application works in Evaluation mode. Some features are limited and advertisements are shown."
+            "\nThe command you are trying to perform is not allowed in the Elevation mode."
+        </item>
+        <item>"The application works in No Ads mode. Some features are limited."
+            "\nThe command you are trying to perform is not allowed in the No Ads mode."
+        </item>
+        <item>You see this message due to an app bug. Please inform the developers.</item>
+    </string-array>
+    <string-array name="ads_notification_message_array">
+        <item>The application works in the Demo mode. Some features are limited and advertisements are shown.</item>
+        <item>The application works in the Evaluation mode. All the features are allowed and advertisements are shown.</item>
+        <item>The application works in the No Ads mode. All the features are allowed and advertisements are disabled.</item>
+        <item>You see this message due to an app bug. Please inform the developers.</item>
+    </string-array>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"

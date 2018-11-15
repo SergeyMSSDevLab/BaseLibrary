@@ -48,8 +48,7 @@ public class InterstitialManager {
         final Resources res = activity.getResources();
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.ads_notification_title);
-        builder.setMessage(res.getString(R.string.ads_restriction_message,
-                    res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]))
+        builder.setMessage(res.getStringArray(R.array.ads_restriction_message_array)[mode.ordinal()])
                 .setCancelable(false)
                 .setPositiveButton(R.string.ads_upgrade_button_title,
                         (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
@@ -120,8 +119,7 @@ public class InterstitialManager {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(R.string.ads_notification_title);
-                    builder.setMessage(res.getString(R.string.ads_notification_message,
-                                res.getStringArray(R.array.common_app_mode_array)[mode.ordinal()]))
+                    builder.setMessage(res.getStringArray(R.array.ads_notification_message_array)[mode.ordinal()])
                             .setView(checkBoxView)
                             .setCancelable(false)
                             .setPositiveButton(R.string.ads_upgrade_button_title, (dialog, id) -> {
