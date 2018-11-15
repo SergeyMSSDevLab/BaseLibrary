@@ -29,15 +29,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "androidx.legacy:legacy-support-v4:$rootProject.supportLibraryVersion"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacyLibraryVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "androidx.annotation:annotation:$rootProject.annotationVersion"
-    implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
     implementation "com.google.android.gms:play-services-ads:$rootProject.mobileAdsVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
-
-    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
-    implementation 'com.google.android.material:material:1.0.0-alpha1'
+    implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
 }
 
