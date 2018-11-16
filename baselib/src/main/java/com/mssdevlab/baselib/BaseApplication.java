@@ -25,18 +25,25 @@ import java.io.RandomAccessFile;
 public abstract class BaseApplication  extends Application implements Thread.UncaughtExceptionHandler {
     private static final String LOG_TAG = "BaseApplication";
     private static final String NAME_FILE_DATA = "error.data";
-    private static BaseApplication curInstance;
-    private static Thread.UncaughtExceptionHandler originalHandler;
-    private static Class<?> upgradeActivityClass;
+    private static BaseApplication sCurInstance;
+    private static Thread.UncaughtExceptionHandler sOriginalHandler;
+    private static Class<?> sUpgradeActivityClass;
+    private static String sUpgradeActivityAdMobUnitId;
+    private static String sUpgradeActivityAppName;
+    private static String sUpgradeActivityDevEmail;
 
     public static final String SHARED_PREF = "PromoteApp";
+    public static final String EXTRA_ADMOB_UNIT_ID = "BaseApplication.adMobUnitId";
+    public static final String EXTRA_APP_NAME = "BaseApplication.appname";
+    public static final String EXTRA_DEV_EMAIL = "BaseApplication.devemail";
+    public static final String EXTRA_MANAGE_PARENT = "BaseApplication.manageParent";
 
     public static MessageSender reportSender = null;
 
     private final Object syncObject = new Object();
 
     public static BaseApplication getInstance() {
-        return curInstance;
+        return sCurInstance;
     }
 
     @CallSuper
@@ -49,9 +56,9 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         super.onCreate();
         Log.v(LOG_TAG, "onCreate");
 // TODO: check google play compatibility
-        if (curInstance == null) {
-            curInstance = this;
-            originalHandler = Thread.getDefaultUncaughtExceptionHandler();
+        if (sCurInstance == null) {
+            sCurInstance = this;
+            sOriginalHandler = Thread.getDefaultUncaughtExceptionHandler();
         }
 
         Thread.setDefaultUncaughtExceptionHandler(this);
@@ -87,8 +94,8 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         } catch (Exception e) {
             Log.v(LOG_TAG, e.getMessage());
         } finally {
-            if (originalHandler != null) {
-                originalHandler.uncaughtException(thread, ex);
+            if (sOriginalHandler != null) {
+                sOriginalHandler.uncaughtException(thread, ex);
             } else {
                 System.exit(0);
             }
@@ -167,13 +174,19 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         return Helper.CreateReport4Throwable(e, this);
     }
 
-    protected void setUpgradeActivity(Class<?> cls) {
-        upgradeActivityClass = cls;
+    protected void setUpgradeActivity(Class<?> cls, String adMobUnitId, String appName, String devEmail) {
+        sUpgradeActivityClass = cls;
+        sUpgradeActivityAdMobUnitId = adMobUnitId;
+        sUpgradeActivityAppName = appName;
+        sUpgradeActivityDevEmail = devEmail;
     }
 
     public static void startUpgradeScreen(Activity ctx){
-        Intent intent = new Intent(ctx, upgradeActivityClass);
+        Intent intent = new Intent(ctx, sUpgradeActivityClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.putExtra(EXTRA_ADMOB_UNIT_ID, sUpgradeActivityAdMobUnitId);
+        intent.putExtra(EXTRA_APP_NAME, sUpgradeActivityAppName);
+        intent.putExtra(EXTRA_DEV_EMAIL, sUpgradeActivityDevEmail);
         ctx.startActivity(intent);
     }
 

@@ -36,6 +36,11 @@ import androidx.lifecycle.ViewModelProviders;
 public class ComboBannerFragment extends Fragment {
     private static final String LOG_TAG = "ComboBannerFragment";
 
+    public static final String EXTRA_UNIT_ID = "ComboBannerFragment.unitid";
+    public static final String EXTRA_APP_NAME = "ComboBannerFragment.appname";
+    public static final String EXTRA_DEV_EMAIL = "ComboBannerFragment.devemail";
+    public static final String EXTRA_MANAGE_PARENT = "ComboBannerFragment.manageParent";
+
     private ComboBannerViewModel mViewModel;
     private View mRoot;
     private AdView mAdView;
@@ -48,10 +53,7 @@ public class ComboBannerFragment extends Fragment {
 
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
         if (arr != null) {
-//            for(int i = 0; i < arr.length(); i++){
-//                TypedValue val = arr.peekValue(i);
-//                Log.v(LOG_TAG, "onInflate attribute: " + val.toString());
-//            }
+            // extract attributes from the markup
             this.mViewModel.setAdUnitId(arr.getString(R.styleable.ComboBannerFragment_ad_unit_id));
             this.mViewModel.setAppName(arr.getString(R.styleable.ComboBannerFragment_app_name));
             this.mViewModel.setDevEmail(arr.getString(R.styleable.ComboBannerFragment_developer_email));
@@ -72,6 +74,18 @@ public class ComboBannerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreateView");
+        if (this.mViewModel == null){
+            // Fragment created programmatically, onInflate is not called
+            Bundle args = getArguments();
+            if (args != null){
+                this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
+                this.mViewModel.setAdUnitId(args.getString(EXTRA_UNIT_ID));
+                this.mViewModel.setAppName(args.getString(EXTRA_APP_NAME));
+                this.mViewModel.setDevEmail(args.getString(EXTRA_DEV_EMAIL));
+                this.mViewModel.setManageParent(args.getBoolean(EXTRA_MANAGE_PARENT, false));
+                this.mViewModel.setAdSize(AdSize.BANNER);
+            }
+        }
         ComboBannerFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.combo_banner_fragment, container, false);
 
         binding.setLifecycleOwner(this);

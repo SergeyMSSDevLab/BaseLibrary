@@ -27,7 +27,10 @@ public class AmApp extends BaseApplication {
         MobileAds.initialize(this, res.getString(R.string.admob_app_id));
         InterstitialManager.enableAds(R.string.ad_interstitial_unit_id);
 
-        this.setUpgradeActivity(UpgradeActivity.class);
+        this.setUpgradeActivity(UpgradeActivity.class,
+                res.getString(R.string.ad_banner_unit_id),
+                res.getString(R.string.app_name),
+                res.getString(R.string.developers_email_address));
 
         MenuItemProviders.addProvider(OUR_APPS_CONFIG_TAG, new LinkMenuProvider(
                 com.mssdevlab.baselib.R.string.bl_common_menu_play_apps,

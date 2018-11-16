@@ -36,6 +36,7 @@ public class AppModeManager {
         // TODO: Implement the checking
         ApplicationData.setApplicationMode(curMode);
         // TODO: enable/disable tracking in firebase according to allowTracking
+        // TODO: disable tracking in the Pro mode
     }
 
     private static AppMode enhanceAppMode(AppMode curMode, AppMode newMode){

@@ -16,6 +16,19 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/blUpgaCvBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/card_radius"
+            app:cardElevation="@dimen/card_elevation"
+            android:layout_marginStart="@dimen/bl_item_spacing_horizontal_2"
+            android:layout_marginLeft="@dimen/bl_item_spacing_horizontal_2"
+            android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
+            android:layout_marginBottom="@dimen/bl_item_spacing_vertical_4"
+            android:layout_marginEnd="@dimen/bl_item_spacing_horizontal_2"
+            android:layout_marginRight="@dimen/bl_item_spacing_horizontal_2"/>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="@dimen/card_radius"

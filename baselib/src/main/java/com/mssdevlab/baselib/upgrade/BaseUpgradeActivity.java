@@ -4,16 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.ads.ComboBannerFragment;
 import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.databinding.ActivityUpgradeBinding;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.NavUtils;
 import androidx.core.app.TaskStackBuilder;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 public class BaseUpgradeActivity extends AppCompatActivity {
@@ -32,6 +37,22 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         if (ab != null){
             ab.setDisplayHomeAsUpEnabled(true);
+        }
+
+        // Setup the banner
+        String adMobUnitId = getIntent().getStringExtra(BaseApplication.EXTRA_ADMOB_UNIT_ID);
+        if (adMobUnitId != null){
+            ComboBannerFragment adsFragment = new ComboBannerFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(ComboBannerFragment.EXTRA_UNIT_ID, adMobUnitId);
+            bundle.putString(ComboBannerFragment.EXTRA_APP_NAME, getIntent().getStringExtra(BaseApplication.EXTRA_APP_NAME));
+            bundle.putString(ComboBannerFragment.EXTRA_DEV_EMAIL, getIntent().getStringExtra(BaseApplication.EXTRA_DEV_EMAIL));
+            bundle.putBoolean(ComboBannerFragment.EXTRA_MANAGE_PARENT, true);
+            adsFragment.setArguments(bundle);
+
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.blUpgaCvBanner, adsFragment, null);
+            fragmentTransaction.commit();
         }
     }
 
