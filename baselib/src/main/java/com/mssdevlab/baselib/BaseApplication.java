@@ -48,7 +48,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     public void onCreate() {
         super.onCreate();
         Log.v(LOG_TAG, "onCreate");
-
+// TODO: check google play compatibility
         if (curInstance == null) {
             curInstance = this;
             originalHandler = Thread.getDefaultUncaughtExceptionHandler();

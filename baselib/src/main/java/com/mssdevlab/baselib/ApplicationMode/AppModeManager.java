@@ -25,9 +25,11 @@ public class AppModeManager {
         SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         boolean allowTrackingParticipated = sharedPref.getBoolean(PREF_ALLOW_TRACKING_PARTICIPATED, false);
         ApplicationData.setAllowTrackingParticipated(allowTrackingParticipated);
-        ApplicationData.setAllowTracking(sharedPref.getBoolean(PREF_ALLOW_TRACKING, false));
+        boolean allowTracking = sharedPref.getBoolean(PREF_ALLOW_TRACKING, false);
+        ApplicationData.setAllowTracking(allowTracking);
         if (allowTrackingParticipated
-            && nowMs <= sharedPref.getLong(PREF_ALLOW_TRACKING_EXPIRE, 0L) ){
+                && nowMs <= sharedPref.getLong(PREF_ALLOW_TRACKING_EXPIRE, 0L)
+                && allowTracking){
             curMode = enhanceAppMode(curMode, AppMode.MODE_EVALUATION);
         }
 
