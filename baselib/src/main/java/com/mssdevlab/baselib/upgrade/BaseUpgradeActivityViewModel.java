@@ -99,7 +99,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
 
     @Override
     public void onRewarded(RewardItem rewardItem) {
-        // TODO: reward user
+        AppModeManager.rewardUser(rewardItem);
     }
 
     @Override

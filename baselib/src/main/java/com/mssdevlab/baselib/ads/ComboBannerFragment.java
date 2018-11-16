@@ -178,8 +178,10 @@ public class ComboBannerFragment extends Fragment {
                 public void onAdLoaded() {
                     Log.v(LOG_TAG, "onAdLoaded");
                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
-                        mViewModel.setIsShowAd(true);
-                        ensureParentView(true);
+                        if (mViewModel.getBannerShowMode().getValue() == ShowView.ADS){
+                            mViewModel.setIsShowAd(true);
+                            ensureParentView(true);
+                        }
                     }
                 }
 
