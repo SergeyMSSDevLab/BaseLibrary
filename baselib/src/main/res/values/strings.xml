@@ -26,8 +26,8 @@
 
     <string-array name="bl_common_app_mode_array">
         <item>Demo</item>
-        <item>Evaluation</item>
-        <item>No ads</item>
+        <item>Free trial</item>
+        <item>Free no ads</item>
         <item>Pro</item>
     </string-array>
 
@@ -36,7 +36,7 @@
             "\nThe command you are trying to perform is not allowed in the Demo mode."
         </item>
         <item>"The application works in Evaluation mode. Some features are limited and advertisements are shown."
-            "\nThe command you are trying to perform is not allowed in the Elevation mode."
+            "\nThe command you are trying to perform is not allowed in the Trial mode."
         </item>
         <item>"The application works in No Ads mode. Some features are limited."
             "\nThe command you are trying to perform is not allowed in the No Ads mode."
@@ -46,7 +46,7 @@
 
     <string-array name="bl_ads_notification_message_array">
         <item>The application works in the Demo mode. Some features are limited and advertisements are shown.</item>
-        <item>The application works in the Evaluation mode. All the features are allowed and advertisements are shown.</item>
+        <item>The application works in the Trial mode. All the features are allowed and advertisements are shown.</item>
         <item>The application works in the No Ads mode. All the features are allowed and advertisements are disabled.</item>
         <item>You see this message due to an app bug. Please inform the developers.</item>
     </string-array>
@@ -56,8 +56,9 @@
     <string name="bl_upgrade_track_value_done">Allow the application to collect anonymous statistics. This data helps developers fix bugs and make the app better.</string>
     <string name="bl_upgrade_invite_title">Invite friends</string>
     <string name="bl_upgrade_invite_value">Invite a friend and you both get a two-weeks free trial estimate.</string>
-    <string name="bl_upgrade_see_ads_title">See advertising</string>
-    <string name="bl_upgrade_see_ads_value">Visit our sponsor\'s site and get free 36 hours without ads and limits.</string>
+    <string name="bl_upgrade_see_ads_title">Watch ads</string>
+    <string name="bl_upgrade_see_ads_value">Click here and view an ad to get free 12 hours without ads and limits.</string>
+    <string name="bl_upgrade_see_ads_value_not_loaded">Click here and view an ad to get free 12 hours without ads and limits.\n<font fgcolor='red'>Please wait until ad is loading.</font></string>
     <string name="bl_upgrade_buy_title">Upgrade</string>
     <string name="bl_upgrade_buy_value">Upgrade the application and enjoy it without limits and without ads.</string>
 

@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.ComboBannerFragment;
 import com.mssdevlab.baselib.ads.InterstitialManager;
+import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.databinding.ActivityUpgradeBinding;
 
 import androidx.appcompat.app.ActionBar;
@@ -22,6 +26,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 public class BaseUpgradeActivity extends AppCompatActivity {
+
+    private RewardedVideoAd mRewardedVideoAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,44 @@ public class BaseUpgradeActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.blUpgaCvBanner, adsFragment, null);
             fragmentTransaction.commit();
         }
+
+        // Rewarded video
+        String rewardedUnitId = getIntent().getStringExtra(BaseApplication.EXTRA_REWARDED_UNIT_ID);
+        if (rewardedUnitId != null){
+            mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+            mRewardedVideoAd.setRewardedVideoAdListener(viewModel);
+
+            viewModel.getShowRewardedVideo().observe(this, event -> {
+                RewardedVideoEvent res = event.getValueIfNotHandled();
+                if (res != null){
+                    if (res == RewardedVideoEvent.SHOW){
+                        if (mRewardedVideoAd.isLoaded()) {
+                            mRewardedVideoAd.show();
+                        }
+                    } else if (res == RewardedVideoEvent.RELOAD){
+                        mRewardedVideoAd.loadAd(rewardedUnitId, new AdRequest.Builder().build());
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        mRewardedVideoAd.resume(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mRewardedVideoAd.pause(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mRewardedVideoAd.destroy(this);
+        super.onDestroy();
     }
 
     @Override

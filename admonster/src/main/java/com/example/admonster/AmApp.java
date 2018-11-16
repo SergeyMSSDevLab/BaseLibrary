@@ -30,7 +30,8 @@ public class AmApp extends BaseApplication {
         this.setUpgradeActivity(UpgradeActivity.class,
                 res.getString(R.string.ad_banner_unit_id),
                 res.getString(R.string.app_name),
-                res.getString(R.string.developers_email_address));
+                res.getString(R.string.developers_email_address),
+                res.getString(R.string.ad_reward_unit_id));
 
         MenuItemProviders.addProvider(OUR_APPS_CONFIG_TAG, new LinkMenuProvider(
                 com.mssdevlab.baselib.R.string.bl_common_menu_play_apps,

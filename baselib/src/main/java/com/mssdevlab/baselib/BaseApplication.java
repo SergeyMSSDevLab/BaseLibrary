@@ -29,11 +29,13 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     private static Thread.UncaughtExceptionHandler sOriginalHandler;
     private static Class<?> sUpgradeActivityClass;
     private static String sUpgradeActivityAdMobUnitId;
+    private static String sUpgradeActivityRewardedUnitId;
     private static String sUpgradeActivityAppName;
     private static String sUpgradeActivityDevEmail;
 
     public static final String SHARED_PREF = "PromoteApp";
     public static final String EXTRA_ADMOB_UNIT_ID = "BaseApplication.adMobUnitId";
+    public static final String EXTRA_REWARDED_UNIT_ID = "BaseApplication.adRewardedUnitId";
     public static final String EXTRA_APP_NAME = "BaseApplication.appname";
     public static final String EXTRA_DEV_EMAIL = "BaseApplication.devemail";
     public static final String EXTRA_MANAGE_PARENT = "BaseApplication.manageParent";
@@ -174,17 +176,23 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         return Helper.CreateReport4Throwable(e, this);
     }
 
-    protected void setUpgradeActivity(Class<?> cls, String adMobUnitId, String appName, String devEmail) {
+    protected void setUpgradeActivity(Class<?> cls,
+                                      String adMobUnitId,
+                                      String appName,
+                                      String devEmail,
+                                      String rewardedUnitId) {
         sUpgradeActivityClass = cls;
         sUpgradeActivityAdMobUnitId = adMobUnitId;
         sUpgradeActivityAppName = appName;
         sUpgradeActivityDevEmail = devEmail;
+        sUpgradeActivityRewardedUnitId = rewardedUnitId;
     }
 
     public static void startUpgradeScreen(Activity ctx){
         Intent intent = new Intent(ctx, sUpgradeActivityClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra(EXTRA_ADMOB_UNIT_ID, sUpgradeActivityAdMobUnitId);
+        intent.putExtra(EXTRA_REWARDED_UNIT_ID, sUpgradeActivityRewardedUnitId);
         intent.putExtra(EXTRA_APP_NAME, sUpgradeActivityAppName);
         intent.putExtra(EXTRA_DEV_EMAIL, sUpgradeActivityDevEmail);
         ctx.startActivity(intent);
