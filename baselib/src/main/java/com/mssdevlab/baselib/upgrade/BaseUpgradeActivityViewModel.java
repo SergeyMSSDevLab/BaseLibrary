@@ -48,7 +48,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
     }
 
     public void inviteFriend(){
-
+        // TODO: Implement
     }
 
     public LiveData<Boolean> getIsVideLoaded(){

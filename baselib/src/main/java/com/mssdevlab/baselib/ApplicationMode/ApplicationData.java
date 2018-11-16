@@ -18,8 +18,17 @@ public class ApplicationData {
     private static final BannerShowModeLiveData sBannerShowMode = new BannerShowModeLiveData();
     private static final MutableLiveData<Boolean> sAllowTrackingParticipated = new MutableLiveData<>();
     private static final MutableLiveData<Boolean> sAllowTracking = new MutableLiveData<>();
+    private static final MutableLiveData<Long> sExpireTime = new MutableLiveData<>();
 
     private ApplicationData() {
+    }
+
+    public static LiveData<Long> getExpireTime(){
+        return sExpireTime;
+    }
+
+    public static void setExpireTime(Long val){
+        Helper.setValue(sExpireTime, val);
     }
 
     public static LiveData<Boolean> getAllowTracking(){

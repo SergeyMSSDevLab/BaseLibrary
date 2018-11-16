@@ -24,23 +24,32 @@ public class AppModeManager {
 
     public static void checkAppMode(){
         AppMode curMode = AppMode.MODE_DEMO;
-        long nowMs = System.currentTimeMillis();
+
         SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         boolean allowTrackingParticipated = sharedPref.getBoolean(PREF_ALLOW_TRACKING_PARTICIPATED, false);
         ApplicationData.setAllowTrackingParticipated(allowTrackingParticipated);
         boolean allowTracking = sharedPref.getBoolean(PREF_ALLOW_TRACKING, false);
         ApplicationData.setAllowTracking(allowTracking);
+
+        long finalExpired = 0L;
+        long nowMs = System.currentTimeMillis();
+        long allowtrackingExpired = sharedPref.getLong(PREF_ALLOW_TRACKING_EXPIRE, 0L);
         if (allowTrackingParticipated
-                && nowMs <= sharedPref.getLong(PREF_ALLOW_TRACKING_EXPIRE, 0L)
+                && nowMs <= allowtrackingExpired
                 && allowTracking){
             curMode = enhanceAppMode(curMode, AppMode.MODE_EVALUATION);
+            finalExpired = allowtrackingExpired;
         }
-        if (nowMs < sharedPref.getLong(PREF_AWARD_EARNED, 0L)){
+
+        long awardExpired = sharedPref.getLong(PREF_AWARD_EARNED, 0L);
+        if (nowMs < awardExpired){
             curMode = enhanceAppMode(curMode, AppMode.MODE_NO_ADS);
+            finalExpired = awardExpired;
         }
 
         // TODO: Implement the checking
         ApplicationData.setApplicationMode(curMode);
+        ApplicationData.setExpireTime(finalExpired);
         // TODO: enable/disable tracking in firebase according to allowTracking
         // TODO: disable tracking in the Pro mode
     }
