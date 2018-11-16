@@ -5,13 +5,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.mssdevlab.baselib.BaseApplication;
-import com.mssdevlab.baselib.common.PromoteManager;
 
 import static com.mssdevlab.baselib.BaseApplication.SHARED_PREF;
 
 public class AppModeManager {
     private static final String LOG_TAG = "AppModeManager";
-    private static final String PREF_ALLOW_TRACKING_FIRST = "appModeManager.allowTrackingFirst";
+    private static final String PREF_ALLOW_TRACKING_PARTICIPATED = "appModeManager.allowTrackingFirst";
     private static final String PREF_ALLOW_TRACKING_EXPIRE = "appModeManager.allowTrackingExpire";
     private static final String PREF_ALLOW_TRACKING = "appModeManager.allowTracking";
 
@@ -24,7 +23,7 @@ public class AppModeManager {
         AppMode curMode = AppMode.MODE_DEMO;
         long nowMs = System.currentTimeMillis();
         SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        boolean allowTrackingParticipated = sharedPref.getBoolean(PREF_ALLOW_TRACKING_FIRST, false);
+        boolean allowTrackingParticipated = sharedPref.getBoolean(PREF_ALLOW_TRACKING_PARTICIPATED, false);
         ApplicationData.setAllowTrackingParticipated(allowTrackingParticipated);
         ApplicationData.setAllowTracking(sharedPref.getBoolean(PREF_ALLOW_TRACKING, false));
         if (allowTrackingParticipated
@@ -34,6 +33,7 @@ public class AppModeManager {
 
         // TODO: Implement the checking
         ApplicationData.setApplicationMode(curMode);
+        // TODO: enable/disable tracking in firebase according to allowTracking
     }
 
     private static AppMode enhanceAppMode(AppMode curMode, AppMode newMode){
@@ -47,10 +47,10 @@ public class AppModeManager {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "setAllowTracking");
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-            boolean allowTrackingStored = sharedPref.getBoolean(PREF_ALLOW_TRACKING_FIRST, false);
+            boolean alreadyParticipated = sharedPref.getBoolean(PREF_ALLOW_TRACKING_PARTICIPATED, false);
             SharedPreferences.Editor spEditor = sharedPref.edit();
             long nowMs = System.currentTimeMillis();
-            if (allowTrackingStored){
+            if (alreadyParticipated){
                 if (!allowTracking){
                     // user is checking again, set expiration
                     spEditor.putLong(PREF_ALLOW_TRACKING_EXPIRE, nowMs);
@@ -59,16 +59,12 @@ public class AppModeManager {
             } else {
                 if (allowTracking){
                     // user is checking first time, set free time
-                    spEditor.putBoolean(PREF_ALLOW_TRACKING_FIRST, true);
+                    spEditor.putBoolean(PREF_ALLOW_TRACKING_PARTICIPATED, true);
                     spEditor.putLong(PREF_ALLOW_TRACKING_EXPIRE, nowMs + DAY_MS * TRACKING_FREE_DAYS);
-                    ApplicationData.setAllowTrackingParticipated(true);
                 }
             }
-            spEditor = sharedPref.edit();
             spEditor.putBoolean(PREF_ALLOW_TRACKING, allowTracking);
             spEditor.apply();
-            ApplicationData.setAllowTracking(allowTracking);
-            // TODO: enable/disable tracking in firebase
         }
         checkAppMode();
     }
