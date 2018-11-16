@@ -38,4 +38,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel {
         AppModeManager.setAllowTracking(((Switch) view).isChecked());
     }
 
+    public void inviteFriend(){
+
+    }
 }
