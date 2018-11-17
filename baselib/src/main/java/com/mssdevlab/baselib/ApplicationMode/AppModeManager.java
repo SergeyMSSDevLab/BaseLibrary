@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.mssdevlab.baselib.BaseApplication;
 
+import androidx.annotation.NonNull;
+
 import static com.mssdevlab.baselib.BaseApplication.SHARED_PREF;
 
 public class AppModeManager {
@@ -87,14 +89,19 @@ public class AppModeManager {
         checkAppMode();
     }
 
-    public static void rewardUser(RewardItem rewardItem) {
+    public static void rewardUser(@NonNull RewardItem rewardItem) {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "rewardUser itemType:" + rewardItem.getType() + " amount:" + rewardItem.getAmount());
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
             long alreadyEaned = sharedPref.getLong(PREF_AWARD_EARNED, 0L);
             long nowMs = System.currentTimeMillis();
 
-            long value = (nowMs > alreadyEaned ? nowMs : alreadyEaned) + HOUR_MS * EARNED_HOURS;
+            long value;
+            if ("coins".equals(rewardItem.getType())){
+                value = (nowMs > alreadyEaned ? nowMs : alreadyEaned) + HOUR_MS * rewardItem.getAmount();
+            } else {
+                value = (nowMs > alreadyEaned ? nowMs : alreadyEaned) + HOUR_MS * EARNED_HOURS;
+            }
             SharedPreferences.Editor spEditor = sharedPref.edit();
             spEditor.putLong(PREF_AWARD_EARNED, value);
             spEditor.apply();
