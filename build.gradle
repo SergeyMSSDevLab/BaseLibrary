@@ -7,16 +7,17 @@ buildscript {
         compileSdkVersion = 28
         minSdkVersion = 15
         targetSdkVersion = 28
+        buildToolsVersion = '28.0.3'
 
         // App dependencies
         junitVersion = '4.12'
         lifecycleVersion = '2.0.0'
         legacyLibraryVersion = '1.0.0'
         annotationVersion = '1.0.0'
-        mobileAdsVersion = '17.1.1'
-        constraintlayoutVersion = '2.0.0-alpha2'
-        materialVersion = '1.1.0-alpha01'
-        appCompatVersion = '1.0.2'
+        mobileAdsVersion = '17.2.0'
+        constraintlayoutVersion = '2.0.0-alpha3'
+        materialVersion = '1.1.0-alpha05'
+        appCompatVersion = '1.1.0-alpha03'
         cardViewVersion = '1.0.0'
 
     }
@@ -26,7 +27,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
