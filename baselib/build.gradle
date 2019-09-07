@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1500101
+        versionCode 2100101
         versionName "1.0.1"
         vectorDrawables.useSupportLibrary = true
     }
@@ -29,7 +29,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacyLibraryVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "androidx.annotation:annotation:$rootProject.annotationVersion"
     implementation "com.google.android.gms:play-services-ads:$rootProject.mobileAdsVersion"
