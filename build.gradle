@@ -12,7 +12,6 @@ buildscript {
         // App dependencies
         junitVersion = '4.12'
         lifecycleVersion = '2.0.0'
-        legacyLibraryVersion = '1.0.0'
         annotationVersion = '1.0.0'
         mobileAdsVersion = '18.2.0'
         constraintlayoutVersion = '2.0.0-beta2'

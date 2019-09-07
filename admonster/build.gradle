@@ -36,7 +36,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':baselib')
 
-    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacyLibraryVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
@@ -44,7 +43,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.cardview:cardview:$rootProject.cardViewVersion"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
