@@ -31,11 +31,12 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "androidx.annotation:annotation:$rootProject.annotationVersion"
-    implementation "com.google.android.gms:play-services-ads:$rootProject.mobileAdsVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
+    implementation "com.google.firebase:firebase-ads:$rootProject.mobileAdsVersion"
+    implementation "com.google.firebase:firebase-analytics:$rootProject.fireBaseAnalyticsVersion"
 }
 
 apply plugin: 'maven'
