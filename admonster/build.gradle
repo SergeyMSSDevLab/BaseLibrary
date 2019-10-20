@@ -39,9 +39,9 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
-    implementation "com.google.android.gms:play-services-ads:$rootProject.mobileAdsVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.cardview:cardview:$rootProject.cardViewVersion"
+    implementation "com.google.firebase:firebase-ads:$rootProject.mobileAdsVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation 'androidx.test:runner:1.2.0'

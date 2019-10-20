@@ -173,6 +173,11 @@ public class ComboBannerFragment extends Fragment {
         if (this.mAdView != null){
 
             ensureParentView(false);
+
+            AdRequest adRequest = new AdRequest
+                    .Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
             this.mAdView.setAdListener(new AdListener() {
                 @Override
                 public void onAdLoaded() {
@@ -191,18 +196,12 @@ public class ComboBannerFragment extends Fragment {
                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
                         mViewModel.setIsShowAd(false);
                         ensureParentView(false);
-                        mAdView.loadAd(new AdRequest
-                                .Builder()
-                                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                                .build());
+                        mAdView.loadAd(adRequest);
                     }
                 }
             });
 
-            this.mAdView.loadAd(new AdRequest
-                    .Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .build());
+            this.mAdView.loadAd(adRequest);
             Log.v(LOG_TAG, "ensureAdView: loadAd started");
         }
     }
