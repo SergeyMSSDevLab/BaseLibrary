@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.ads.reward.RewardItem;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.mssdevlab.baselib.BaseApplication;
 
 import androidx.annotation.NonNull;
@@ -27,11 +28,16 @@ public class AppModeManager {
     public static void checkAppMode(){
         AppMode curMode = AppMode.MODE_DEMO;
 
-        SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        BaseApplication baseApp = BaseApplication.getInstance();
+        SharedPreferences sharedPref = baseApp.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+
         boolean allowTrackingParticipated = sharedPref.getBoolean(PREF_ALLOW_TRACKING_PARTICIPATED, false);
         ApplicationData.setAllowTrackingParticipated(allowTrackingParticipated);
+
         boolean allowTracking = sharedPref.getBoolean(PREF_ALLOW_TRACKING, false);
         ApplicationData.setAllowTracking(allowTracking);
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(baseApp);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(allowTracking);
 
         long finalExpired = 0L;
         long nowMs = System.currentTimeMillis();
@@ -49,10 +55,8 @@ public class AppModeManager {
             finalExpired = awardExpired;
         }
 
-        // TODO: Implement the checking
         ApplicationData.setApplicationMode(curMode);
         ApplicationData.setExpireTime(finalExpired);
-        // TODO: enable/disable tracking in firebase according to allowTracking
         // TODO: disable tracking in the Pro mode
     }
 

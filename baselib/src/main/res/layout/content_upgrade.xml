@@ -109,7 +109,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
                     android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
                     android:text="@{safeUnbox(viewModelMain.allowTrackingText)}"
                     android:checked="@{safeUnbox(viewModelMain.allowTracking)}"
@@ -118,74 +117,6 @@
                     app:layout_constraintLeft_toLeftOf="@+id/blUpgaTrackTitle"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/blUpgaTrackTitle"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/card_radius"
-            app:cardElevation="@dimen/card_elevation"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:onClick="@{(view) -> viewModelMain.inviteFriend()}"
-            android:layout_marginStart="@dimen/bl_item_spacing_horizontal_2"
-            android:layout_marginLeft="@dimen/bl_item_spacing_horizontal_2"
-            android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
-            android:layout_marginBottom="@dimen/bl_item_spacing_vertical_4"
-            android:layout_marginEnd="@dimen/bl_item_spacing_horizontal_2"
-            android:layout_marginRight="@dimen/bl_item_spacing_horizontal_2" >
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/bl_item_spacing_vertical_2"
-                android:paddingBottom="@dimen/bl_item_spacing_vertical_2">
-
-                <ImageView
-                    android:id="@+id/blUpgaInviteImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginLeft="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginStart="@dimen/bl_item_spacing_horizontal"
-                    android:contentDescription="@string/bl_upgrade_invite_title"
-                    tools:text="@string/bl_upgrade_invite_title"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/blUpgaInviteTitle"
-                    app:srcCompat="@drawable/ic_invite" />
-
-                <TextView
-                    android:id="@+id/blUpgaInviteTitle"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginLeft="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginStart="@dimen/bl_item_spacing_horizontal"
-                    android:text="@string/bl_upgrade_invite_title"
-                    tools:text="Invite friends"
-                    app:layout_constraintLeft_toRightOf="@+id/blUpgaInviteImage"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/blUpgaInviteValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
-                    android:text="@string/bl_upgrade_invite_value"
-                    tools:text="Invite a friend and you both get a two-weeks free trial estimate."
-                    app:layout_constraintLeft_toLeftOf="@+id/blUpgaInviteTitle"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/blUpgaInviteTitle"
                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -247,7 +178,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
                     android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
                     android:text="@{safeUnbox(viewModelMain.seeAdsText)}"
                     tools:text="Visit our sponsor's site and get free 36 hours without ads and limits."
@@ -259,9 +189,79 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Disabled controls -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/card_radius"
+            app:cardElevation="@dimen/card_elevation"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="@{(view) -> viewModelMain.inviteFriend()}"
+            android:layout_marginStart="@dimen/bl_item_spacing_horizontal_2"
+            android:layout_marginLeft="@dimen/bl_item_spacing_horizontal_2"
+            android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
+            android:layout_marginBottom="@dimen/bl_item_spacing_vertical_4"
+            android:layout_marginEnd="@dimen/bl_item_spacing_horizontal_2"
+            android:layout_marginRight="@dimen/bl_item_spacing_horizontal_2" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/bl_item_spacing_vertical_2"
+                android:paddingBottom="@dimen/bl_item_spacing_vertical_2"
+                >
+
+                <ImageView
+                    android:id="@+id/blUpgaInviteImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/bl_item_spacing_horizontal"
+                    android:layout_marginLeft="@dimen/bl_item_spacing_horizontal"
+                    android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
+                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
+                    android:contentDescription="@string/bl_upgrade_invite_title"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/blUpgaInviteTitle"
+                    app:srcCompat="@drawable/ic_invite"
+                    tools:text="@string/bl_upgrade_invite_title" />
+
+                <TextView
+                    android:id="@+id/blUpgaInviteTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/bl_item_spacing_horizontal"
+                    android:layout_marginLeft="@dimen/bl_item_spacing_horizontal"
+                    android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
+                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
+                    android:text="@string/bl_upgrade_invite_title"
+                    app:layout_constraintLeft_toRightOf="@+id/blUpgaInviteImage"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Invite friends" />
+
+                <TextView
+                    android:id="@+id/blUpgaInviteValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
+                    android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
+                    android:text="@string/bl_upgrade_invite_value"
+                    app:layout_constraintLeft_toLeftOf="@+id/blUpgaInviteTitle"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/blUpgaInviteTitle"
+                    tools:text="Invite a friend and you both get a two-weeks free trial estimate." />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
             app:cardCornerRadius="@dimen/card_radius"
             app:cardElevation="@dimen/card_elevation"
             android:clickable="true"
@@ -315,7 +315,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
-                    android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
                     android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
                     android:text="@string/bl_upgrade_buy_value"
                     tools:text="Upgrade the application and enjoy it without limits and without ads."

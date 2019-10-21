@@ -52,8 +52,15 @@
     </string-array>
 
     <string name="bl_upgrade_track_title">Anonymous statistics</string>
-    <string name="bl_upgrade_track_value">Allow the application to collect anonymous statistics and get a seven-day free trial estimate.</string>
-    <string name="bl_upgrade_track_value_done">Allow the application to collect anonymous statistics. This data helps developers fix bugs and make the app better.</string>
+    <string name="bl_upgrade_track_value">
+        Allow the application to collect anonymous statistics. This data helps developers to fix bugs and to make the app better.
+        No personal data is collected. Please check our privacy policy that to be sure what the data is collected.\n
+        If you opt in right now you will get a seven-day free trial mode for estimate.
+    </string>
+    <string name="bl_upgrade_track_value_done">
+        Allow the application to collect anonymous statistics. This data helps developers to fix bugs and to make the app better.
+        No personal data is collected. Please check our privacy policy that to be sure what the data is collected.
+    </string>
     <string name="bl_upgrade_invite_title">Invite friends</string>
     <string name="bl_upgrade_invite_value">Invite a friend and you both get a two-weeks free trial estimate.</string>
     <string name="bl_upgrade_see_ads_title">Watch ads</string>

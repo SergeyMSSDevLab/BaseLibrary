@@ -5,13 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
         <activity
             android:name=".common.ErrorActivity"
-            android:label="@string/bl_common_error_report_email_subject"></activity>
-        <activity
-            android:name=".upgrade.BaseUpgradeActivity"
-            android:label="@string/title_activity_upgrade"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/bl_common_error_report_email_subject"/>
     </application>
 
 </manifest>
