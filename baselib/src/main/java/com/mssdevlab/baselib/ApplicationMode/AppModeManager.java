@@ -55,9 +55,10 @@ public class AppModeManager {
             finalExpired = awardExpired;
         }
 
+        // TODO: check payable modes
+
         ApplicationData.setApplicationMode(curMode);
         ApplicationData.setExpireTime(finalExpired);
-        // TODO: disable tracking in the Pro mode
     }
 
     private static AppMode enhanceAppMode(AppMode curMode, AppMode newMode){

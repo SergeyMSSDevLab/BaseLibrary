@@ -29,14 +29,16 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    implementation "com.android.billingclient:billing:$rootProject.BillingVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "androidx.annotation:annotation:$rootProject.annotationVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
-    testImplementation "junit:junit:$rootProject.junitVersion"
     implementation "com.google.firebase:firebase-ads:$rootProject.mobileAdsVersion"
     implementation "com.google.firebase:firebase-analytics:$rootProject.fireBaseAnalyticsVersion"
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
 }
 
 apply plugin: 'maven'
