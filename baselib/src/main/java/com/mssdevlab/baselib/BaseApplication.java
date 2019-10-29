@@ -3,11 +3,14 @@ package com.mssdevlab.baselib;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import androidx.annotation.CallSuper;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+
+import com.android.billingclient.api.Purchase;
 import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
+import com.mssdevlab.baselib.Billing.BillingManager;
 import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
@@ -17,6 +20,8 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Base class for MSSDevLab Application object
@@ -48,6 +53,8 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         return sCurInstance;
     }
 
+    private BillingManager mBillingManager;
+
     @CallSuper
     protected void setReportSender(@NonNull MessageSender sender){
         reportSender = sender;
@@ -77,10 +84,19 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
                 try {
                     createReportFile(ex);
                 } catch (Exception e) {
-                    Log.v(LOG_TAG, e.getMessage());
+                    Log.e(LOG_TAG, "onCreate", e);
                 }
             }
         }).start();
+    }
+
+    public BillingManager getBillingManager() {
+        return mBillingManager;
+    }
+
+    @CallSuper
+    protected  void checkPurchases(String publicKey){
+        mBillingManager = new BillingManager(this, publicKey, new UpdateListener());
     }
 
     @CallSuper
@@ -89,12 +105,12 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     }
 
     @Override
-    public void uncaughtException(Thread thread, Throwable ex) {
+    public void uncaughtException(@NonNull Thread thread, @NonNull Throwable ex) {
         Log.v(LOG_TAG, "uncaughtException");
         try {
             createReportFile(ex);
         } catch (Exception e) {
-            Log.v(LOG_TAG, e.getMessage());
+            Log.e(LOG_TAG, "uncaughtException", e);
         } finally {
             if (sOriginalHandler != null) {
                 sOriginalHandler.uncaughtException(thread, ex);
@@ -113,13 +129,13 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
                 try {
                     file = new RandomAccessFile(this.getFileStreamPath(NAME_FILE_DATA), "rw");
                     file.seek(file.length());
-                    file.write(report.getBytes("UTF-8"));
+                    file.write(report.getBytes(StandardCharsets.UTF_8));
                 } finally {
                     if (file != null) {
                         try {
                             file.close();
                         } catch (IOException e) {
-                            Log.v(LOG_TAG, e.getMessage());
+                            Log.e(LOG_TAG,"createReportFile", e);
                         }
                     }
                 }
@@ -152,17 +168,17 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
                 if (file.length() > 0) {
                     byte[] fContent = new byte[(int) file.length()];
                     file.readFully(fContent);
-                    ret = new String(fContent, "UTF-8");
+                    ret = new String(fContent, StandardCharsets.UTF_8);
                     file.setLength(0); // Always truncate file
                 }
             } catch (IOException e) {
-                Log.v(LOG_TAG, e.getMessage());
+                Log.v(LOG_TAG, "GetLastExceptionReport", e);
             } finally {
                 if (file != null) {
                     try {
                         file.close();
                     } catch (IOException e) {
-                        Log.v(LOG_TAG, e.getMessage());
+                        Log.v(LOG_TAG, "GetLastExceptionReport", e);
                     }
                 }
             }
@@ -176,7 +192,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         return Helper.CreateReport4Throwable(e, this);
     }
 
-    protected void setUpgradeActivity(Class<?> cls,
+    protected void setUpgradeActivity(@SuppressWarnings("SameParameterValue") Class<?> cls,
                                       String adMobUnitId,
                                       String appName,
                                       String devEmail,
@@ -196,6 +212,35 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         intent.putExtra(EXTRA_APP_NAME, sUpgradeActivityAppName);
         intent.putExtra(EXTRA_DEV_EMAIL, sUpgradeActivityDevEmail);
         ctx.startActivity(intent);
+    }
+    /**
+     * Handler to billing updates
+     */
+    private class UpdateListener implements BillingManager.BillingUpdatesListener {
+        @Override
+        public void onBillingClientSetupFinished() {
+            // Do nothing
+        }
+
+        @Override
+        public void onConsumeFinished(String token, int result) {
+            // Do nothing
+        }
+
+        @Override
+        public void onPurchasesUpdated(List<Purchase> purchaseList) {
+            boolean proEarned = false;
+// TODO: complete the purchase status recovering
+            for (Purchase purchase : purchaseList) {
+                int state = purchase.getPurchaseState();
+                if (state == Purchase.PurchaseState.PURCHASED){
+                    proEarned = true;
+                    break;
+                }
+            }
+
+            AppModeManager.setProMode(proEarned);
+        }
     }
 
 }

@@ -18,6 +18,8 @@ public class AppModeManager {
     private static final String PREF_ALLOW_TRACKING_EXPIRE = "appModeManager.allowTrackingExpire";
     private static final String PREF_ALLOW_TRACKING = "appModeManager.allowTracking";
     private static final String PREF_AWARD_EARNED = "appModeManager.awardEarned";
+    private static final String PREF_PRO_EARNED = "appModeManager.proEarned";
+    private static final String PREF_PRO_EXPIRED = "appModeManager.proExpired";
 
     private static final long TRACKING_FREE_DAYS = 7L;
     private static final long EARNED_HOURS = 12L;
@@ -55,7 +57,11 @@ public class AppModeManager {
             finalExpired = awardExpired;
         }
 
-        // TODO: check payable modes
+        boolean proEarned = sharedPref.getBoolean(PREF_PRO_EARNED, false);
+        if (proEarned){
+            finalExpired = sharedPref.getLong(PREF_PRO_EXPIRED, 0L);
+            curMode = enhanceAppMode(curMode, AppMode.MODE_PRO);
+        }
 
         ApplicationData.setApplicationMode(curMode);
         ApplicationData.setExpireTime(finalExpired);
@@ -109,6 +115,17 @@ public class AppModeManager {
             }
             SharedPreferences.Editor spEditor = sharedPref.edit();
             spEditor.putLong(PREF_AWARD_EARNED, value);
+            spEditor.apply();
+        }
+        checkAppMode();
+    }
+
+    public static void setProMode(boolean isProMode) {
+        synchronized (lockObj) {
+            Log.v(LOG_TAG, "setProMode");
+            SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+            SharedPreferences.Editor spEditor = sharedPref.edit();
+            spEditor.putBoolean(PREF_PRO_EARNED, isProMode);
             spEditor.apply();
         }
         checkAppMode();
