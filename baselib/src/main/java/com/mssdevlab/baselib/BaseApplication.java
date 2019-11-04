@@ -8,9 +8,7 @@ import android.util.Log;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 
-import com.android.billingclient.api.Purchase;
 import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
-import com.mssdevlab.baselib.Billing.BillingManager;
 import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
@@ -21,7 +19,6 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * Base class for MSSDevLab Application object
@@ -52,8 +49,6 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     public static BaseApplication getInstance() {
         return sCurInstance;
     }
-
-    private BillingManager mBillingManager;
 
     @CallSuper
     protected void setReportSender(@NonNull MessageSender sender){
@@ -88,15 +83,6 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
                 }
             }
         }).start();
-    }
-
-    public BillingManager getBillingManager() {
-        return mBillingManager;
-    }
-
-    @CallSuper
-    protected  void checkPurchases(String publicKey){
-        mBillingManager = new BillingManager(this, publicKey, new UpdateListener());
     }
 
     @CallSuper
@@ -213,34 +199,4 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
         intent.putExtra(EXTRA_DEV_EMAIL, sUpgradeActivityDevEmail);
         ctx.startActivity(intent);
     }
-    /**
-     * Handler to billing updates
-     */
-    private class UpdateListener implements BillingManager.BillingUpdatesListener {
-        @Override
-        public void onBillingClientSetupFinished() {
-            // Do nothing
-        }
-
-        @Override
-        public void onConsumeFinished(String token, int result) {
-            // Do nothing
-        }
-
-        @Override
-        public void onPurchasesUpdated(List<Purchase> purchaseList) {
-            boolean proEarned = false;
-// TODO: complete the purchase status recovering
-            for (Purchase purchase : purchaseList) {
-                int state = purchase.getPurchaseState();
-                if (state == Purchase.PurchaseState.PURCHASED){
-                    proEarned = true;
-                    break;
-                }
-            }
-
-            AppModeManager.setProMode(proEarned);
-        }
-    }
-
 }

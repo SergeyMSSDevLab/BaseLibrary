@@ -3,6 +3,7 @@
     package="com.mssdevlab.baselib">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application>
         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
