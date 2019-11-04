@@ -220,7 +220,7 @@ public class BillingProcessor extends BillingBase
 	{
 		final PackageManager packageManager = context.getPackageManager();
 		List<ResolveInfo> list = packageManager.queryIntentServices(getBindServiceIntent(), 0);
-		return list != null && list.size() > 0;
+		return list.size() > 0;
 	}
 
 	public void release()
@@ -314,7 +314,7 @@ public class BillingProcessor extends BillingBase
 	 *
 	 * @return {@code true} if all retrievals are successful, {@code false} otherwise
 	 */
-	public boolean loadOwnedPurchasesFromGoogle()
+	boolean loadOwnedPurchasesFromGoogle()
 	{
 		return loadPurchasesByType(Constants.PRODUCT_TYPE_MANAGED, cachedProducts) &&
 			   loadPurchasesByType(Constants.PRODUCT_TYPE_SUBSCRIPTION, cachedSubscriptions);
@@ -385,7 +385,7 @@ public class BillingProcessor extends BillingBase
 						isSubscriptionWithExtraParamsSupported(extraParams) ? extraParams : null);
 	}
 
-	public boolean isOneTimePurchaseSupported()
+	boolean isOneTimePurchaseSupported()
 	{
 		if(!isInitialized())
 		{
@@ -410,7 +410,7 @@ public class BillingProcessor extends BillingBase
 		return isOneTimePurchasesSupported;
 	}
 
-	private boolean isSubscriptionUpdateSupported()
+	boolean isSubscriptionUpdateSupported()
 	{
 		// Avoid calling the service again if this value is true
 		if (isSubsUpdateSupported)

@@ -2,6 +2,8 @@ package com.example.admonster;
 
 import android.content.res.Resources;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.ads.MobileAds;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.ads.InterstitialManager;
@@ -10,6 +12,10 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
 import com.mssdevlab.baselib.menuproviders.LinkMenuProvider;
 import com.mssdevlab.baselib.menuproviders.UpgradeMenuProvider;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 
 public class AmApp extends BaseApplication {
     public static final String OUR_APPS_CONFIG_TAG = "JapApp.OurApps";
@@ -17,6 +23,24 @@ public class AmApp extends BaseApplication {
 
     public AmApp() {
         this.setReportSender(new ErrorEMailSender(R.string.developers_email_address));
+    }
+
+    @NonNull
+    @Override
+    protected String getPublicKey() {
+        return "samplePublicKey";
+    }
+
+    @NonNull
+    @Override
+    protected List<String> getProductSkus() {
+        return  Arrays.asList("android.test.purchased", "android.test.canceled", "android.test.item_unavailable");
+    }
+
+    @NonNull
+    @Override
+    protected List<String> getSubscriptionSkus() {
+        return Collections.emptyList();
     }
 
     @Override

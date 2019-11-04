@@ -9,6 +9,8 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 
 import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
+import com.mssdevlab.baselib.Billing.BillingData;
+import com.mssdevlab.baselib.Billing.BillingProcessor;
 import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
@@ -19,6 +21,7 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Base class for MSSDevLab Application object
@@ -67,6 +70,12 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         Thread.setDefaultUncaughtExceptionHandler(this);
 
+        if(BillingProcessor.isIabServiceAvailable(sCurInstance)) {
+            Log.v(LOG_TAG, "InApp service available. Initializing BillingData.");
+            BillingData.setUpPurchases(getPublicKey(), getSubscriptionSkus(), getProductSkus());
+            BillingData.checkPurchases();
+        }
+
         new Thread(() -> {
             try {
                 AppModeManager.checkAppMode();
@@ -84,6 +93,15 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
             }
         }).start();
     }
+
+    @NonNull
+    protected abstract String getPublicKey();
+
+    @NonNull
+    protected abstract List<String> getProductSkus();
+
+    @NonNull
+    protected abstract List<String> getSubscriptionSkus();
 
     @CallSuper
     protected void initApplicationInBackground(){
