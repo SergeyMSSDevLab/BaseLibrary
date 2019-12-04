@@ -28,17 +28,23 @@ public class BillingData {
     private static final MutableLiveData<Boolean> sCanPurchaseProducts = new MutableLiveData<>();
     private static final MutableLiveData<Boolean> sCanPurchaseSubsctiptions = new MutableLiveData<>();
 
-    public static void setUpPurchases(@NonNull String publicKey,
+    @UiThread
+    public static void setUpBilling(@NonNull String publicKey,
                                       @NonNull List<String> subscriptionsSkus,
                                       @NonNull List<String> productsSkus){
         sPublicKey = publicKey;
         sProdSkus = productsSkus;
         sSubSkus = subscriptionsSkus;
-    }
 
-    @UiThread
-    public static void checkPurchases(){
         Context ctx = BaseApplication.getInstance();
+
+        // TODO: Create billing manager and setup billing client
+        // if client connected:
+        //  query purchases and load all sku details, update corresponding live data and last connected value
+        // if client is not connected:
+        //  disable purchases(live data), check last connected and display popup if disconected a long time
+        // stop working if it disconected too long period and some attempts passed and no internet connected
+
         sBillingProcessor = new BillingProcessor(ctx, sPublicKey, new BillingHandler());
         sBillingProcessor.initialize();
 

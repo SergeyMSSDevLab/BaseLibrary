@@ -62,7 +62,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     public void onCreate() {
         super.onCreate();
         Log.v(LOG_TAG, "onCreate");
-// TODO: check google play compatibility
+
         if (sCurInstance == null) {
             sCurInstance = this;
             sOriginalHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -70,28 +70,33 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        if(BillingProcessor.isIabServiceAvailable(sCurInstance)) {
-            Log.v(LOG_TAG, "InApp service available. Initializing BillingData.");
-            BillingData.setUpPurchases(getPublicKey(), getSubscriptionSkus(), getProductSkus());
-            BillingData.checkPurchases();
-        }
+        boolean isGooglePlayOk = true;
+// TODO: check google play compatibility
 
-        new Thread(() -> {
-            try {
-                AppModeManager.checkAppMode();
-                initApplicationInBackground();
+        if (isGooglePlayOk){
+            Log.v(LOG_TAG, "GooglePlay service available. Initializing BillingData.");
+            BillingData.setUpBilling(getPublicKey(), getSubscriptionSkus(), getProductSkus());
 
-                // Inform observers that configuration finished
-                CommonViewProviders.setInitCompleted();
-                MenuItemProviders.setInitCompleted();
-            } catch (Throwable ex) {
+            new Thread(() -> {
                 try {
-                    createReportFile(ex);
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, "onCreate", e);
+                    AppModeManager.checkAppMode();
+                    initApplicationInBackground();
+
+                    // Inform observers that configuration finished
+                    CommonViewProviders.setInitCompleted();
+                    MenuItemProviders.setInitCompleted();
+                } catch (Throwable ex) {
+                    try {
+                        createReportFile(ex);
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "onCreate", e);
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        } else {
+            Log.v(LOG_TAG, "GooglePlay service unavailable.");
+            // TODO: Try to fix or stop working otherwise
+        }
     }
 
     @NonNull
