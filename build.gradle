@@ -13,10 +13,10 @@ buildscript {
         junitVersion = '4.12'
         lifecycleVersion = '2.1.0'
         annotationVersion = '1.1.0'
-        mobileAdsVersion = '18.2.0'
+        mobileAdsVersion = '18.3.0'
         fireBaseAnalyticsVersion = '17.2.1'
         constraintlayoutVersion = '2.0.0-beta3'
-        materialVersion = '1.2.0-alpha01'
+        materialVersion = '1.2.0-alpha02'
         appCompatVersion = '1.1.0'
         cardViewVersion = '1.0.0'
         BillingVersion = '2.0.3'
@@ -28,7 +28,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
