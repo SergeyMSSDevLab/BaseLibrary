@@ -1,5 +1,6 @@
 package com.mssdevlab.baselib.Billing;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -9,7 +10,11 @@ import androidx.annotation.UiThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.SkuDetails;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.common.Helper;
 
@@ -22,11 +27,11 @@ public class BillingData {
     private static String sPublicKey;
     private static List<String> sProdSkus;
     private static List<String> sSubSkus;
-    private static BillingProcessor sBillingProcessor;
 
     private static final MutableLiveData<List<Purchase>> sAppPurchases = new MutableLiveData<>();
-    private static final MutableLiveData<Boolean> sCanPurchaseProducts = new MutableLiveData<>();
-    private static final MutableLiveData<Boolean> sCanPurchaseSubsctiptions = new MutableLiveData<>();
+    private static final MutableLiveData<Boolean> sCanPurchase = new MutableLiveData<>();
+    private static final MutableLiveData<List<SkuDetails>> sSkuDetails = new MutableLiveData<>();
+    private  static BillingManager sBillingManager;
 
     @UiThread
     public static void setUpBilling(@NonNull String publicKey,
@@ -36,48 +41,39 @@ public class BillingData {
         sProdSkus = productsSkus;
         sSubSkus = subscriptionsSkus;
 
-        Context ctx = BaseApplication.getInstance();
+        getBillindData(null, 0);
+    }
 
-        // TODO: Create billing manager and setup billing client
-        // if client connected:
-        //  query purchases and load all sku details, update corresponding live data and last connected value
-        // if client is not connected:
-        //  disable purchases(live data), check last connected and display popup if disconected a long time
-        // stop working if it disconected too long period and some attempts passed and no internet connected
+    public static void getBillindData(Activity activity, int requestCode){
+        setCanPurchase(false);
+        if (BaseApplication.checkPlayServices(activity, requestCode)){
+            Log.v(LOG_TAG, "Play Services ok");
 
-        sBillingProcessor = new BillingProcessor(ctx, sPublicKey, new BillingHandler());
-        sBillingProcessor.initialize();
-
-        Helper.setValue(sCanPurchaseProducts, sBillingProcessor.isOneTimePurchaseSupported());
-        Helper.setValue(sCanPurchaseSubsctiptions, sBillingProcessor.isSubscriptionUpdateSupported());
-
-        sBillingProcessor.loadOwnedPurchasesFromGoogle();
-        sBillingProcessor.getPurchaseListingDetails(new ArrayList<>(sProdSkus));
-        sBillingProcessor.getSubscriptionListingDetails(new ArrayList<>(sSubSkus));    }
+            if (sBillingManager == null){
+                sBillingManager = new BillingManager(BaseApplication.getInstance(), sPublicKey, new BillingListener());
+            }
+        }
+        else {
+            Log.v(LOG_TAG, "Play Services are not availabled");
+        }
+    }
 
     @NonNull
-    public static LiveData<Boolean> getCanPurchaseProducts(){
-        Log.v(LOG_TAG, "getCanPurchaseProducts hasActiveObservers: " + sCanPurchaseProducts.hasActiveObservers());
-        return sCanPurchaseProducts;
+    public static LiveData<Boolean> getCanPurchase(){
+        Log.v(LOG_TAG, "sCanPurchase hasActiveObservers: " + sCanPurchase.hasActiveObservers());
+        return sCanPurchase;
     }
-    @NonNull
-    public static LiveData<Boolean> getCanPurchaseSubsctiptions(){
-        Log.v(LOG_TAG, "getCanPurchaseSubsctiptions hasActiveObservers: " + sCanPurchaseSubsctiptions.hasActiveObservers());
-        return sCanPurchaseSubsctiptions;
-    }
-
-    static BillingProcessor getsBillingProcessor(){
-        return sBillingProcessor;
-    }
-
-    private static void setsAppPurchases(List<Purchase> val){
-        Helper.setValue(sAppPurchases, val);
+    private static void setCanPurchase(Boolean val){
+        Helper.setValue(sCanPurchase, val);
     }
 
     @NonNull
     public static LiveData<List<Purchase>> getAppPurchases(){
         Log.v(LOG_TAG, "getAppPurchases hasActiveObservers: " + sAppPurchases.hasActiveObservers());
         return sAppPurchases;
+    }
+    private static void setAppPurchases(List<Purchase> val){
+        Helper.setValue(sAppPurchases, val);
     }
 
     @NonNull
@@ -89,42 +85,42 @@ public class BillingData {
         return purchases;
     }
 
-    private static class BillingHandler implements BillingProcessor.IBillingHandler{
+    @NonNull
+    public static LiveData<List<SkuDetails>> getSkuDetails(){
+        Log.v(LOG_TAG, "sSkuDetails hasActiveObservers: " + sSkuDetails.hasActiveObservers());
+        return sSkuDetails;
+    }
+    private static void setSkuDetails(List<SkuDetails> val){
+        Helper.setValue(sSkuDetails, val);
+    }
+
+    private static class BillingListener implements BillingManager.BillingUpdatesListener {
 
         @Override
-        public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-            Log.v(LOG_TAG, "onProductPurchased");
-            /*
-             * Called when requested PRODUCT ID was successfully purchased
-             */
+        public void onBillingClientSetupFinished() {
+            if(sBillingManager.isServiceConnected()){
+                setCanPurchase(true);
+                Log.d(LOG_TAG, "Setup successful. Querying inventory.");
+                sBillingManager.queryPurchasesAsync();
+                Log.d(LOG_TAG, "Querying Sku details.");
+                sBillingManager.querySkuDetails(sProdSkus, sSubSkus);
+            }
         }
 
         @Override
-        public void onPurchaseHistoryRestored() {
-            Log.v(LOG_TAG, "onPurchaseHistoryRestored");
-            /*
-             * Called when purchase history was restored and the list of all owned PRODUCT ID's
-             * was loaded from Google Play
-             */
+        public void onConsumeFinished(String token, int result) {
+
         }
 
         @Override
-        public void onBillingError(int errorCode, @Nullable Throwable error) {
-            Log.v(LOG_TAG, "onBillingError");
-            /*
-             * Called when some error occurred. See Constants class for more details
-             *
-             * Note - this includes handling the case where the user canceled the buy dialog:
-             * errorCode = Constants.BILLING_RESPONSE_RESULT_USER_CANCELED
-             */
+        public void onPurchasesUpdated(List<Purchase> purchases) {
+            // TODO: check if pending purchases are confirmed and confirm if needed
+            setAppPurchases(purchases);
         }
 
         @Override
-        public void onBillingInitialized() {
-            Log.v(LOG_TAG, "onBillingInitialized");
-            /*
-             * Called when BillingProcessor was initialized and it's ready to purchase
-             */
+        public void onSkuListUpdated(List<SkuDetails> details) {
+            setSkuDetails(details);
         }
     }
 }

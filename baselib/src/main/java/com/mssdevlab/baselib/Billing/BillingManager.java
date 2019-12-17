@@ -10,6 +10,9 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class BillingManager implements PurchasesUpdatedListener {
     private final BillingUpdatesListener mBillingUpdatesListener;
 
     private final List<Purchase> mPurchases = new ArrayList<>();
+    private final List<SkuDetails> mSkuDetails = new ArrayList<>();
 
     private Set<String> mTokensToBeConsumed;
 
@@ -37,34 +41,64 @@ public class BillingManager implements PurchasesUpdatedListener {
         void onBillingClientSetupFinished();
         void onConsumeFinished(String token, @BillingClient.BillingResponseCode int result);
         void onPurchasesUpdated(List<Purchase> purchases);
+        void onSkuListUpdated(List<SkuDetails> skuDetailsList);
     }
 
     public BillingManager(Context context, String publicKey, final BillingUpdatesListener updatesListener) {
         Log.d(LOG_TAG, "Creating Billing client.");
         mBase64EncodedPublicKey = publicKey;
         mBillingUpdatesListener = updatesListener;
-        mBillingClient = BillingClient.newBuilder(context).setListener(this).build();
-
+        mBillingClient = BillingClient.newBuilder(context)
+                .enablePendingPurchases()
+                .setListener(this).build();
 
         Log.d(LOG_TAG, "Starting setup.");
-
         // Start setup. This is asynchronous and the specified listener will be called
         // once setup completes.
-        // It also starts to report all the new purchases through onPurchasesUpdated() callback.
-        startServiceConnection(() -> {
-            // Notifying the listener that billing client is ready
-            mBillingUpdatesListener.onBillingClientSetupFinished();
-            // IAB is fully set up. Now, let's get an inventory of stuff we own.
-            Log.d(LOG_TAG, "Setup successful. Querying inventory.");
-            queryPurchases();
-        });
+        startServiceConnection(mBillingUpdatesListener::onBillingClientSetupFinished);
     }
 
-    public int getBillingClientResponseCode() {
+    private int getBillingClientResponseCode() {
         return mBillingClientResponseCode;
     }
 
-    private void queryPurchases() {
+    public void querySkuDetails(final List<String> prodSkuList, final List<String> subsSkuList) {
+        mSkuDetails.clear();    // TODO: redesign the sku details retrieve
+        querySkuDetailsAsync(BillingClient.SkuType.INAPP, prodSkuList, new SkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK){
+                    mSkuDetails.addAll(list);
+                    mBillingUpdatesListener.onSkuListUpdated(mSkuDetails);
+                }
+            }
+        });
+
+        querySkuDetailsAsync(BillingClient.SkuType.SUBS, prodSkuList, new SkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK){
+                    mSkuDetails.addAll(list);
+                    mBillingUpdatesListener.onSkuListUpdated(mSkuDetails);
+                }
+            }
+        });
+    }
+
+    private void querySkuDetailsAsync(@BillingClient.SkuType final String itemType, final List<String> skuList,
+                                     final SkuDetailsResponseListener listener) {
+        // Creating a runnable from the request to use it inside our connection retry policy below
+        Runnable queryRequest = () -> {
+            // Query the purchase async
+            SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+            params.setSkusList(skuList).setType(itemType);
+            mBillingClient.querySkuDetailsAsync(params.build(), listener);
+        };
+
+        executeServiceRequest(queryRequest);
+    }
+
+    public void queryPurchasesAsync() {
         Runnable queryToExecute = () -> {
             long time = System.currentTimeMillis();
             Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
@@ -98,7 +132,7 @@ public class BillingManager implements PurchasesUpdatedListener {
         executeServiceRequest(queryToExecute);
     }
 
-    private boolean isServiceConnected(){
+    public boolean isServiceConnected(){
         return mBillingClientResponseCode == BillingClient.BillingResponseCode.OK;
     }
 

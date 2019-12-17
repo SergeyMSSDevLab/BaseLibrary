@@ -22,6 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BaseActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "OnCreate started");
         BaseApplication.getInstance().handleLastError(this);
         super.onCreate(savedInstanceState);
         InterstitialManager.showInterstitialAd(this,true);

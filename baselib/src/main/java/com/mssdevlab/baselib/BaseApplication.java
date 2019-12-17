@@ -2,15 +2,17 @@ package com.mssdevlab.baselib;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
 import com.mssdevlab.baselib.Billing.BillingData;
-import com.mssdevlab.baselib.Billing.BillingProcessor;
 import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
@@ -70,33 +72,40 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        boolean isGooglePlayOk = true;
-// TODO: check google play compatibility
+        BillingData.setUpBilling(getPublicKey(), getSubscriptionSkus(), getProductSkus());
 
-        if (isGooglePlayOk){
-            Log.v(LOG_TAG, "GooglePlay service available. Initializing BillingData.");
-            BillingData.setUpBilling(getPublicKey(), getSubscriptionSkus(), getProductSkus());
+        new Thread(() -> {
+            try {
+                AppModeManager.checkAppMode();
+                initApplicationInBackground();
 
-            new Thread(() -> {
+                // Inform observers that configuration finished
+                CommonViewProviders.setInitCompleted();
+                MenuItemProviders.setInitCompleted();
+            } catch (Throwable ex) {
                 try {
-                    AppModeManager.checkAppMode();
-                    initApplicationInBackground();
-
-                    // Inform observers that configuration finished
-                    CommonViewProviders.setInitCompleted();
-                    MenuItemProviders.setInitCompleted();
-                } catch (Throwable ex) {
-                    try {
-                        createReportFile(ex);
-                    } catch (Exception e) {
-                        Log.e(LOG_TAG, "onCreate", e);
-                    }
+                    createReportFile(ex);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "onCreate", e);
                 }
-            }).start();
-        } else {
-            Log.v(LOG_TAG, "GooglePlay service unavailable.");
-            // TODO: Try to fix or stop working otherwise
+            }
+        }).start();
+    }
+
+    public static boolean checkPlayServices(Activity activity, int requestCode){
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(getInstance());
+        if (resultCode != ConnectionResult.SUCCESS && activity != null) {
+            if (googleApiAvailability.isUserResolvableError(resultCode)) {
+
+                Dialog updateDialog = googleApiAvailability.getErrorDialog(activity, resultCode, requestCode);
+                if (updateDialog != null){
+                    updateDialog.show();
+                }
+            }
         }
+
+        return resultCode == ConnectionResult.SUCCESS;
     }
 
     @NonNull
