@@ -10,13 +10,13 @@ buildscript {
         buildToolsVersion = '29.0.2'
 
         // App dependencies
-        junitVersion = '4.12'
+        junitVersion = '4.13'
         lifecycleVersion = '2.1.0'
         annotationVersion = '1.1.0'
         mobileAdsVersion = '18.3.0'
         fireBaseAnalyticsVersion = '17.2.1'
         constraintlayoutVersion = '2.0.0-beta4'
-        materialVersion = '1.2.0-alpha02'
+        materialVersion = '1.2.0-alpha03'
         appCompatVersion = '1.1.0'
         cardViewVersion = '1.0.0'
         BillingVersion = '2.1.0'

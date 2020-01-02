@@ -17,21 +17,22 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.mssdevlab.baselib.R;
-import com.mssdevlab.baselib.common.PromoteManager;
-import com.mssdevlab.baselib.common.ShowView;
-import com.mssdevlab.baselib.databinding.ComboBannerFragmentBinding;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.mssdevlab.baselib.BaseApplication;
+import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.common.PromoteManager;
+import com.mssdevlab.baselib.common.ShowView;
+import com.mssdevlab.baselib.databinding.ComboBannerFragmentBinding;
 
 public class ComboBannerFragment extends Fragment {
     private static final String LOG_TAG = "ComboBannerFragment";
@@ -170,7 +171,7 @@ public class ComboBannerFragment extends Fragment {
     private void ensureAdView(){
         Log.v(LOG_TAG, "ensureAdView");
 
-        if (this.mAdView != null){
+        if (this.mAdView != null && BaseApplication.checkPlayServices(null, 0)){
 
             ensureParentView(false);
 

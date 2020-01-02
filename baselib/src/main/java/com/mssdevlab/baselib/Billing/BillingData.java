@@ -1,20 +1,15 @@
 package com.mssdevlab.baselib.Billing;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.common.Helper;
 
@@ -54,7 +49,7 @@ public class BillingData {
             }
         }
         else {
-            Log.v(LOG_TAG, "Play Services are not availabled");
+            Log.v(LOG_TAG, "Play Services not available");
         }
     }
 

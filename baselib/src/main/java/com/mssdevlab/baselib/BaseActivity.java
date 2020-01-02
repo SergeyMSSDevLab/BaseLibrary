@@ -1,18 +1,16 @@
 package com.mssdevlab.baselib;
 
-import androidx.lifecycle.Observer;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import com.mssdevlab.baselib.ads.InterstitialManager;
-import com.mssdevlab.baselib.factory.CommonViewProvider;
-import com.mssdevlab.baselib.factory.CommonViewProviders;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
 
 /**
@@ -20,12 +18,20 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BaseActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "OnCreate started");
         BaseApplication.getInstance().handleLastError(this);
         super.onCreate(savedInstanceState);
-        InterstitialManager.showInterstitialAd(this,true);
+        InterstitialManager.showInterstitialAd(this, true);
+    }
+
+    @Override
+    @CallSuper
+    protected void onResume() {
+        super.onResume();
+        Log.v(LOG_TAG, "onResume started");
     }
 
     protected void addCommonMenuItems(final Menu menu,
