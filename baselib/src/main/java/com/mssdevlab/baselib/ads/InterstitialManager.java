@@ -9,20 +9,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.mssdevlab.baselib.BaseApplication;
-import com.mssdevlab.baselib.R;
-import com.mssdevlab.baselib.ApplicationMode.AppMode;
-import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
+import com.mssdevlab.baselib.BaseApplication;
+import com.mssdevlab.baselib.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.mssdevlab.baselib.BaseApplication.SHARED_PREF;
 
@@ -91,9 +94,19 @@ public class InterstitialManager {
                         onAdLoadedInternal(activity, ad, showWarning);
                     }
                 });
-                if (!ad.isLoading()) {
-                    Log.v(LOG_TAG, "showAd request ads");
-                    ad.loadAd(new AdRequest.Builder().build());
+
+                if (activity != null && !ad.isLoading()) {
+                    new Timer().schedule(new TimerTask()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            activity.runOnUiThread(() -> {
+                                ad.loadAd(new AdRequest.Builder().build());
+                                Log.v(LOG_TAG, "showAd: request ads");
+                            });
+                        }
+                    }, 500);
                 }
             }
         }

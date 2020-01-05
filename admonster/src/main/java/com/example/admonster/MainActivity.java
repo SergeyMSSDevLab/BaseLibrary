@@ -23,38 +23,34 @@ import com.mssdevlab.baselib.ads.InterstitialManager;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String LOG_TAG = "MainActivity";
-    private static final int PLAY_REQUEST_CODE = 1593;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //if (BaseApplication.checkPlayServices(this, PLAY_REQUEST_CODE)) {
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setLifecycleOwner(this);
+        MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        binding.setViewModelMain(viewModel);
 
-            ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-            binding.setLifecycleOwner(this);
-            MainActivityViewModel viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-            binding.setViewModelMain(viewModel);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view ->
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show());
 
-            FloatingActionButton fab = findViewById(R.id.fab);
-            fab.setOnClickListener(view ->
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show());
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            this.addCommonMenuItems(navigationView.getMenu(), R.id.nav_common, null);
-            navigationView.setNavigationItemSelectedListener(this);
-        //}
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        this.addCommonMenuItems(navigationView.getMenu(), R.id.nav_common, null);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override

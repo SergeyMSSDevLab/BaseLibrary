@@ -34,6 +34,9 @@ import com.mssdevlab.baselib.common.PromoteManager;
 import com.mssdevlab.baselib.common.ShowView;
 import com.mssdevlab.baselib.databinding.ComboBannerFragmentBinding;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ComboBannerFragment extends Fragment {
     private static final String LOG_TAG = "ComboBannerFragment";
 
@@ -133,8 +136,8 @@ public class ComboBannerFragment extends Fragment {
             case ADS:
                 Log.v(LOG_TAG, "getBannerShowMode: ads");
                 this.mViewModel.setIsShowPromo(false);
+                this.ensureParentView(false);
                 this.ensureAdView();
-                this.ensureParentView(true);
                 break;
             case PROMO:
                 Log.v(LOG_TAG, "getBannerShowMode: promo");
@@ -197,13 +200,27 @@ public class ComboBannerFragment extends Fragment {
                     if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)){
                         mViewModel.setIsShowAd(false);
                         ensureParentView(false);
-                        mAdView.loadAd(adRequest);
+                        if (!mAdView.isLoading()){
+                            mAdView.loadAd(adRequest);
+                        }
                     }
                 }
             });
 
-            this.mAdView.loadAd(adRequest);
-            Log.v(LOG_TAG, "ensureAdView: loadAd started");
+            Activity activity = ComboBannerFragment.this.getActivity();
+            if (activity != null && !this.mAdView.isLoading()) {
+                new Timer().schedule(new TimerTask()
+                {
+                    @Override
+                    public void run()
+                    {
+                        activity.runOnUiThread(() -> {
+                            mAdView.loadAd(adRequest);
+                            Log.v(LOG_TAG, "ensureAdView: loadAd started");
+                        });
+                    }
+                }, 2000);
+            }
         }
     }
 
