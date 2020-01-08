@@ -219,7 +219,7 @@ public class ComboBannerFragment extends Fragment {
                             Log.v(LOG_TAG, "ensureAdView: loadAd started");
                         });
                     }
-                }, 2000);
+                }, 1000);
             }
         }
     }

@@ -6,10 +6,15 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application>
-        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+
         <activity
             android:name=".common.ErrorActivity"
-            android:label="@string/bl_common_error_report_email_subject"/>
+            android:label="@string/bl_common_error_report_email_subject" />
+
+        <activity android:name=".common.GPErrorActivity"/>
     </application>
 
 </manifest>

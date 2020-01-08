@@ -14,6 +14,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
 import com.mssdevlab.baselib.Billing.BillingData;
 import com.mssdevlab.baselib.common.ErrorActivity;
+import com.mssdevlab.baselib.common.GPErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.common.MessageSender;
 import com.mssdevlab.baselib.common.PromoteManager;
@@ -100,12 +101,27 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
                 Dialog updateDialog = googleApiAvailability.getErrorDialog(activity, resultCode, requestCode);
                 if (updateDialog != null){
+                    updateDialog.setCancelable(false);
                     updateDialog.show();
                 }
             }
         }
 
         return resultCode == ConnectionResult.SUCCESS;
+    }
+
+    public static void handleGooglePlayState(Activity activity) {
+        Log.v(LOG_TAG, "handleGooglePlayState");
+        if (activity != null){
+            GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+            int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+            if (resultCode != ConnectionResult.SUCCESS) {
+                Intent intent = new Intent(activity, GPErrorActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        }
     }
 
     @NonNull
