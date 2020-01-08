@@ -101,7 +101,6 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
                 Dialog updateDialog = googleApiAvailability.getErrorDialog(activity, resultCode, requestCode);
                 if (updateDialog != null){
-                    updateDialog.setCancelable(false);
                     updateDialog.show();
                 }
             }
