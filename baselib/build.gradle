@@ -38,7 +38,6 @@ dependencies {
     implementation "com.google.firebase:firebase-ads:$rootProject.mobileAdsVersion"
     implementation "com.google.firebase:firebase-analytics:$rootProject.fireBaseAnalyticsVersion"
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
     testImplementation "junit:junit:$rootProject.junitVersion"
 }
 
