@@ -4,6 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -11,19 +20,7 @@ import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.ComboBannerFragment;
 import com.mssdevlab.baselib.ads.InterstitialManager;
-import com.mssdevlab.baselib.common.Helper;
 import com.mssdevlab.baselib.databinding.ActivityUpgradeBinding;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.NavUtils;
-import androidx.core.app.TaskStackBuilder;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 public class BaseUpgradeActivity extends AppCompatActivity {
 
@@ -35,7 +32,8 @@ public class BaseUpgradeActivity extends AppCompatActivity {
 
         ActivityUpgradeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_upgrade);
         binding.setLifecycleOwner(this);
-        BaseUpgradeActivityViewModel viewModel = ViewModelProviders.of(this).get(BaseUpgradeActivityViewModel.class);
+        ViewModelProvider provider = new ViewModelProvider(this);
+        BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         binding.setViewModelMain(viewModel);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
