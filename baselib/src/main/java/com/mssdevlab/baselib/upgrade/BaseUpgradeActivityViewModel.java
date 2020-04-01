@@ -5,6 +5,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
+
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
@@ -17,20 +24,13 @@ import com.mssdevlab.baselib.common.Event;
 import java.text.DateFormat;
 import java.util.Date;
 
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModel;
-
 public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedVideoAdListener {
     private static final String LOG_TAG = "UpgradeViewModel";
 
     private final MutableLiveData<Event<RewardedVideoEvent>> mShowRewardedvideo = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mRewardedVideoLoaded = new MutableLiveData<>();
     private final MediatorLiveData<String> mCurModeText = new MediatorLiveData<>();
+    private final MediatorLiveData<Integer> mAdsVisibilityValue = new MediatorLiveData<>();
 
     private final String[] mAppModeNames;
     private final String mExpireName;
@@ -43,6 +43,14 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
         Resources res = BaseApplication.getInstance().getResources();
         this.mAppModeNames = res.getStringArray(R.array.bl_common_app_mode_array);
         this.mExpireName = res.getString(R.string.bl_upgrade_expire_time);
+
+        mAdsVisibilityValue.addSource(ApplicationData.getApplicationMode(), appMode -> {
+            if (appMode == AppMode.MODE_NO_ADS || appMode == AppMode.MODE_PRO){
+                this.mAdsVisibilityValue.setValue(View.GONE);
+            } else {
+                this.mAdsVisibilityValue.setValue(View.VISIBLE);
+            }
+        });
 
         mCurModeText.addSource(ApplicationData.getApplicationMode(), appMode -> {
             composeModeText(appMode, ApplicationData.getExpireTime().getValue());
@@ -105,6 +113,10 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
                     }
                     return R.string.bl_upgrade_see_ads_value_not_loaded;
                 });
+    }
+
+    public LiveData<Integer> getAdsVisibilityValue(){
+        return mAdsVisibilityValue;
     }
 
     public LiveData<Event<RewardedVideoEvent>> getShowRewardedVideo(){

@@ -22,7 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -51,20 +51,19 @@ public class ComboBannerFragment extends Fragment {
 
     /* This method is called first in lifecycle*/
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(Context context, @NonNull AttributeSet attrs, Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onInflate");
-        this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
+        ViewModelProvider provider = new ViewModelProvider(this);
+        this.mViewModel = provider.get(ComboBannerViewModel.class);
 
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ComboBannerFragment);
-        if (arr != null) {
-            // extract attributes from the markup
-            this.mViewModel.setAdUnitId(arr.getString(R.styleable.ComboBannerFragment_ad_unit_id));
-            this.mViewModel.setAppName(arr.getString(R.styleable.ComboBannerFragment_app_name));
-            this.mViewModel.setDevEmail(arr.getString(R.styleable.ComboBannerFragment_developer_email));
-            this.mViewModel.setManageParent(arr.getBoolean(R.styleable.ComboBannerFragment_manage_parent, false));
-            this.mViewModel.setAdSize(AdSize.BANNER);
-            arr.recycle();
-        }
+        // extract attributes from the markup
+        this.mViewModel.setAdUnitId(arr.getString(R.styleable.ComboBannerFragment_ad_unit_id));
+        this.mViewModel.setAppName(arr.getString(R.styleable.ComboBannerFragment_app_name));
+        this.mViewModel.setDevEmail(arr.getString(R.styleable.ComboBannerFragment_developer_email));
+        this.mViewModel.setManageParent(arr.getBoolean(R.styleable.ComboBannerFragment_manage_parent, false));
+        this.mViewModel.setAdSize(AdSize.BANNER);
+        arr.recycle();
         Log.v(LOG_TAG, "ensureViewModel data set:" +
                 " adUnitId: " + this.mViewModel.getAdUnitId() +
                 " appName: " + this.mViewModel.getAppName().getValue() +
@@ -82,7 +81,8 @@ public class ComboBannerFragment extends Fragment {
             // Fragment created programmatically, onInflate is not called
             Bundle args = getArguments();
             if (args != null){
-                this.mViewModel = ViewModelProviders.of(this).get(ComboBannerViewModel.class);
+                ViewModelProvider provider = new ViewModelProvider(this);
+                this.mViewModel = provider.get(ComboBannerViewModel.class);
                 this.mViewModel.setAdUnitId(args.getString(EXTRA_UNIT_ID));
                 this.mViewModel.setAppName(args.getString(EXTRA_APP_NAME));
                 this.mViewModel.setDevEmail(args.getString(EXTRA_DEV_EMAIL));
@@ -118,7 +118,7 @@ public class ComboBannerFragment extends Fragment {
             Log.v(LOG_TAG, "onCreateView: mAdView done");
         }
 
-        mViewModel.getBannerShowMode().observe(this, this::updateView);
+        mViewModel.getBannerShowMode().observe(getViewLifecycleOwner(), this::updateView);
     }
 
     private void updateView(ShowView showWhat){
@@ -178,10 +178,7 @@ public class ComboBannerFragment extends Fragment {
 
             ensureParentView(false);
 
-            AdRequest adRequest = new AdRequest
-                    .Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .build();
+            AdRequest adRequest = new AdRequest.Builder().build();
             this.mAdView.setAdListener(new AdListener() {
                 @Override
                 public void onAdLoaded() {

@@ -6,6 +6,7 @@
 
     <string name="bl_common_menu_play_apps">Applications</string>
     <string name="bl_common_menu_upgrade">Upgrade the app</string>
+    <string name="bl_common_menu_upgrade_noads">Sponsoring options</string>
 
     <string name="bl_common_enjoy_prompt">Enjoying %s?</string>
     <string name="bl_common_enjoy_yes">Yes</string>
