@@ -67,6 +67,8 @@
     <string name="bl_upgrade_see_ads_title">Watch ads</string>
     <string name="bl_upgrade_see_ads_value">Click here and view an ad to get free hours without ads and limits.</string>
     <string name="bl_upgrade_see_ads_value_not_loaded">Click here and view an ad to get free hours without ads and limits.\n<font fgcolor='red'>Please wait until ad is loading.</font></string>
+    <string name="bl_upgrade_see_ads_value_noads">Click here and view our sponsor ad.</string>
+    <string name="bl_upgrade_see_ads_value_noads_not_loaded">Click here and view our sponsor ad.\n<font fgcolor='red'>Please wait until ad is loading.</font></string>
     <string name="bl_upgrade_buy_title">Upgrade</string>
     <string name="bl_upgrade_buy_value">Upgrade the application and enjoy it without limits and without ads.</string>
     <string name="bl_upgrade_expire_time">expire:</string>

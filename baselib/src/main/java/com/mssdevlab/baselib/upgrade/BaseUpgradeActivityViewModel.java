@@ -31,6 +31,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
     private final MutableLiveData<Boolean> mRewardedVideoLoaded = new MutableLiveData<>();
     private final MediatorLiveData<String> mCurModeText = new MediatorLiveData<>();
     private final MediatorLiveData<Integer> mAdsVisibilityValue = new MediatorLiveData<>();
+    private final MediatorLiveData<Integer> mSeeAdsText = new MediatorLiveData<>();
 
     private final String[] mAppModeNames;
     private final String mExpireName;
@@ -52,12 +53,39 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
             }
         });
 
-        mCurModeText.addSource(ApplicationData.getApplicationMode(), appMode -> {
-            composeModeText(appMode, ApplicationData.getExpireTime().getValue());
-        });
-        mCurModeText.addSource(ApplicationData.getExpireTime(), expireTime -> {
-            composeModeText(ApplicationData.getCurrentApplicationMode(), expireTime);
-        });
+        mCurModeText.addSource(ApplicationData.getApplicationMode(),
+                appMode -> composeModeText(appMode, ApplicationData.getExpireTime().getValue()));
+        mCurModeText.addSource(ApplicationData.getExpireTime(),
+                expireTime -> composeModeText(ApplicationData.getCurrentApplicationMode(), expireTime));
+
+        mSeeAdsText.addSource(ApplicationData.getApplicationMode(),
+                appMode -> composeSeeAdsText(appMode, this.mRewardedVideoLoaded.getValue()));
+        mSeeAdsText.addSource(this.mRewardedVideoLoaded,
+                adsLoaded -> composeSeeAdsText(ApplicationData.getCurrentApplicationMode(), adsLoaded));
+    }
+
+    private void composeSeeAdsText(@Nullable AppMode mode, @Nullable Boolean adsLoaded){
+        if (mode == null){
+            mode = AppMode.MODE_DEMO;
+        }
+
+        if (adsLoaded == null){
+            adsLoaded = false;
+        }
+
+        if (mode == AppMode.MODE_NO_ADS || mode == AppMode.MODE_PRO){
+            if (adsLoaded) {
+                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value_noads);
+            } else {
+                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value_noads_not_loaded);
+            }
+        } else {
+            if (adsLoaded) {
+                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value);
+            } else {
+                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value_not_loaded);
+            }
+        }
     }
 
     private void composeModeText(@Nullable AppMode mode, @Nullable Long expireTime){
@@ -106,25 +134,19 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
     }
 
     public LiveData<Integer> getSeeAdsText(){
-        return Transformations.map(this.mRewardedVideoLoaded,
-                val -> {
-                    if (val) {
-                        return R.string.bl_upgrade_see_ads_value;
-                    }
-                    return R.string.bl_upgrade_see_ads_value_not_loaded;
-                });
+        return mSeeAdsText;
     }
 
     public LiveData<Integer> getAdsVisibilityValue(){
         return mAdsVisibilityValue;
     }
 
-    public LiveData<Event<RewardedVideoEvent>> getShowRewardedVideo(){
-        return mShowRewardedvideo;
-    }
-
     public void onSeeRewardedAds(){
         this.mShowRewardedvideo.setValue(new Event<>(RewardedVideoEvent.SHOW));
+    }
+
+    LiveData<Event<RewardedVideoEvent>> getShowRewardedVideo(){
+        return mShowRewardedvideo;
     }
 
     /************************************************************************************
