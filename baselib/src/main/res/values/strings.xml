@@ -26,10 +26,10 @@
     <string name="bl_ads_continue_button_title">Continue in the %1$s mode</string>
 
     <string-array name="bl_common_app_mode_array">
-        <item>Demo</item>
+        <item>Demo mode</item>
         <item>Trial</item>
         <item>No ads</item>
-        <item>Pro</item>
+        <item>Pro mode</item>
     </string-array>
 
     <string-array name="bl_ads_restriction_message_array">
@@ -65,13 +65,15 @@
     <string name="bl_upgrade_invite_title">Invite friends</string>
     <string name="bl_upgrade_invite_value">Invite a friend and you both get a two-weeks free trial estimate.</string>
     <string name="bl_upgrade_see_ads_title">Watch ads</string>
-    <string name="bl_upgrade_see_ads_value">Click here and view an ad to get free hours without ads and limits.</string>
-    <string name="bl_upgrade_see_ads_value_not_loaded">Click here and view an ad to get free hours without ads and limits.\n<font fgcolor='red'>Please wait until ad is loading.</font></string>
+    <string name="bl_upgrade_see_ads_value">Click here and view an ad to get some free hours without ads and limits.</string>
+    <string name="bl_upgrade_see_ads_value_not_loaded">Click here and view an ad to get some free hours without ads and limits.\n<font fgcolor='red'>Please wait until ad is loading.</font></string>
     <string name="bl_upgrade_see_ads_value_noads">Click here and view our sponsor ad.</string>
     <string name="bl_upgrade_see_ads_value_noads_not_loaded">Click here and view our sponsor ad.\n<font fgcolor='red'>Please wait until ad is loading.</font></string>
     <string name="bl_upgrade_buy_title">Upgrade</string>
     <string name="bl_upgrade_buy_value">Upgrade the application and enjoy it without limits and without ads.</string>
     <string name="bl_upgrade_expire_time">expire:</string>
+    <string name="bl_title_activity_upgrade">Upgrade application</string>
+    <string name="bl_title_activity_sponsoring">Sponsoring options</string>
 
     <string name="bl_gp_error_text">Google play services are not available. Please, setup google play services properly and restart the application.</string>
 

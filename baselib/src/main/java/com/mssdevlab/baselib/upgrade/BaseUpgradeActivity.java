@@ -3,6 +3,7 @@ package com.mssdevlab.baselib.upgrade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,11 +37,19 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         binding.setViewModelMain(viewModel);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
         if (ab != null){
             ab.setDisplayHomeAsUpEnabled(true);
+            viewModel.getAdsVisibilityValue().observe(this, adsVisibility -> {
+                if (adsVisibility != null && adsVisibility == View.GONE){
+                    ab.setTitle(R.string.bl_title_activity_sponsoring);
+                } else {
+                    ab.setTitle(R.string.bl_title_activity_upgrade);
+                }
+            });
         }
 
         // Setup the banner

@@ -94,7 +94,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
         }
         String curModeText = this.mAppModeNames[mode.ordinal()];
         Long nowMS = System.currentTimeMillis();
-        if (expireTime != null && nowMS < expireTime){
+        if ((mode == AppMode.MODE_EVALUATION || mode == AppMode.MODE_NO_ADS) && expireTime != null && nowMS < expireTime){
             curModeText += ", " + this.mExpireName + " " +
             DateFormat
                     .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
