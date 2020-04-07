@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <variable name="viewModel" type="com.mssdevlab.baselib.upgrade.UpgradeOptionsViewModel"/>
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/bl_item_spacing_vertical_4"
+        android:paddingBottom="@dimen/bl_item_spacing_vertical_4"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/blUpgaModeTitle"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
+            android:layout_marginLeft="@dimen/bl_item_spacing_horizontal"
+            android:layout_marginRight="@dimen/bl_item_spacing_horizontal"
+            android:layout_marginStart="@dimen/bl_item_spacing_horizontal"
+            android:text="options loaded"
+            tools:text="Free trial, expire: 31.10.2029"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/blUpgaUpgradeOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
+            android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
+            app:setAdapter="@{viewModel.getAdapter()}" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

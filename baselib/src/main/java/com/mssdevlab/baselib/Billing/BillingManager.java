@@ -64,6 +64,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
     public void querySkuDetails(final List<String> prodSkuList, final List<String> subsSkuList) {
         mSkuDetails.clear();    // TODO: redesign the sku details retrieve
+
         querySkuDetailsAsync(BillingClient.SkuType.INAPP, prodSkuList, new SkuDetailsResponseListener() {
             @Override
             public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
@@ -74,7 +75,7 @@ public class BillingManager implements PurchasesUpdatedListener {
             }
         });
 
-        querySkuDetailsAsync(BillingClient.SkuType.SUBS, prodSkuList, new SkuDetailsResponseListener() {
+        querySkuDetailsAsync(BillingClient.SkuType.SUBS, subsSkuList, new SkuDetailsResponseListener() {
             @Override
             public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK){

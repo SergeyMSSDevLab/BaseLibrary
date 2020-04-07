@@ -17,9 +17,9 @@ import java.util.List;
 public class UpgradeOptionsAdapter extends RecyclerView.Adapter<UpgradeOptionsAdapter.GenericViewHolder> {
     private int mLayoutId;
     private List<UpgradeOptionModel> mOptions;
-    private BaseUpgradeActivityViewModel mViewModel;
+    private UpgradeOptionsViewModel mViewModel;
 
-    public UpgradeOptionsAdapter(@LayoutRes int layoutId, BaseUpgradeActivityViewModel viewModel) {
+    public UpgradeOptionsAdapter(@LayoutRes int layoutId, UpgradeOptionsViewModel viewModel) {
         this.mLayoutId = layoutId;
         this.mViewModel = viewModel;
     }
@@ -70,7 +70,7 @@ public class UpgradeOptionsAdapter extends RecyclerView.Adapter<UpgradeOptionsAd
             this.mBinding = binding;
         }
 
-        void bind(BaseUpgradeActivityViewModel viewModel, Integer position) {
+        void bind(UpgradeOptionsViewModel viewModel, Integer position) {
             mBinding.setVariable(BR.viewModel, viewModel);
             mBinding.setVariable(BR.position, position);
             mBinding.executePendingBindings();

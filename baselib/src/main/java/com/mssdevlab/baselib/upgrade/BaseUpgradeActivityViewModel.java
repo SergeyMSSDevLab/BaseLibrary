@@ -23,12 +23,9 @@ import com.mssdevlab.baselib.common.Event;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedVideoAdListener {
-    private static final String LOG_TAG = "UpgradeViewModel";
-    private UpgradeOptionsAdapter mUpgradeOptionsAdapter;
-    public MutableLiveData<UpgradeOptionModel> mSelected;
+    private static final String LOG_TAG = "U_ActivityViewModel";
 
     private final MutableLiveData<Event<RewardedVideoEvent>> mShowRewardedvideo = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mRewardedVideoLoaded = new MutableLiveData<>();
@@ -38,6 +35,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
 
     private final String[] mAppModeNames;
     private final String mExpireName;
+    private UpgradeOptionsViewModel mOptionsViewModel;
 
     public BaseUpgradeActivityViewModel() {
         Log.v(LOG_TAG, "Constructor");
@@ -65,7 +63,6 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
                 appMode -> composeSeeAdsText(appMode, this.mRewardedVideoLoaded.getValue()));
         mSeeAdsText.addSource(this.mRewardedVideoLoaded,
                 adsLoaded -> composeSeeAdsText(ApplicationData.getCurrentApplicationMode(), adsLoaded));
-        mUpgradeOptionsAdapter = new UpgradeOptionsAdapter(R.layout.view_upgrade_option, this);
     }
 
     private void composeSeeAdsText(@Nullable AppMode mode, @Nullable Boolean adsLoaded){
@@ -153,29 +150,13 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
         return mShowRewardedvideo;
     }
 
-    public UpgradeOptionsAdapter getAdapter() {
-        return mUpgradeOptionsAdapter;
+    public void setOptionsViewModel(UpgradeOptionsViewModel model){
+        this.mOptionsViewModel = model;
     }
 
-    public void setUpgradeOptionsInAdapter(List<UpgradeOptionModel> options) {
-        this.mUpgradeOptionsAdapter.setOptions(options);
-        this.mUpgradeOptionsAdapter.notifyDataSetChanged();
+    public UpgradeOptionsViewModel getOptionsViewModel(){
+        return mOptionsViewModel;
     }
-
-    public MutableLiveData<UpgradeOptionModel> getSelected() {
-        return mSelected;
-    }
-
-    public void onItemClick(Integer index) {
-        Log.v(LOG_TAG, "onItemClick: " + index.toString());
-        UpgradeOptionModel db = getOptionAt(index);
-        mSelected.setValue(db);
-    }
-
-    public UpgradeOptionModel getOptionAt(Integer index) {
-        return mUpgradeOptionsAdapter.getItemAt(index);
-    }
-
 
     /************************************************************************************
     * RewardedVideoAdListener implementation

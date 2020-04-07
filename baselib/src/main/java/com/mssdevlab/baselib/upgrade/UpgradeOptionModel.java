@@ -2,13 +2,22 @@ package com.mssdevlab.baselib.upgrade;
 
 import androidx.databinding.BaseObservable;
 
-public class UpgradeOptionModel extends BaseObservable {
-    private String mOptionTitle;
+import com.android.billingclient.api.SkuDetails;
 
-    public void setTitle(String title) {
-        this.mOptionTitle = title;
+public class UpgradeOptionModel extends BaseObservable {
+    private SkuDetails mSkuDetails;
+
+    public UpgradeOptionModel(SkuDetails skuDetails){
+        this.mSkuDetails = skuDetails;
     }
+
     public String getTitle() {
-        return mOptionTitle;
+        String temp = this.mSkuDetails.getTitle();
+        return temp;
+    }
+
+    public String getDescription() {
+        String temp = this.mSkuDetails.getDescription();
+        return temp;
     }
 }

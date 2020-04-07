@@ -39,15 +39,14 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
         ViewModelProvider provider = new ViewModelProvider(this);
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
+        viewModel.setOptionsViewModel(provider.get(UpgradeOptionsViewModel.class));
         binding.setViewModelMain(viewModel);
         BillingData.getSkuDetails().observe(this, skuDetails -> {
             ArrayList<UpgradeOptionModel> options = new ArrayList<>();
             for (SkuDetails d : skuDetails){
-                UpgradeOptionModel o = new UpgradeOptionModel();
-                o.setTitle(d.getTitle());
-                options.add(o);
+                options.add(new UpgradeOptionModel(d));
             }
-            viewModel.setUpgradeOptionsInAdapter(options);
+            viewModel.getOptionsViewModel().setUpgradeOptionsInAdapter(options);
         });
 
         Toolbar toolbar = binding.toolbar;
