@@ -41,6 +41,7 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         viewModel.setOptionsViewModel(provider.get(UpgradeOptionsViewModel.class));
         binding.setViewModelMain(viewModel);
+
         BillingData.getSkuDetails().observe(this, skuDetails -> {
             ArrayList<UpgradeOptionModel> options = new ArrayList<>();
             for (SkuDetails d : skuDetails){
@@ -48,7 +49,7 @@ public class BaseUpgradeActivity extends AppCompatActivity {
             }
             viewModel.getOptionsViewModel().setUpgradeOptionsInAdapter(options);
         });
-
+// todo: initiate the sku loading there ????
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
