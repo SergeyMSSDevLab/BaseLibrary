@@ -14,14 +14,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.billingclient.api.SkuDetails;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.mssdevlab.baselib.BaseApplication;
+import com.mssdevlab.baselib.Billing.BillingData;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.ComboBannerFragment;
 import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.databinding.ActivityUpgradeBinding;
+
+import java.util.ArrayList;
 
 public class BaseUpgradeActivity extends AppCompatActivity {
 
@@ -36,7 +40,15 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         ViewModelProvider provider = new ViewModelProvider(this);
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         binding.setViewModelMain(viewModel);
-
+        BillingData.getSkuDetails().observe(this, skuDetails -> {
+            ArrayList<UpgradeOptionModel> options = new ArrayList<>();
+            for (SkuDetails d : skuDetails){
+                UpgradeOptionModel o = new UpgradeOptionModel();
+                o.setTitle(d.getTitle());
+                options.add(o);
+            }
+            viewModel.setUpgradeOptionsInAdapter(options);
+        });
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);

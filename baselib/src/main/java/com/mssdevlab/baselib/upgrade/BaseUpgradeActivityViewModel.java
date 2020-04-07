@@ -23,9 +23,12 @@ import com.mssdevlab.baselib.common.Event;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedVideoAdListener {
     private static final String LOG_TAG = "UpgradeViewModel";
+    private UpgradeOptionsAdapter mUpgradeOptionsAdapter;
+    public MutableLiveData<UpgradeOptionModel> mSelected;
 
     private final MutableLiveData<Event<RewardedVideoEvent>> mShowRewardedvideo = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mRewardedVideoLoaded = new MutableLiveData<>();
@@ -62,6 +65,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
                 appMode -> composeSeeAdsText(appMode, this.mRewardedVideoLoaded.getValue()));
         mSeeAdsText.addSource(this.mRewardedVideoLoaded,
                 adsLoaded -> composeSeeAdsText(ApplicationData.getCurrentApplicationMode(), adsLoaded));
+        mUpgradeOptionsAdapter = new UpgradeOptionsAdapter(R.layout.view_upgrade_option, this);
     }
 
     private void composeSeeAdsText(@Nullable AppMode mode, @Nullable Boolean adsLoaded){
@@ -148,6 +152,30 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
     LiveData<Event<RewardedVideoEvent>> getShowRewardedVideo(){
         return mShowRewardedvideo;
     }
+
+    public UpgradeOptionsAdapter getAdapter() {
+        return mUpgradeOptionsAdapter;
+    }
+
+    public void setUpgradeOptionsInAdapter(List<UpgradeOptionModel> options) {
+        this.mUpgradeOptionsAdapter.setOptions(options);
+        this.mUpgradeOptionsAdapter.notifyDataSetChanged();
+    }
+
+    public MutableLiveData<UpgradeOptionModel> getSelected() {
+        return mSelected;
+    }
+
+    public void onItemClick(Integer index) {
+        Log.v(LOG_TAG, "onItemClick: " + index.toString());
+        UpgradeOptionModel db = getOptionAt(index);
+        mSelected.setValue(db);
+    }
+
+    public UpgradeOptionModel getOptionAt(Integer index) {
+        return mUpgradeOptionsAdapter.getItemAt(index);
+    }
+
 
     /************************************************************************************
     * RewardedVideoAdListener implementation
