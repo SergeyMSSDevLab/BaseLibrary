@@ -13,9 +13,8 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="@dimen/card_radius"
         app:cardElevation="@dimen/card_elevation"
-        android:onClick="@{() -> viewModel.onItemClick(position)}"
-        android:clickable="true"
-        android:focusable="true"
+        android:clickable="false"
+        android:focusable="false"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginStart="@dimen/bl_item_spacing_horizontal_2"
         android:layout_marginLeft="@dimen/bl_item_spacing_horizontal_2"
@@ -60,7 +59,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/blUpgaUpgradeValue"
+                android:id="@+id/blUpgaUpgradeDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
@@ -70,6 +69,21 @@
                 app:layout_constraintLeft_toLeftOf="@+id/blUpgaUpgradeTitle"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/blUpgaUpgradeTitle"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/bl_item_spacing_horizontal"
+                android:layout_marginTop="@dimen/bl_item_spacing_vertical_4"
+                android:onClick="@{() -> viewModel.onItemClick(position)}"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@{viewModel.getOptionAt(position).priceTitle}"
+                tools:text="Buy for $10.23"
+                app:layout_constraintLeft_toLeftOf="@+id/blUpgaUpgradeDescription"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blUpgaUpgradeDescription"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

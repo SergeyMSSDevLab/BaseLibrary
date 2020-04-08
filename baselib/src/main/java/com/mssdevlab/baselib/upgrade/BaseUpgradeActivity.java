@@ -37,7 +37,7 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         ViewModelProvider provider = new ViewModelProvider(this);
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         viewModel.setOptionsViewModel(provider.get(UpgradeOptionsViewModel.class));
-        viewModel.getOptionsViewModel().attachActivity(this);
+        viewModel.getOptionsViewModel().attachActivity(this, this.getResources());
         binding.setViewModelMain(viewModel);
 
         BaseApplication app = BaseApplication.getInstance();
