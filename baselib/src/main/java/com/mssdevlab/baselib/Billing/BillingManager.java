@@ -20,14 +20,12 @@ import java.util.Set;
 
 public class BillingManager implements PurchasesUpdatedListener {
     private static final String LOG_TAG = "BillingManager";
-    private static String mBase64EncodedPublicKey;
 
     private BillingClient mBillingClient;
 
     private final BillingUpdatesListener mBillingUpdatesListener;
 
     private final List<Purchase> mPurchases = new ArrayList<>();
-    private final List<SkuDetails> mSkuDetails = new ArrayList<>();
 
     private Set<String> mTokensToBeConsumed;
 
@@ -44,9 +42,8 @@ public class BillingManager implements PurchasesUpdatedListener {
         void onSkuListUpdated(List<SkuDetails> skuDetailsList);
     }
 
-    public BillingManager(Context context, String publicKey, final BillingUpdatesListener updatesListener) {
+    BillingManager(Context context, final BillingUpdatesListener updatesListener) {
         Log.d(LOG_TAG, "Creating Billing client.");
-        mBase64EncodedPublicKey = publicKey;
         mBillingUpdatesListener = updatesListener;
         mBillingClient = BillingClient.newBuilder(context)
                 .enablePendingPurchases()
@@ -58,19 +55,14 @@ public class BillingManager implements PurchasesUpdatedListener {
         startServiceConnection(mBillingUpdatesListener::onBillingClientSetupFinished);
     }
 
-    private int getBillingClientResponseCode() {
-        return mBillingClientResponseCode;
-    }
-
-    public void querySkuDetails(final List<String> prodSkuList, final List<String> subsSkuList) {
-        mSkuDetails.clear();    // TODO: redesign the sku details retrieve
+    void querySkuDetails(final List<String> prodSkuList, final List<String> subsSkuList) {
 
         querySkuDetailsAsync(BillingClient.SkuType.INAPP, prodSkuList, new SkuDetailsResponseListener() {
             @Override
             public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
-                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK){
-                    mSkuDetails.addAll(list);
-                    mBillingUpdatesListener.onSkuListUpdated(mSkuDetails);
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+                        && list != null){
+                    mBillingUpdatesListener.onSkuListUpdated(list);
                 }
             }
         });
@@ -78,9 +70,9 @@ public class BillingManager implements PurchasesUpdatedListener {
         querySkuDetailsAsync(BillingClient.SkuType.SUBS, subsSkuList, new SkuDetailsResponseListener() {
             @Override
             public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
-                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK){
-                    mSkuDetails.addAll(list);
-                    mBillingUpdatesListener.onSkuListUpdated(mSkuDetails);
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+                        && list != null){
+                    mBillingUpdatesListener.onSkuListUpdated(list);
                 }
             }
         });
@@ -133,7 +125,7 @@ public class BillingManager implements PurchasesUpdatedListener {
         executeServiceRequest(queryToExecute);
     }
 
-    public boolean isServiceConnected(){
+    boolean isServiceConnected(){
         return mBillingClientResponseCode == BillingClient.BillingResponseCode.OK;
     }
 
@@ -213,7 +205,7 @@ public class BillingManager implements PurchasesUpdatedListener {
     }
 
     private void handlePurchase(Purchase purchase) {
-        if (!Security.verifyPurchase(purchase.getSku(), mBase64EncodedPublicKey, purchase.getOriginalJson(), purchase.getSignature())) {
+        if (!Security.verifyPurchase(purchase.getSku(), "mBase64EncodedPublicKey", purchase.getOriginalJson(), purchase.getSignature())) {
             Log.i(LOG_TAG, "Got a purchase: " + purchase + "; but signature is bad. Skipping...");
             return;
         }

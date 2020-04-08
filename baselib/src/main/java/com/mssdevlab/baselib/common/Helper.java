@@ -9,14 +9,14 @@ import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Common Helpers
@@ -151,5 +151,12 @@ public class Helper {
         } else {
             field.postValue(value);
         }
+    }
+
+    public static <T> T getValueOrDefault(T value, BlSupplier<T> fnDefault) {
+        return value == null ? fnDefault.get() : value;
+    }
+    public interface BlSupplier<R>{
+        R get();
     }
 }

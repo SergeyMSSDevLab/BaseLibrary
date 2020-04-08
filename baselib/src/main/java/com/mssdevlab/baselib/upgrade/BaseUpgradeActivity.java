@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.billingclient.api.SkuDetails;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -24,8 +23,6 @@ import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.ComboBannerFragment;
 import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.databinding.ActivityUpgradeBinding;
-
-import java.util.ArrayList;
 
 public class BaseUpgradeActivity extends AppCompatActivity {
 
@@ -40,16 +37,13 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         ViewModelProvider provider = new ViewModelProvider(this);
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         viewModel.setOptionsViewModel(provider.get(UpgradeOptionsViewModel.class));
+        viewModel.getOptionsViewModel().attachActivity(this);
         binding.setViewModelMain(viewModel);
 
-        BillingData.getSkuDetails().observe(this, skuDetails -> {
-            ArrayList<UpgradeOptionModel> options = new ArrayList<>();
-            for (SkuDetails d : skuDetails){
-                options.add(new UpgradeOptionModel(d));
-            }
-            viewModel.getOptionsViewModel().setUpgradeOptionsInAdapter(options);
-        });
-// todo: initiate the sku loading there ????
+        BaseApplication app = BaseApplication.getInstance();
+        // request code is not used
+        BillingData.loadSku(this, 0, app.getSubscriptionSkus(), app.getProductSkus());
+
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();

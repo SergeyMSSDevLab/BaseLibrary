@@ -36,13 +36,13 @@ public class AmApp extends BaseApplication {
 
     @NonNull
     @Override
-    protected List<String> getProductSkus() {
+    public List<String> getProductSkus() {
         return  Arrays.asList("android.test.purchased", "android.test.canceled", "android.test.item_unavailable");
     }
 
     @NonNull
     @Override
-    protected List<String> getSubscriptionSkus() {
+    public List<String> getSubscriptionSkus() {
         return Collections.emptyList();
     }
 

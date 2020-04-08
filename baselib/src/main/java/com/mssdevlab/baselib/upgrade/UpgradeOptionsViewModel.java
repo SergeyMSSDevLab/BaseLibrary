@@ -3,11 +3,14 @@ package com.mssdevlab.baselib.upgrade;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 
+import com.android.billingclient.api.SkuDetails;
+import com.mssdevlab.baselib.Billing.BillingData;
 import com.mssdevlab.baselib.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class UpgradeOptionsViewModel extends ViewModel {
     private static final String LOG_TAG = "U_OptionsViewModel";
@@ -18,13 +21,19 @@ public class UpgradeOptionsViewModel extends ViewModel {
         mUpgradeOptionsAdapter = new UpgradeOptionsAdapter(R.layout.view_option_upgrade, this);
     }
 
-    public UpgradeOptionsAdapter getAdapter() {
-        return mUpgradeOptionsAdapter;
+    public void attachActivity(LifecycleOwner lifecycleOwner){
+        BillingData.getSkuDetails().observe(lifecycleOwner, skuDetails -> {
+            ArrayList<UpgradeOptionModel> options = new ArrayList<>();
+            for (SkuDetails d : skuDetails){
+                options.add(new UpgradeOptionModel(d));
+            }
+            this.mUpgradeOptionsAdapter.setOptions(options);
+            this.mUpgradeOptionsAdapter.notifyDataSetChanged();
+        });
     }
 
-    public void setUpgradeOptionsInAdapter(List<UpgradeOptionModel> options) {
-        this.mUpgradeOptionsAdapter.setOptions(options);
-        this.mUpgradeOptionsAdapter.notifyDataSetChanged();
+    public UpgradeOptionsAdapter getAdapter() {
+        return mUpgradeOptionsAdapter;
     }
 
     public void onItemClick(@NonNull Integer index) {

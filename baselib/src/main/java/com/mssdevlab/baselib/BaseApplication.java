@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
-import com.mssdevlab.baselib.Billing.BillingData;
 import com.mssdevlab.baselib.common.ErrorActivity;
 import com.mssdevlab.baselib.common.GPErrorActivity;
 import com.mssdevlab.baselib.common.Helper;
@@ -73,7 +72,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        BillingData.setUpBilling(getPublicKey(), getSubscriptionSkus(), getProductSkus());
+        // todo: load puchases here BillingData.setUpBilling(getPublicKey(), getSubscriptionSkus(), getProductSkus());
 
         new Thread(() -> {
             try {
@@ -127,10 +126,10 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     protected abstract String getPublicKey();
 
     @NonNull
-    protected abstract List<String> getProductSkus();
+    public abstract List<String> getProductSkus();
 
     @NonNull
-    protected abstract List<String> getSubscriptionSkus();
+    public abstract List<String> getSubscriptionSkus();
 
     @CallSuper
     protected void initApplicationInBackground(){

@@ -19,47 +19,30 @@ import java.util.List;
 public class BillingData {
     private static final String LOG_TAG = "BillingData";
 
-    private static String sPublicKey;
-    private static List<String> sProdSkus;
-    private static List<String> sSubSkus;
-
     private static final MutableLiveData<List<Purchase>> sAppPurchases = new MutableLiveData<>();
-    private static final MutableLiveData<Boolean> sCanPurchase = new MutableLiveData<>();
     private static final MutableLiveData<List<SkuDetails>> sSkuDetails = new MutableLiveData<>();
     private  static BillingManager sBillingManager;
 
     @UiThread
-    public static void setUpBilling(@NonNull String publicKey,
-                                      @NonNull List<String> subscriptionsSkus,
-                                      @NonNull List<String> productsSkus){
-        sPublicKey = publicKey;
-        sProdSkus = productsSkus;
-        sSubSkus = subscriptionsSkus;
+    public static void loadSku(Activity activity,
+                            int requestCode,
+                            @NonNull List<String> subscriptionsSkus,
+                            @NonNull List<String> productsSkus){
 
-        getBillindData(null, 0);
-    }
-
-    public static void getBillindData(Activity activity, int requestCode){
-        setCanPurchase(false);
         if (BaseApplication.checkPlayServices(activity, requestCode)){
             Log.v(LOG_TAG, "Play Services ok");
+            setSkuDetails(new ArrayList<>());
+            SkuDetailsListener listener = new SkuDetailsListener(productsSkus, subscriptionsSkus);
 
             if (sBillingManager == null){
-                sBillingManager = new BillingManager(BaseApplication.getInstance(), sPublicKey, new BillingListener());
+                sBillingManager = new BillingManager(activity, listener);
+            } else {
+                listener.onBillingClientSetupFinished();
             }
         }
         else {
             Log.v(LOG_TAG, "Play Services not available");
         }
-    }
-
-    @NonNull
-    public static LiveData<Boolean> getCanPurchase(){
-        Log.v(LOG_TAG, "sCanPurchase hasActiveObservers: " + sCanPurchase.hasActiveObservers());
-        return sCanPurchase;
-    }
-    private static void setCanPurchase(Boolean val){
-        Helper.setValue(sCanPurchase, val);
     }
 
     @NonNull
@@ -88,17 +71,30 @@ public class BillingData {
     private static void setSkuDetails(List<SkuDetails> val){
         Helper.setValue(sSkuDetails, val);
     }
+    private static void addSkuDetails(List<SkuDetails> val){
+        ArrayList<SkuDetails> list = new ArrayList<>(
+                Helper.getValueOrDefault(sSkuDetails.getValue(), ArrayList::new));
+        list.addAll(val);
+        setSkuDetails(list);
+    }
 
-    private static class BillingListener implements BillingManager.BillingUpdatesListener {
+    private static class SkuDetailsListener implements BillingManager.BillingUpdatesListener {
+        private List<String> mProdSkus;
+        private List<String> mSubSkus;
+
+        SkuDetailsListener(List<String> prods, List<String> subs){
+            this.mProdSkus = prods;
+            this.mSubSkus = subs;
+        }
 
         @Override
         public void onBillingClientSetupFinished() {
             if(sBillingManager.isServiceConnected()){
-                setCanPurchase(true);
                 Log.d(LOG_TAG, "Setup successful. Querying inventory.");
-                sBillingManager.queryPurchasesAsync();
+                // todo: move this to separate listener sBillingManager.queryPurchasesAsync();
+
                 Log.d(LOG_TAG, "Querying Sku details.");
-                sBillingManager.querySkuDetails(sProdSkus, sSubSkus);
+                sBillingManager.querySkuDetails(mProdSkus, mSubSkus);
             }
         }
 
@@ -115,7 +111,7 @@ public class BillingData {
 
         @Override
         public void onSkuListUpdated(List<SkuDetails> details) {
-            setSkuDetails(details);
+            addSkuDetails(details);
         }
     }
 }
