@@ -32,15 +32,20 @@ public class BaseUpgradeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        BaseApplication app = BaseApplication.getInstance();
+
         ActivityUpgradeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_upgrade);
         binding.setLifecycleOwner(this);
         ViewModelProvider provider = new ViewModelProvider(this);
         BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
         viewModel.setOptionsViewModel(provider.get(UpgradeOptionsViewModel.class));
         viewModel.getOptionsViewModel().attachActivity(this, this.getResources());
+        viewModel.getOptionsViewModel().getSelectedDetails().observe(this, details -> {
+            if (details != null){
+                BillingData.startPurchase(this, details, app.getPublicKey());
+            }
+        });
         binding.setViewModelMain(viewModel);
-
-        BaseApplication app = BaseApplication.getInstance();
         // request code is not used
         BillingData.loadSku(this, 0, app.getSubscriptionSkus(), app.getProductSkus());
 

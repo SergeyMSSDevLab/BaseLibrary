@@ -5,16 +5,20 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.billingclient.api.SkuDetails;
 import com.mssdevlab.baselib.Billing.BillingData;
 import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.common.Helper;
 
 import java.util.ArrayList;
 
 public class UpgradeOptionsViewModel extends ViewModel {
     private static final String LOG_TAG = "U_OptionsViewModel";
+
+    private MutableLiveData<SkuDetails> mSelectedDetails = new MutableLiveData<>();
 
     private UpgradeOptionsAdapter mUpgradeOptionsAdapter;
 
@@ -37,9 +41,13 @@ public class UpgradeOptionsViewModel extends ViewModel {
         return mUpgradeOptionsAdapter;
     }
 
+    public MutableLiveData<SkuDetails> getSelectedDetails(){
+        return this.mSelectedDetails;
+    }
+
     public void onItemClick(@NonNull Integer index) {
         Log.v(LOG_TAG, "onItemClick: " + index.toString());
-        //UpgradeOptionModel db = getOptionAt(index);
+        Helper.setValue(this.mSelectedDetails, getOptionAt(index).getSkuDetails());
     }
 
     public UpgradeOptionModel getOptionAt(Integer index) {

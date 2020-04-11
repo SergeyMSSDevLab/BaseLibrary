@@ -123,7 +123,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
     }
 
     @NonNull
-    protected abstract String getPublicKey();
+    public abstract String getPublicKey();
 
     @NonNull
     public abstract List<String> getProductSkus();

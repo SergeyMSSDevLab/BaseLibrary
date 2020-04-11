@@ -2,6 +2,7 @@ package com.mssdevlab.baselib.upgrade;
 
 import android.content.res.Resources;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 
 import com.android.billingclient.api.SkuDetails;
@@ -11,7 +12,7 @@ public class UpgradeOptionModel extends BaseObservable {
     private final SkuDetails mSkuDetails;
     private final String mPriceTitle;
 
-    UpgradeOptionModel(final SkuDetails skuDetails, final Resources res){
+    UpgradeOptionModel(@NonNull final SkuDetails skuDetails, @NonNull final Resources res){
         this.mSkuDetails = skuDetails;
         this.mPriceTitle = res.getString(R.string.bl_upgrade_price_title,
                 this.mSkuDetails.getOriginalPrice());
@@ -27,4 +28,7 @@ public class UpgradeOptionModel extends BaseObservable {
 
     public String getPriceTitle() {
         return this.mPriceTitle;
-    }}
+    }
+
+    public SkuDetails getSkuDetails() { return this.mSkuDetails; }
+}

@@ -30,7 +30,7 @@ public class AmApp extends BaseApplication {
 
     @NonNull
     @Override
-    protected String getPublicKey() {
+    public String getPublicKey() {
         return "samplePublicKey";
     }
 

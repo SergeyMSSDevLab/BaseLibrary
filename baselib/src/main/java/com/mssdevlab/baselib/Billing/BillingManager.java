@@ -1,5 +1,6 @@
 package com.mssdevlab.baselib.Billing;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -7,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
@@ -16,18 +18,15 @@ import com.android.billingclient.api.SkuDetailsResponseListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class BillingManager implements PurchasesUpdatedListener {
     private static final String LOG_TAG = "BillingManager";
 
     private BillingClient mBillingClient;
+    private String mBase64EncodedPublicKey;
 
     private final BillingUpdatesListener mBillingUpdatesListener;
-
     private final List<Purchase> mPurchases = new ArrayList<>();
-
-    private Set<String> mTokensToBeConsumed;
 
     private int mBillingClientResponseCode = BillingClient.BillingResponseCode.SERVICE_DISCONNECTED;
 
@@ -186,10 +185,18 @@ public class BillingManager implements PurchasesUpdatedListener {
         });
     }
 
+    BillingResult startPurchase(Activity activity, SkuDetails skuDetails, String publicKey){
+        this.mBase64EncodedPublicKey = publicKey;
+        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(skuDetails)
+                .build();
+        return mBillingClient.launchBillingFlow(activity, flowParams);
+    }
+
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
         int resultCode = billingResult.getResponseCode();
-        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+        if (resultCode == BillingClient.BillingResponseCode.OK) {
             if (purchases != null){
                 for (Purchase purchase : purchases) {
                     handlePurchase(purchase);
@@ -205,7 +212,7 @@ public class BillingManager implements PurchasesUpdatedListener {
     }
 
     private void handlePurchase(Purchase purchase) {
-        if (!Security.verifyPurchase(purchase.getSku(), "mBase64EncodedPublicKey", purchase.getOriginalJson(), purchase.getSignature())) {
+        if (!Security.verifyPurchase(purchase.getSku(), mBase64EncodedPublicKey, purchase.getOriginalJson(), purchase.getSignature())) {
             Log.i(LOG_TAG, "Got a purchase: " + purchase + "; but signature is bad. Skipping...");
             return;
         }
