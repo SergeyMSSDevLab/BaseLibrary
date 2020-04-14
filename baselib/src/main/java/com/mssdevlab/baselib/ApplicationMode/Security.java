@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.mssdevlab.baselib.Billing;
+package com.mssdevlab.baselib.ApplicationMode;
 
 import android.text.TextUtils;
 import android.util.Base64;

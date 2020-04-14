@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.Billing;
+package com.mssdevlab.baselib.ApplicationMode;
 
 import android.app.Activity;
 import android.util.Log;
@@ -17,24 +17,26 @@ import com.mssdevlab.baselib.common.Helper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillingData {
+class BillingData {
     private static final String LOG_TAG = "BillingData";
 
     private static final MutableLiveData<List<Purchase>> sAppPurchases = new MutableLiveData<>();
     private static final MutableLiveData<List<SkuDetails>> sSkuDetails = new MutableLiveData<>();
-    private  static BillingManager sBillingManager;
 
-    @UiThread
-    public static void startPurchase(Activity activity, SkuDetails skuDetails, String publicKey){
+    private  static BillingManager sPurchaseManager;
+    private  static BillingManager sSkuManager;
+    private  static BillingManager sInventoryManager;
+
+    static void loadPurchases(Activity activity, String publicKey){
         // todo handle request code
         if (BaseApplication.checkPlayServices(activity, 0)){
 
             Log.v(LOG_TAG, "Play Services ok");
-            PurchaseListener listener = new PurchaseListener(activity, skuDetails, publicKey);
-            if (sBillingManager == null){
-                sBillingManager = new BillingManager(activity, listener);
+            InventoryListener listener = new InventoryListener(publicKey);
+            if (sInventoryManager == null){
+                sInventoryManager = new BillingManager(activity, listener);
             } else {
-                listener.onBillingClientSetupFinished();
+                sInventoryManager.setUpdatesListener(listener);
             }
         }
         else {
@@ -43,7 +45,25 @@ public class BillingData {
     }
 
     @UiThread
-    public static void loadSku(Activity activity,
+    static void startPurchase(Activity activity, SkuDetails skuDetails, String publicKey){
+        // todo handle request code
+        if (BaseApplication.checkPlayServices(activity, 0)){
+
+            Log.v(LOG_TAG, "Play Services ok");
+            PurchaseListener listener = new PurchaseListener(activity, skuDetails, publicKey);
+            if (sPurchaseManager == null){
+                sPurchaseManager = new BillingManager(activity, listener);
+            } else {
+                sPurchaseManager.setUpdatesListener(listener);
+            }
+        }
+        else {
+            Log.v(LOG_TAG, "Play Services not available");
+        }
+    }
+
+    @UiThread
+    static void loadSku(Activity activity,
                             int requestCode,
                             @NonNull List<String> subscriptionsSkus,
                             @NonNull List<String> productsSkus){
@@ -53,10 +73,10 @@ public class BillingData {
             setSkuDetails(new ArrayList<>());
             SkuDetailsListener listener = new SkuDetailsListener(productsSkus, subscriptionsSkus);
 
-            if (sBillingManager == null){
-                sBillingManager = new BillingManager(activity, listener);
+            if (sSkuManager == null){
+                sSkuManager = new BillingManager(activity, listener);
             } else {
-                listener.onBillingClientSetupFinished();
+                sSkuManager.setUpdatesListener(listener);
             }
         }
         else {
@@ -65,26 +85,24 @@ public class BillingData {
     }
 
     @NonNull
-    public static LiveData<List<Purchase>> getAppPurchases(){
+    static LiveData<List<Purchase>> getAppPurchases(){
         Log.v(LOG_TAG, "getAppPurchases hasActiveObservers: " + sAppPurchases.hasActiveObservers());
         return sAppPurchases;
     }
     private static void setAppPurchases(List<Purchase> val){
-        // TODO: check purchases and save ofline information
+        // TODO: check purchase acknowledge and save ofline information
         Helper.setValue(sAppPurchases, val);
     }
-
-    @NonNull
-    public static List<Purchase> getCurrentAppPurchases(){
-        List<Purchase> purchases = sAppPurchases.getValue();
-        if (purchases == null){
-            purchases = new ArrayList<Purchase>();
-        }
-        return purchases;
+    private static void addAppPurchases(List<Purchase> val){
+        ArrayList<Purchase> list = new ArrayList<>(
+                Helper.getValueOrDefault(sAppPurchases.getValue(), ArrayList::new));
+        // todo: check if purchase already exists
+        list.addAll(val);
+        setAppPurchases(list);
     }
 
     @NonNull
-    public static LiveData<List<SkuDetails>> getSkuDetails(){
+    static LiveData<List<SkuDetails>> getSkuDetails(){
         Log.v(LOG_TAG, "sSkuDetails hasActiveObservers: " + sSkuDetails.hasActiveObservers());
         return sSkuDetails;
     }
@@ -109,9 +127,9 @@ public class BillingData {
 
         @Override
         public void onBillingClientSetupFinished() {
-            if(sBillingManager.isServiceConnected()){
+            if(sSkuManager.isServiceConnected()){
                 Log.d(LOG_TAG, "Setup successful. Querying Sku details.");
-                sBillingManager.querySkuDetails(mProdSkus, mSubSkus);
+                sSkuManager.querySkuDetails(mProdSkus, mSubSkus);
             }
         }
 
@@ -144,9 +162,9 @@ public class BillingData {
 
         @Override
         public void onBillingClientSetupFinished() {
-            if(sBillingManager.isServiceConnected()){
+            if(sPurchaseManager.isServiceConnected()){
                 Log.d(LOG_TAG, "Setup successful. Starting purchase flow.");
-                BillingResult result = sBillingManager.startPurchase(this.mActivity, this.mSkuDetails, this.mPublicKey);
+                BillingResult result = sPurchaseManager.startPurchase(this.mActivity, this.mSkuDetails, this.mPublicKey);
                 Log.d(LOG_TAG, "Purchase flow finished: " + result.getResponseCode());
             }
         }
@@ -158,7 +176,37 @@ public class BillingData {
 
         @Override
         public void onPurchasesUpdated(List<Purchase> purchases) {
-            // TODO: check if pending purchases are confirmed and confirm if needed
+            addAppPurchases(purchases);
+        }
+
+        @Override
+        public void onSkuListUpdated(List<SkuDetails> details) {
+        }
+    }
+
+    private static class InventoryListener implements BillingManager.BillingUpdatesListener {
+
+        private final String mPublicKey;
+
+        InventoryListener(String publicKey){
+            mPublicKey = publicKey;
+        }
+
+        @Override
+        public void onBillingClientSetupFinished() {
+            if(sInventoryManager.isServiceConnected()){
+                Log.d(LOG_TAG, "Setup successful. Getting inventory");
+                sInventoryManager.queryPurchases(this.mPublicKey);
+            }
+        }
+
+        @Override
+        public void onConsumeFinished(String token, int result) {
+
+        }
+
+        @Override
+        public void onPurchasesUpdated(List<Purchase> purchases) {
             setAppPurchases(purchases);
         }
 

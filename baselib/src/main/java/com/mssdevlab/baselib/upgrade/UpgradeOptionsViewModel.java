@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.billingclient.api.SkuDetails;
-import com.mssdevlab.baselib.Billing.BillingData;
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Helper;
 
@@ -27,7 +27,7 @@ public class UpgradeOptionsViewModel extends ViewModel {
     }
 
     void attachActivity(LifecycleOwner lifecycleOwner, Resources res){
-        BillingData.getSkuDetails().observe(lifecycleOwner, skuDetails -> {
+        AppViewModel.getSkuDetails().observe(lifecycleOwner, skuDetails -> {
             ArrayList<UpgradeOptionModel> options = new ArrayList<>();
             for (SkuDetails d : skuDetails){
                 options.add(new UpgradeOptionModel(d, res));
@@ -41,7 +41,7 @@ public class UpgradeOptionsViewModel extends ViewModel {
         return mUpgradeOptionsAdapter;
     }
 
-    public MutableLiveData<SkuDetails> getSelectedDetails(){
+    MutableLiveData<SkuDetails> getSelectedDetails(){
         return this.mSelectedDetails;
     }
 

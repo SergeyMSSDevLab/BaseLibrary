@@ -8,7 +8,9 @@ import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.factory.MenuItemProviders;
 
@@ -17,6 +19,8 @@ import com.mssdevlab.baselib.factory.MenuItemProviders;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String LOG_TAG = "BaseActivity";
+
+    private AppViewModel mAppViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +31,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         InterstitialManager.showInterstitialAd(this, true);
     }
 
+    public AppViewModel getAppViewModel(){
+        if (this.mAppViewModel == null){
+            BaseApplication ctx = BaseApplication.getInstance();
+            ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(ctx);
+            this.mAppViewModel = factory.create(AppViewModel.class);
+        }
+        return this.mAppViewModel;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "onResume started");
+        AppViewModel.loadPurchases(this);
     }
 
     protected void addCommonMenuItems(final Menu menu,

@@ -10,7 +10,6 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.Observer;
 
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
-import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
 import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.common.Event;
@@ -45,7 +44,7 @@ public class UpgradeMenuProvider extends MenuItemProvider {
             }
         };
 
-        ApplicationData.getApplicationMode().observe(activity, appMode -> {
+        activity.getAppViewModel().getApplicationMode().observe(activity, appMode -> {
             int menuTitle = resTitle;
             if (appMode == AppMode.MODE_PRO
                 || appMode == AppMode.MODE_NO_ADS) {

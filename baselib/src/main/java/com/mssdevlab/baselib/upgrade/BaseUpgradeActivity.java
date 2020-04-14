@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.BaseApplication;
-import com.mssdevlab.baselib.Billing.BillingData;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.ComboBannerFragment;
 import com.mssdevlab.baselib.ads.InterstitialManager;
@@ -32,8 +32,6 @@ public class BaseUpgradeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        BaseApplication app = BaseApplication.getInstance();
-
         ActivityUpgradeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_upgrade);
         binding.setLifecycleOwner(this);
         ViewModelProvider provider = new ViewModelProvider(this);
@@ -42,12 +40,13 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         viewModel.getOptionsViewModel().attachActivity(this, this.getResources());
         viewModel.getOptionsViewModel().getSelectedDetails().observe(this, details -> {
             if (details != null){
-                BillingData.startPurchase(this, details, app.getPublicKey());
+                AppViewModel.startPurchase(this, details);
             }
         });
+
         binding.setViewModelMain(viewModel);
         // request code is not used
-        BillingData.loadSku(this, 0, app.getSubscriptionSkus(), app.getProductSkus());
+        AppViewModel.loadSku(this, 0);
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
@@ -104,6 +103,7 @@ public class BaseUpgradeActivity extends AppCompatActivity {
     public void onResume() {
         mRewardedVideoAd.resume(this);
         super.onResume();
+        AppViewModel.loadPurchases(this);
     }
 
     @Override

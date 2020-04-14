@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.mssdevlab.baselib.BaseApplication;
 
-import androidx.annotation.NonNull;
-
 import static com.mssdevlab.baselib.BaseApplication.SHARED_PREF;
 
-public class AppModeManager {
+class AppModeManager {
     private static final String LOG_TAG = "AppModeManager";
     private static final String PREF_ALLOW_TRACKING_PARTICIPATED = "appModeManager.allowTrackingFirst";
     private static final String PREF_ALLOW_TRACKING_EXPIRE = "appModeManager.allowTrackingExpire";

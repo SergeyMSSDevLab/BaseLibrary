@@ -1,4 +1,4 @@
-package com.mssdevlab.baselib.Billing;
+package com.mssdevlab.baselib.ApplicationMode;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,13 +19,13 @@ import com.android.billingclient.api.SkuDetailsResponseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillingManager implements PurchasesUpdatedListener {
+class BillingManager implements PurchasesUpdatedListener {
     private static final String LOG_TAG = "BillingManager";
 
     private BillingClient mBillingClient;
     private String mBase64EncodedPublicKey;
 
-    private final BillingUpdatesListener mBillingUpdatesListener;
+    private BillingUpdatesListener mBillingUpdatesListener;
     private final List<Purchase> mPurchases = new ArrayList<>();
 
     private int mBillingClientResponseCode = BillingClient.BillingResponseCode.SERVICE_DISCONNECTED;
@@ -43,15 +43,62 @@ public class BillingManager implements PurchasesUpdatedListener {
 
     BillingManager(Context context, final BillingUpdatesListener updatesListener) {
         Log.d(LOG_TAG, "Creating Billing client.");
-        mBillingUpdatesListener = updatesListener;
         mBillingClient = BillingClient.newBuilder(context)
                 .enablePendingPurchases()
                 .setListener(this).build();
+        setUpdatesListener(updatesListener);
+    }
 
+    void setUpdatesListener(final BillingUpdatesListener updatesListener){
+        mBillingUpdatesListener = updatesListener;
         Log.d(LOG_TAG, "Starting setup.");
         // Start setup. This is asynchronous and the specified listener will be called
         // once setup completes.
         startServiceConnection(mBillingUpdatesListener::onBillingClientSetupFinished);
+
+    }
+
+    void queryPurchases(String publicKey) {
+        this.mBase64EncodedPublicKey = publicKey;
+        Runnable queryToExecute = () -> {
+            long time = System.currentTimeMillis();
+            Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+            Log.i(LOG_TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
+                    + "ms");
+            // If there are subscriptions supported, we add subscription rows as well
+            if (areSubscriptionsSupported()) {
+                Purchase.PurchasesResult subscriptionResult
+                        = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                Log.i(LOG_TAG, "Querying purchases and subscriptions elapsed time: "
+                        + (System.currentTimeMillis() - time) + "ms");
+                Log.i(LOG_TAG, "Querying subscriptions result code: "
+                        + subscriptionResult.getResponseCode()
+                        + " res: " + subscriptionResult.getPurchasesList().size());
+
+                if (subscriptionResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    purchasesResult.getPurchasesList().addAll(
+                            subscriptionResult.getPurchasesList());
+                } else {
+                    Log.e(LOG_TAG, "Got an error response trying to query subscription purchases");
+                }
+            } else if (purchasesResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                Log.i(LOG_TAG, "Skipped subscription purchases query since they are not supported");
+            } else {
+                Log.w(LOG_TAG, "queryPurchases() got an error response code: "
+                        + purchasesResult.getResponseCode());
+            }
+            onQueryPurchasesFinished(purchasesResult);
+        };
+
+        executeServiceRequest(queryToExecute);
+    }
+
+    BillingResult startPurchase(Activity activity, SkuDetails skuDetails, String publicKey){
+        this.mBase64EncodedPublicKey = publicKey;
+        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(skuDetails)
+                .build();
+        return mBillingClient.launchBillingFlow(activity, flowParams);
     }
 
     void querySkuDetails(final List<String> prodSkuList, final List<String> subsSkuList) {
@@ -88,40 +135,6 @@ public class BillingManager implements PurchasesUpdatedListener {
         };
 
         executeServiceRequest(queryRequest);
-    }
-
-    public void queryPurchasesAsync() {
-        Runnable queryToExecute = () -> {
-            long time = System.currentTimeMillis();
-            Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
-            Log.i(LOG_TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
-                    + "ms");
-            // If there are subscriptions supported, we add subscription rows as well
-            if (areSubscriptionsSupported()) {
-                Purchase.PurchasesResult subscriptionResult
-                        = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
-                Log.i(LOG_TAG, "Querying purchases and subscriptions elapsed time: "
-                        + (System.currentTimeMillis() - time) + "ms");
-                Log.i(LOG_TAG, "Querying subscriptions result code: "
-                        + subscriptionResult.getResponseCode()
-                        + " res: " + subscriptionResult.getPurchasesList().size());
-
-                if (subscriptionResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    purchasesResult.getPurchasesList().addAll(
-                            subscriptionResult.getPurchasesList());
-                } else {
-                    Log.e(LOG_TAG, "Got an error response trying to query subscription purchases");
-                }
-            } else if (purchasesResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                Log.i(LOG_TAG, "Skipped subscription purchases query since they are not supported");
-            } else {
-                Log.w(LOG_TAG, "queryPurchases() got an error response code: "
-                        + purchasesResult.getResponseCode());
-            }
-            onQueryPurchasesFinished(purchasesResult);
-        };
-
-        executeServiceRequest(queryToExecute);
     }
 
     boolean isServiceConnected(){
@@ -183,14 +196,6 @@ public class BillingManager implements PurchasesUpdatedListener {
                 mBillingClientResponseCode = BillingClient.BillingResponseCode.SERVICE_DISCONNECTED;
             }
         });
-    }
-
-    BillingResult startPurchase(Activity activity, SkuDetails skuDetails, String publicKey){
-        this.mBase64EncodedPublicKey = publicKey;
-        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetails)
-                .build();
-        return mBillingClient.launchBillingFlow(activity, flowParams);
     }
 
     @Override

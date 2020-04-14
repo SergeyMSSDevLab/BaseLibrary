@@ -14,7 +14,7 @@ buildscript {
         lifecycleVersion = '2.2.0'
         annotationVersion = '1.1.0'
         mobileAdsVersion = '19.0.1'
-        fireBaseAnalyticsVersion = '17.2.3'
+        fireBaseAnalyticsVersion = '17.3.0'
         constraintlayoutVersion = '2.0.0-beta4'
         materialVersion = '1.2.0-alpha05'
         appCompatVersion = '1.1.0'

@@ -1,13 +1,13 @@
 package com.mssdevlab.baselib.ads;
 
-import com.google.android.gms.ads.AdSize;
-import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
-import com.mssdevlab.baselib.common.Helper;
-import com.mssdevlab.baselib.common.ShowView;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.google.android.gms.ads.AdSize;
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
+import com.mssdevlab.baselib.common.Helper;
+import com.mssdevlab.baselib.common.ShowView;
 
 @SuppressWarnings("WeakerAccess")
 public class ComboBannerViewModel extends ViewModel {
@@ -25,7 +25,7 @@ public class ComboBannerViewModel extends ViewModel {
     }
 
     public LiveData<ShowView> getBannerShowMode(){
-        return ApplicationData.getBannerShowMode();
+        return AppViewModel.getBannerShowMode();
     }
 
     public String getAdUnitId() { return this.mAdUnitId; }

@@ -15,12 +15,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
-import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 
@@ -43,8 +44,16 @@ public class InterstitialManager {
     private static Observer<InterstitialAd> sAdObserver;
 
     public static boolean isAppModeAtLeast(AppCompatActivity activity, @NonNull AppMode minMode) {
-        AppMode mode = ApplicationData.getCurrentApplicationMode();
-        if (mode.ordinal() >= minMode.ordinal() ){
+        ViewModelProvider.AndroidViewModelFactory factory =
+                ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance());
+        AppViewModel viewModel = factory.create(AppViewModel.class);
+
+        AppMode mode = viewModel.getApplicationMode().getValue();
+        if (mode == null){
+            mode = AppMode.MODE_DEMO;
+        }
+
+        if (mode.ordinal() >= minMode.ordinal()){
             return true;
         }
 
@@ -60,7 +69,7 @@ public class InterstitialManager {
                         (dialog, id) -> {
                             showInterstitialAd(activity, false);
                             dialog.cancel();
-                }).show();
+                        }).show();
 
         return false;
     }
@@ -113,14 +122,22 @@ public class InterstitialManager {
     }
 
     private static void onAdLoadedInternal(final AppCompatActivity activity, final InterstitialAd ad, boolean showWarning){
-        AppMode mode = ApplicationData.getCurrentApplicationMode();
+        ViewModelProvider.AndroidViewModelFactory factory =
+                ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance());
+        AppViewModel viewModel = factory.create(AppViewModel.class);
+
+        AppMode mode = viewModel.getApplicationMode().getValue();
+        if (mode == null){
+            mode = AppMode.MODE_DEMO;
+        }
+
         if (mode.ordinal() < AppMode.MODE_NO_ADS.ordinal()) {
             long passedTime = System.currentTimeMillis() - sLastShownTime;
             Log.v(LOG_TAG, "onAdLoadedInternal passedTime > SHOWING_DELAY:" + (passedTime > SHOWING_DELAY));
-            if (passedTime > SHOWING_DELAY){
+            if (passedTime > SHOWING_DELAY) {
                 final SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
                 final Resources res = activity.getResources();
-                if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)){
+                if (showWarning && sharedPref.getBoolean(PREF_SHOW_MODE_WARNING, true)) {
                     View checkBoxView = View.inflate(activity, R.layout.checkbox, null);
                     CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
                     checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -141,10 +158,10 @@ public class InterstitialManager {
                             })
                             .setNegativeButton(res.getString(R.string.bl_ads_continue_button_title,
                                     res.getStringArray(R.array.bl_common_app_mode_array)[mode.ordinal()]),
-                                (dialog, id) -> {
-                                    showAdScreen(ad, sharedPref);
-                                    dialog.cancel();
-                            }).show();
+                                    (dialog, id) -> {
+                                        showAdScreen(ad, sharedPref);
+                                        dialog.cancel();
+                                    }).show();
                 } else {
                     showAdScreen(ad, sharedPref);
                 }
@@ -175,10 +192,13 @@ public class InterstitialManager {
 
     public static void enableAds(@StringRes int adUnitId){
         Log.v(LOG_TAG, "enableAds");
-        Context ctx = BaseApplication.getInstance();
+        BaseApplication ctx = BaseApplication.getInstance();
+        ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(ctx);
+        AppViewModel viewModel = factory.create(AppViewModel.class);
+
         Handler mainHandler = new Handler(ctx.getMainLooper());
         mainHandler.post(() -> {
-            ApplicationData.getApplicationMode().observeForever(appMode -> enableDisableAds(appMode, adUnitId));
+            viewModel.getApplicationMode().observeForever(appMode -> enableDisableAds(appMode, adUnitId));
             Log.v(LOG_TAG, "enableAds() appMode observer added");
         });
     }

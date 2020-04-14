@@ -11,15 +11,16 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
-import com.mssdevlab.baselib.ApplicationMode.AppModeManager;
-import com.mssdevlab.baselib.ApplicationMode.ApplicationData;
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Event;
+import com.mssdevlab.baselib.common.Helper;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -45,8 +46,11 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
         Resources res = BaseApplication.getInstance().getResources();
         this.mAppModeNames = res.getStringArray(R.array.bl_common_app_mode_array);
         this.mExpireName = res.getString(R.string.bl_upgrade_expire_time);
+        ViewModelProvider.AndroidViewModelFactory factory =
+                ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance());
+        AppViewModel viewModel = factory.create(AppViewModel.class);
 
-        mAdsVisibilityValue.addSource(ApplicationData.getApplicationMode(), appMode -> {
+        mAdsVisibilityValue.addSource(viewModel.getApplicationMode(), appMode -> {
             if (appMode == AppMode.MODE_NO_ADS || appMode == AppMode.MODE_PRO){
                 this.mAdsVisibilityValue.setValue(View.GONE);
             } else {
@@ -54,15 +58,15 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
             }
         });
 
-        mCurModeText.addSource(ApplicationData.getApplicationMode(),
-                appMode -> composeModeText(appMode, ApplicationData.getExpireTime().getValue()));
-        mCurModeText.addSource(ApplicationData.getExpireTime(),
-                expireTime -> composeModeText(ApplicationData.getCurrentApplicationMode(), expireTime));
+        mCurModeText.addSource(viewModel.getApplicationMode(),
+                appMode -> composeModeText(appMode, AppViewModel.getExpireTime().getValue()));
+        mCurModeText.addSource(AppViewModel.getExpireTime(),
+                expireTime -> composeModeText(viewModel.getApplicationMode().getValue(), expireTime));
 
-        mSeeAdsText.addSource(ApplicationData.getApplicationMode(),
+        mSeeAdsText.addSource(viewModel.getApplicationMode(),
                 appMode -> composeSeeAdsText(appMode, this.mRewardedVideoLoaded.getValue()));
         mSeeAdsText.addSource(this.mRewardedVideoLoaded,
-                adsLoaded -> composeSeeAdsText(ApplicationData.getCurrentApplicationMode(), adsLoaded));
+                adsLoaded -> composeSeeAdsText(viewModel.getApplicationMode().getValue(), adsLoaded));
     }
 
     private void composeSeeAdsText(@Nullable AppMode mode, @Nullable Boolean adsLoaded){
@@ -74,19 +78,21 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
             adsLoaded = false;
         }
 
+        int textResId;
         if (mode == AppMode.MODE_NO_ADS || mode == AppMode.MODE_PRO){
             if (adsLoaded) {
-                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value_noads);
+                textResId = R.string.bl_upgrade_see_ads_value_noads;
             } else {
-                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value_noads_not_loaded);
+                textResId = R.string.bl_upgrade_see_ads_value_noads_not_loaded;
             }
         } else {
             if (adsLoaded) {
-                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value);
+                textResId = R.string.bl_upgrade_see_ads_value;
             } else {
-                this.mSeeAdsText.setValue(R.string.bl_upgrade_see_ads_value_not_loaded);
+                textResId = R.string.bl_upgrade_see_ads_value_not_loaded;
             }
         }
+        Helper.setValue(this.mSeeAdsText, textResId);
     }
 
     private void composeModeText(@Nullable AppMode mode, @Nullable Long expireTime){
@@ -101,7 +107,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
                     .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
                     .format(new Date(expireTime));
         }
-        this.mCurModeText.setValue(curModeText);
+        Helper.setValue(this.mCurModeText, curModeText);
     }
 
     public LiveData<String> getCurrentModeText(){
@@ -109,7 +115,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
     }
 
     public LiveData<Integer> getAllowTrackingText(){
-        return Transformations.map(ApplicationData.getAllowTrackingParticipated(),
+        return Transformations.map(AppViewModel.getAllowTrackingParticipated(),
             val -> {
                 if (val) {
                     return R.string.bl_upgrade_track_value_done;
@@ -119,11 +125,11 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
     }
 
     public LiveData<Boolean> getAllowTracking(){
-        return ApplicationData.getAllowTracking();
+        return AppViewModel.getAllowTracking();
     }
 
     public void setAllowTracking(View view){
-        AppModeManager.setAllowTracking(((Switch) view).isChecked());
+        AppViewModel.setAllowTracking(((Switch) view).isChecked());
     }
 
     public void inviteFriend(){
@@ -150,7 +156,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
         return mShowRewardedvideo;
     }
 
-    public void setOptionsViewModel(UpgradeOptionsViewModel model){
+    void setOptionsViewModel(UpgradeOptionsViewModel model){
         this.mOptionsViewModel = model;
     }
 
@@ -184,7 +190,7 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
 
     @Override
     public void onRewarded(RewardItem rewardItem) {
-        AppModeManager.rewardUser(rewardItem);
+        AppViewModel.rewardUser(rewardItem);
     }
 
     @Override
