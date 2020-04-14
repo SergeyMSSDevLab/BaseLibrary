@@ -33,16 +33,20 @@ public class AppViewModel extends AndroidViewModel {
 
     private void initAppMode(){
         mAppMode.addSource(ApplicationData.getApplicationMode(),
-                appMode -> composeMode(appMode, null));
+                appMode -> composeMode(appMode, BillingData.getAppPurchases().getValue()));
         mAppMode.addSource(BillingData.getAppPurchases(),
                 purchases -> composeMode(ApplicationData.getCurrentApplicationMode(), purchases));
     }
 
     private void composeMode(@Nullable AppMode appMode, @Nullable List<Purchase> purchases){
         AppMode curMode = appMode;
-        if (purchases != null && purchases.size() > 0){
+        if (purchases != null && purchases.size() > 0){ // TODO: find a point for purchase validating
             curMode = AppMode.MODE_PRO;
+            if (!curMode.equals(appMode)){
+                AppModeManager.setProMode(true);
+            }
         }
+
         Helper.setValue(this.mAppMode, curMode);
     }
 

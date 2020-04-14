@@ -20,7 +20,7 @@ public class BannerShowModeLiveData extends MediatorLiveData<ShowView> {
         AppViewModel viewModel = factory.create(AppViewModel.class);
 
         this.addSource(PromoteManager.getShowPromo(),
-                aBoolean -> onAppMode(ApplicationData.getCurrentApplicationMode()) );
+                aBoolean -> onAppMode(viewModel.getApplicationMode().getValue()) );
         this.addSource(viewModel.getApplicationMode(), this::onAppMode);
     }
 

@@ -27,7 +27,7 @@ class AppModeManager {
     private static final long DAY_MS = HOUR_MS * 24;
     private static final Object lockObj = new Object();
 
-    public static void checkAppMode(){
+    static void checkAppMode(){
         AppMode curMode = AppMode.MODE_DEMO;
 
         BaseApplication baseApp = BaseApplication.getInstance();
@@ -74,7 +74,7 @@ class AppModeManager {
         return curMode;
     }
 
-    public static void setAllowTracking(boolean allowTracking) {
+    static void setAllowTracking(boolean allowTracking) {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "setAllowTracking");
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
@@ -100,7 +100,7 @@ class AppModeManager {
         checkAppMode();
     }
 
-    public static void rewardUser(@NonNull RewardItem rewardItem) {
+    static void rewardUser(@NonNull RewardItem rewardItem) {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "rewardUser itemType:" + rewardItem.getType() + " amount:" + rewardItem.getAmount());
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
@@ -120,7 +120,7 @@ class AppModeManager {
         checkAppMode();
     }
 
-    public static void setProMode(boolean isProMode) {
+    static void setProMode(boolean isProMode) {
         synchronized (lockObj) {
             Log.v(LOG_TAG, "setProMode");
             SharedPreferences sharedPref = BaseApplication.getInstance().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
