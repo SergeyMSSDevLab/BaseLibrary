@@ -191,7 +191,7 @@
 
         <include layout="@layout/content_options_upgrade"
             android:visibility="@{safeUnbox(viewModelMain.getAdsVisibilityValue)}"
-            app:viewModel="@{viewModelMain.optionsViewModel}"/>
+            app:viewModel="@{viewModelMain}"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.reward.RewardItem;
@@ -25,7 +24,7 @@ import com.mssdevlab.baselib.common.Helper;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedVideoAdListener {
+public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implements RewardedVideoAdListener {
     private static final String LOG_TAG = "U_ActivityViewModel";
 
     private final MutableLiveData<Event<RewardedVideoEvent>> mShowRewardedvideo = new MutableLiveData<>();
@@ -36,7 +35,6 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
 
     private final String[] mAppModeNames;
     private final String mExpireName;
-    private UpgradeOptionsViewModel mOptionsViewModel;
 
     public BaseUpgradeActivityViewModel() {
         Log.v(LOG_TAG, "Constructor");
@@ -124,10 +122,6 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
             });
     }
 
-    public LiveData<Boolean> getAllowTracking(){
-        return AppViewModel.getAllowTracking();
-    }
-
     public void setAllowTracking(View view){
         AppViewModel.setAllowTracking(((Switch) view).isChecked());
     }
@@ -154,14 +148,6 @@ public class BaseUpgradeActivityViewModel extends ViewModel implements RewardedV
 
     LiveData<Event<RewardedVideoEvent>> getShowRewardedVideo(){
         return mShowRewardedvideo;
-    }
-
-    void setOptionsViewModel(UpgradeOptionsViewModel model){
-        this.mOptionsViewModel = model;
-    }
-
-    public UpgradeOptionsViewModel getOptionsViewModel(){
-        return mOptionsViewModel;
     }
 
     /************************************************************************************

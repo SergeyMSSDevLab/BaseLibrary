@@ -20,7 +20,6 @@ import java.util.List;
 class BillingData {
     private static final String LOG_TAG = "BillingData";
 
-    private static final MutableLiveData<List<Purchase>> sAppPurchases = new MutableLiveData<>();
     private static final MutableLiveData<List<SkuDetails>> sSkuDetails = new MutableLiveData<>();
 
     private  static BillingManager sPurchaseManager;
@@ -84,21 +83,13 @@ class BillingData {
         }
     }
 
-    @NonNull
-    static LiveData<List<Purchase>> getAppPurchases(){
-        Log.v(LOG_TAG, "getAppPurchases hasActiveObservers: " + sAppPurchases.hasActiveObservers());
-        return sAppPurchases;
-    }
-    private static void setAppPurchases(List<Purchase> val){
+    private static void setAppPurchases(@NonNull List<Purchase> val){
         // TODO: check purchase acknowledge and save ofline information
-        Helper.setValue(sAppPurchases, val);
+        AppModeManager.setPurchases(val);
     }
     private static void addAppPurchases(List<Purchase> val){
-        ArrayList<Purchase> list = new ArrayList<>(
-                Helper.getValueOrDefault(sAppPurchases.getValue(), ArrayList::new));
         // todo: check if purchase already exists
-        list.addAll(val);
-        setAppPurchases(list);
+        AppModeManager.addPurchases(val);
     }
 
     @NonNull

@@ -1,79 +1,94 @@
 package com.mssdevlab.baselib.ApplicationMode;
 
 import android.app.Activity;
-import android.app.Application;
+import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.lifecycle.AndroidViewModel;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.mssdevlab.baselib.BaseApplication;
-import com.mssdevlab.baselib.common.Helper;
+import com.mssdevlab.baselib.R;
+import com.mssdevlab.baselib.ads.InterstitialManager;
 import com.mssdevlab.baselib.common.ShowView;
 
 import java.util.List;
 
-public class AppViewModel extends AndroidViewModel {
-    private final MediatorLiveData<AppMode> mAppMode = new MediatorLiveData<>();
+/* Base application view model
+Exposes application mode.
+Implements facade for billing functionality.
+*/
+public class AppViewModel extends ViewModel {
 
-    public AppViewModel(@NonNull Application application) {
-        super(application);
-        this.initAppMode();
+    public static void initAppMode(){
+        AppModeManager.initAppMode();
     }
 
+    public AppViewModel() {
+        super();
+    }
+
+    @NonNull
     public LiveData<AppMode> getApplicationMode(){
-        return mAppMode;
+        return ApplicationData.getApplicationMode();
     }
 
-    private void initAppMode(){
-        mAppMode.addSource(ApplicationData.getApplicationMode(),
-                appMode -> composeMode(appMode, BillingData.getAppPurchases().getValue()));
-        mAppMode.addSource(BillingData.getAppPurchases(),
-                purchases -> composeMode(ApplicationData.getCurrentApplicationMode(), purchases));
-    }
-
-    private void composeMode(@Nullable AppMode appMode, @Nullable List<Purchase> purchases){
-        AppMode curMode = appMode;
-        if (purchases != null && purchases.size() > 0){ // TODO: find a point for purchase validating
-            curMode = AppMode.MODE_PRO;
-            if (!curMode.equals(appMode)){
-                AppModeManager.setProMode(true);
-            }
-        }
-
-        Helper.setValue(this.mAppMode, curMode);
+    @NonNull
+    public LiveData<List<SkuDetails>> getSkuDetails(){
+        return BillingData.getSkuDetails();
     }
 
     @UiThread
-    public static void loadPurchases(Activity activity){
+    public void loadPurchases(Activity activity){
         BillingData.loadPurchases(activity, BaseApplication.getInstance().getPublicKey());
     }
 
     @UiThread
-    public static void loadSku(Activity activity, int requestCode){
+    public void loadSku(Activity activity, int requestCode){
         BaseApplication app = BaseApplication.getInstance();
         BillingData.loadSku(activity, requestCode, app.getSubscriptionSkus(), app.getProductSkus());
     }
 
     @UiThread
-    public static void startPurchase(Activity activity, SkuDetails skuDetails){
+    public void startPurchase(Activity activity, SkuDetails skuDetails){
         BillingData.startPurchase(activity, skuDetails, BaseApplication.getInstance().getPublicKey());
     }
 
-    @NonNull
-    public static LiveData<List<SkuDetails>> getSkuDetails(){
-        return BillingData.getSkuDetails();
+    public boolean isAppModeAtLeast(AppCompatActivity activity, @NonNull AppMode minMode) {
+
+        AppMode mode = getApplicationMode().getValue();
+        if (mode == null){
+            mode = AppMode.MODE_DEMO;
+        }
+
+        if (mode.ordinal() >= minMode.ordinal()){
+            return true;
+        }
+
+        final Resources res = activity.getResources();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.bl_ads_notification_title);
+        builder.setMessage(res.getStringArray(R.array.bl_ads_restriction_message_array)[mode.ordinal()])
+                .setCancelable(false)
+                .setPositiveButton(R.string.bl_ads_upgrade_button_title,
+                        (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
+                .setNegativeButton(res.getString(R.string.bl_ads_continue_button_title,
+                        res.getStringArray(R.array.bl_common_app_mode_array)[mode.ordinal()]),
+                        (dialog, id) -> {
+                            InterstitialManager.showInterstitialAd(activity, false);
+                            dialog.cancel();
+                        }).show();
+
+        return false;
     }
 
-    public static void checkAppMode(){
-        AppModeManager.checkAppMode();
-    }
+
+
     public static void rewardUser(@NonNull RewardItem rewardItem) {
         AppModeManager.rewardUser(rewardItem);
     }

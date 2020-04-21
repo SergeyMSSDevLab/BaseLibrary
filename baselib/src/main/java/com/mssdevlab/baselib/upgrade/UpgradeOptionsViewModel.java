@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.android.billingclient.api.SkuDetails;
 import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
@@ -15,7 +14,7 @@ import com.mssdevlab.baselib.common.Helper;
 
 import java.util.ArrayList;
 
-public class UpgradeOptionsViewModel extends ViewModel {
+public class UpgradeOptionsViewModel extends AppViewModel {
     private static final String LOG_TAG = "U_OptionsViewModel";
 
     private MutableLiveData<SkuDetails> mSelectedDetails = new MutableLiveData<>();
@@ -27,7 +26,7 @@ public class UpgradeOptionsViewModel extends ViewModel {
     }
 
     void attachActivity(LifecycleOwner lifecycleOwner, Resources res){
-        AppViewModel.getSkuDetails().observe(lifecycleOwner, skuDetails -> {
+        this.getSkuDetails().observe(lifecycleOwner, skuDetails -> {
             ArrayList<UpgradeOptionModel> options = new ArrayList<>();
             for (SkuDetails d : skuDetails){
                 options.add(new UpgradeOptionModel(d, res));

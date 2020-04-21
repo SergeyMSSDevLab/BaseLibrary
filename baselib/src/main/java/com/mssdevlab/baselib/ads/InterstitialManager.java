@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,37 +41,6 @@ public class InterstitialManager {
     private static long sLastShownTime = 0L;
     private static final MutableLiveData<InterstitialAd> sInterstitialAd = new MutableLiveData<>();
     private static Observer<InterstitialAd> sAdObserver;
-
-    public static boolean isAppModeAtLeast(AppCompatActivity activity, @NonNull AppMode minMode) {
-        ViewModelProvider.AndroidViewModelFactory factory =
-                ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance());
-        AppViewModel viewModel = factory.create(AppViewModel.class);
-
-        AppMode mode = viewModel.getApplicationMode().getValue();
-        if (mode == null){
-            mode = AppMode.MODE_DEMO;
-        }
-
-        if (mode.ordinal() >= minMode.ordinal()){
-            return true;
-        }
-
-        final Resources res = activity.getResources();
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(R.string.bl_ads_notification_title);
-        builder.setMessage(res.getStringArray(R.array.bl_ads_restriction_message_array)[mode.ordinal()])
-                .setCancelable(false)
-                .setPositiveButton(R.string.bl_ads_upgrade_button_title,
-                        (dialog, id) -> BaseApplication.startUpgradeScreen(activity))
-                .setNegativeButton(res.getString(R.string.bl_ads_continue_button_title,
-                        res.getStringArray(R.array.bl_common_app_mode_array)[mode.ordinal()]),
-                        (dialog, id) -> {
-                            showInterstitialAd(activity, false);
-                            dialog.cancel();
-                        }).show();
-
-        return false;
-    }
 
     public static void showInterstitialAd(final AppCompatActivity activity, boolean showWarning){
         Log.v(LOG_TAG, "showInterstitialAd");

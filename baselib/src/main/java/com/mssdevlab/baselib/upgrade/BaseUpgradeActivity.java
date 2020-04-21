@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.ComboBannerFragment;
@@ -27,7 +26,7 @@ import com.mssdevlab.baselib.databinding.ActivityUpgradeBinding;
 public class BaseUpgradeActivity extends AppCompatActivity {
 
     private RewardedVideoAd mRewardedVideoAd;
-
+    private BaseUpgradeActivityViewModel mViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,25 +34,26 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         ActivityUpgradeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_upgrade);
         binding.setLifecycleOwner(this);
         ViewModelProvider provider = new ViewModelProvider(this);
-        BaseUpgradeActivityViewModel viewModel = provider.get(BaseUpgradeActivityViewModel.class);
-        viewModel.setOptionsViewModel(provider.get(UpgradeOptionsViewModel.class));
-        viewModel.getOptionsViewModel().attachActivity(this, this.getResources());
-        viewModel.getOptionsViewModel().getSelectedDetails().observe(this, details -> {
+        this.mViewModel = provider.get(BaseUpgradeActivityViewModel.class);
+        // TODO: remove method attachActivity
+        this.mViewModel.attachActivity(this, this.getResources());
+
+        this.mViewModel.getSelectedDetails().observe(this, details -> {
             if (details != null){
-                AppViewModel.startPurchase(this, details);
+                mViewModel.startPurchase(this, details);
             }
         });
 
-        binding.setViewModelMain(viewModel);
+        binding.setViewModelMain(this.mViewModel);
         // request code is not used
-        AppViewModel.loadSku(this, 0);
+        this.mViewModel.loadSku(this, 0);
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
         if (ab != null){
             ab.setDisplayHomeAsUpEnabled(true);
-            viewModel.getAdsVisibilityValue().observe(this, adsVisibility -> {
+            this.mViewModel.getAdsVisibilityValue().observe(this, adsVisibility -> {
                 if (adsVisibility != null && adsVisibility == View.GONE){
                     ab.setTitle(R.string.bl_title_activity_sponsoring);
                 } else {
@@ -82,9 +82,9 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         String rewardedUnitId = getIntent().getStringExtra(BaseApplication.EXTRA_REWARDED_UNIT_ID);
         if (rewardedUnitId != null){
             mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-            mRewardedVideoAd.setRewardedVideoAdListener(viewModel);
+            mRewardedVideoAd.setRewardedVideoAdListener(this.mViewModel);
 
-            viewModel.getShowRewardedVideo().observe(this, event -> {
+            this.mViewModel.getShowRewardedVideo().observe(this, event -> {
                 RewardedVideoEvent res = event.getValueIfNotHandled();
                 if (res != null){
                     if (res == RewardedVideoEvent.SHOW){
@@ -103,7 +103,7 @@ public class BaseUpgradeActivity extends AppCompatActivity {
     public void onResume() {
         mRewardedVideoAd.resume(this);
         super.onResume();
-        AppViewModel.loadPurchases(this);
+        this.mViewModel.loadPurchases(this);
     }
 
     @Override

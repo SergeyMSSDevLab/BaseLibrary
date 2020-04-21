@@ -93,28 +93,28 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_eval) {
-            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_EVALUATION)){
+            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_EVALUATION)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run an Evaluation feature.")
                         .setCancelable(true).show();
             }
         } else if (id == R.id.nav_no_ads) {
-            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_NO_ADS)){
+            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_NO_ADS)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run a NoAds feature.")
                         .setCancelable(true).show();
             }
         } else if (id == R.id.nav_pro) {
-            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_PRO)){
+            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_PRO)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run a Pro feature.")
                         .setCancelable(true).show();
             }
         } else if (id == R.id.nav_demo) {
-            if (InterstitialManager.isAppModeAtLeast(this, AppMode.MODE_DEMO)){
+            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_DEMO)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run a Demo feature.")

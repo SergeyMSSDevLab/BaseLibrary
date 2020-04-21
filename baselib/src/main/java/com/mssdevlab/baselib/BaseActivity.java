@@ -33,9 +33,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public AppViewModel getAppViewModel(){
         if (this.mAppViewModel == null){
-            BaseApplication ctx = BaseApplication.getInstance();
-            ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(ctx);
-            this.mAppViewModel = factory.create(AppViewModel.class);
+            ViewModelProvider provider = new ViewModelProvider(this);
+            this.mAppViewModel = provider.get(AppViewModel.class);
         }
         return this.mAppViewModel;
     }
@@ -44,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "onResume started");
-        AppViewModel.loadPurchases(this);
+        this.mAppViewModel.loadPurchases(this);
     }
 
     protected void addCommonMenuItems(final Menu menu,

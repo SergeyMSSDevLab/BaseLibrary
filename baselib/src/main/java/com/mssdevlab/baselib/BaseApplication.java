@@ -74,7 +74,7 @@ public abstract class BaseApplication  extends Application implements Thread.Unc
 
         new Thread(() -> {
             try {
-                AppViewModel.checkAppMode();
+                AppViewModel.initAppMode();
                 initApplicationInBackground();
 
                 // Inform observers that configuration finished
