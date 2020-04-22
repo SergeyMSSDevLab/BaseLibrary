@@ -125,11 +125,6 @@ class BillingData {
         }
 
         @Override
-        public void onConsumeFinished(String token, int result) {
-
-        }
-
-        @Override
         public void onPurchasesUpdated(List<Purchase> purchases) {
         }
 
@@ -161,11 +156,6 @@ class BillingData {
         }
 
         @Override
-        public void onConsumeFinished(String token, int result) {
-
-        }
-
-        @Override
         public void onPurchasesUpdated(List<Purchase> purchases) {
             addAppPurchases(purchases);
         }
@@ -189,11 +179,6 @@ class BillingData {
                 Log.d(LOG_TAG, "Setup successful. Getting inventory");
                 sInventoryManager.queryPurchases(this.mPublicKey);
             }
-        }
-
-        @Override
-        public void onConsumeFinished(String token, int result) {
-
         }
 
         @Override

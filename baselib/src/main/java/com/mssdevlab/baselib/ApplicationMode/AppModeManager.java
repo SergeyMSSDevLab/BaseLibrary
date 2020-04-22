@@ -99,6 +99,7 @@ class AppModeManager {
         }
     }
 
+    @NonNull
     private static AppMode enhanceAppMode(AppMode curMode, AppMode newMode){
         if (curMode.ordinal() < newMode.ordinal()){
             return newMode;

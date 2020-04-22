@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -36,7 +38,7 @@ class BillingManager implements PurchasesUpdatedListener {
      */
     public interface BillingUpdatesListener {
         void onBillingClientSetupFinished();
-        void onConsumeFinished(String token, @BillingClient.BillingResponseCode int result);
+        //void onConsumeFinished(String token, @BillingClient.BillingResponseCode int result);
         void onPurchasesUpdated(List<Purchase> purchases);
         void onSkuListUpdated(List<SkuDetails> skuDetailsList);
     }
@@ -93,6 +95,8 @@ class BillingManager implements PurchasesUpdatedListener {
         executeServiceRequest(queryToExecute);
     }
 
+    @NonNull
+    @UiThread
     BillingResult startPurchase(Activity activity, SkuDetails skuDetails, String publicKey){
         this.mBase64EncodedPublicKey = publicKey;
         BillingFlowParams flowParams = BillingFlowParams.newBuilder()
@@ -103,23 +107,17 @@ class BillingManager implements PurchasesUpdatedListener {
 
     void querySkuDetails(final List<String> prodSkuList, final List<String> subsSkuList) {
 
-        querySkuDetailsAsync(BillingClient.SkuType.INAPP, prodSkuList, new SkuDetailsResponseListener() {
-            @Override
-            public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
-                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
-                        && list != null){
-                    mBillingUpdatesListener.onSkuListUpdated(list);
-                }
+        querySkuDetailsAsync(BillingClient.SkuType.INAPP, prodSkuList, (billingResult, list) -> {
+            if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+                    && list != null){
+                mBillingUpdatesListener.onSkuListUpdated(list);
             }
         });
 
-        querySkuDetailsAsync(BillingClient.SkuType.SUBS, subsSkuList, new SkuDetailsResponseListener() {
-            @Override
-            public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
-                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
-                        && list != null){
-                    mBillingUpdatesListener.onSkuListUpdated(list);
-                }
+        querySkuDetailsAsync(BillingClient.SkuType.SUBS, subsSkuList, (billingResult, list) -> {
+            if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+                    && list != null){
+                mBillingUpdatesListener.onSkuListUpdated(list);
             }
         });
     }

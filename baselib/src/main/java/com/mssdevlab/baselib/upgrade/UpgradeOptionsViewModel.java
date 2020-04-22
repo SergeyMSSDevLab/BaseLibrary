@@ -25,7 +25,7 @@ public class UpgradeOptionsViewModel extends AppViewModel {
         mUpgradeOptionsAdapter = new UpgradeOptionsAdapter(R.layout.view_option_upgrade, this);
     }
 
-    void attachActivity(LifecycleOwner lifecycleOwner, Resources res){
+    void loadSkuDetails(LifecycleOwner lifecycleOwner, Resources res){
         this.getSkuDetails().observe(lifecycleOwner, skuDetails -> {
             ArrayList<UpgradeOptionModel> options = new ArrayList<>();
             for (SkuDetails d : skuDetails){

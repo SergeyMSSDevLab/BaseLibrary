@@ -8,6 +8,7 @@ import androidx.annotation.UiThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.billingclient.api.SkuDetails;
@@ -15,6 +16,8 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.ads.InterstitialManager;
+import com.mssdevlab.baselib.common.Helper;
+import com.mssdevlab.baselib.common.PromoteManager;
 import com.mssdevlab.baselib.common.ShowView;
 
 import java.util.List;
@@ -39,13 +42,8 @@ public class AppViewModel extends ViewModel {
     }
 
     @NonNull
-    public LiveData<List<SkuDetails>> getSkuDetails(){
+    protected LiveData<List<SkuDetails>> getSkuDetails(){
         return BillingData.getSkuDetails();
-    }
-
-    @UiThread
-    public void loadPurchases(Activity activity){
-        BillingData.loadPurchases(activity, BaseApplication.getInstance().getPublicKey());
     }
 
     @UiThread
@@ -87,34 +85,57 @@ public class AppViewModel extends ViewModel {
         return false;
     }
 
+    @NonNull
+    public LiveData<ShowView> getBannerShowMode(){
+        MediatorLiveData<ShowView> dataMode = new MediatorLiveData<>();
+        dataMode.addSource(PromoteManager.getShowPromo(),
+                aBoolean -> onAppMode(dataMode, ApplicationData.getApplicationMode().getValue(), aBoolean));
+        dataMode.addSource(ApplicationData.getApplicationMode(),
+                appMode -> onAppMode(dataMode, appMode, PromoteManager.getShowPromo().getValue()));
 
+        return dataMode;
+    }
 
-    public static void rewardUser(@NonNull RewardItem rewardItem) {
+    private void onAppMode(MediatorLiveData<ShowView> dataMode, AppMode newMode, Boolean isPromo){
+        if (isPromo == null || !isPromo){
+            if (newMode != null){
+                if (newMode.ordinal() < AppMode.MODE_NO_ADS.ordinal()){
+                    Helper.setValue(dataMode, ShowView.ADS);
+                } else {
+                    Helper.setValue(dataMode, ShowView.NOTHING);
+                }
+            } else {
+                Helper.setValue(dataMode, ShowView.ADS);
+            }
+        } else {
+            Helper.setValue(dataMode, ShowView.PROMO);
+        }
+    }
+
+    protected void rewardUser(@NonNull RewardItem rewardItem) {
         AppModeManager.rewardUser(rewardItem);
     }
 
-    public static void setAllowTracking(boolean allowTracking){
+    @NonNull
+    public LiveData<Boolean> getAllowTracking(){
+        return ApplicationData.getAllowTracking();
+    }
+    public void setAllowTracking(boolean allowTracking){
         AppModeManager.setAllowTracking(allowTracking);
     }
-    public static LiveData<ShowView> getBannerShowMode(){
-        return ApplicationData.getBannerShowMode();
-    }
 
-    public static LiveData<Long> getExpireTime(){
+    @NonNull
+    protected LiveData<Long> getExpireTime(){
         return ApplicationData.getExpireTime();
     }
 
-    public static LiveData<Boolean> getAllowTracking(){
-        return ApplicationData.getAllowTracking();
-    }
-
-    public static LiveData<Boolean> getAllowTrackingParticipated(){
+    @NonNull
+    protected LiveData<Boolean> getAllowTrackingParticipated(){
         return ApplicationData.getAllowTrackingParticipated();
     }
 
-    // TODO: Remove this debug method or add debug class into configuration
-    public static void setApplicationMode(AppMode mode){
-        ApplicationData.setApplicationMode(mode);
+    @UiThread
+    public static void loadPurchases(Activity activity){
+        BillingData.loadPurchases(activity, BaseApplication.getInstance().getPublicKey());
     }
-
 }

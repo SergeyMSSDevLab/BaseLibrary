@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_DEMO.name().replace("MODE_", "")}'
                     android:checked="@{safeUnbox(viewModelMain.isModeDemo)}"
-                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_DEMO)}"
                     />
                 <RadioButton
                     android:id="@+id/radio_eval"
@@ -52,7 +51,6 @@
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_EVALUATION.name().replace("MODE_", "")}'
                     android:checked="@{safeUnbox(viewModelMain.isModeEval)}"
-                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_EVALUATION)}"
                     />
                 <RadioButton
                     android:id="@+id/radio_no_ads"
@@ -60,7 +58,6 @@
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_NO_ADS.name().replace("MODE_", "")}'
                     android:checked="@{safeUnbox(viewModelMain.isModeNoAds)}"
-                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_NO_ADS)}"
                     />
                 <RadioButton
                     android:id="@+id/radio_pro"
@@ -68,7 +65,6 @@
                     android:layout_height="wrap_content"
                     android:text='@{AppMode.MODE_PRO.name().replace("MODE_", "")}'
                     android:checked="@{safeUnbox(viewModelMain.isModePro)}"
-                    android:onClick="@{() -> viewModelMain.setAppMode(AppMode.MODE_PRO)}"
                     />
             </RadioGroup>
 

@@ -2,15 +2,13 @@ package com.mssdevlab.baselib.ads;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.ads.AdSize;
 import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.common.Helper;
-import com.mssdevlab.baselib.common.ShowView;
 
 @SuppressWarnings("WeakerAccess")
-public class ComboBannerViewModel extends ViewModel {
+public class ComboBannerViewModel extends AppViewModel {
 
     private final MutableLiveData<String> mAppName = new MutableLiveData<>();
     private final MutableLiveData<String> mDevEmail = new MutableLiveData<>();
@@ -22,10 +20,6 @@ public class ComboBannerViewModel extends ViewModel {
 
     public ComboBannerViewModel() {
 
-    }
-
-    public LiveData<ShowView> getBannerShowMode(){
-        return AppViewModel.getBannerShowMode();
     }
 
     public String getAdUnitId() { return this.mAdUnitId; }

@@ -35,8 +35,8 @@ public class BaseUpgradeActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
         ViewModelProvider provider = new ViewModelProvider(this);
         this.mViewModel = provider.get(BaseUpgradeActivityViewModel.class);
-        // TODO: remove method attachActivity
-        this.mViewModel.attachActivity(this, this.getResources());
+
+        this.mViewModel.loadSkuDetails(this, this.getResources());
 
         this.mViewModel.getSelectedDetails().observe(this, details -> {
             if (details != null){

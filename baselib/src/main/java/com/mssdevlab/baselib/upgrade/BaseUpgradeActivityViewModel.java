@@ -10,12 +10,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
-import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.BaseApplication;
 import com.mssdevlab.baselib.R;
 import com.mssdevlab.baselib.common.Event;
@@ -44,11 +42,8 @@ public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implem
         Resources res = BaseApplication.getInstance().getResources();
         this.mAppModeNames = res.getStringArray(R.array.bl_common_app_mode_array);
         this.mExpireName = res.getString(R.string.bl_upgrade_expire_time);
-        ViewModelProvider.AndroidViewModelFactory factory =
-                ViewModelProvider.AndroidViewModelFactory.getInstance(BaseApplication.getInstance());
-        AppViewModel viewModel = factory.create(AppViewModel.class);
 
-        mAdsVisibilityValue.addSource(viewModel.getApplicationMode(), appMode -> {
+        mAdsVisibilityValue.addSource(this.getApplicationMode(), appMode -> {
             if (appMode == AppMode.MODE_NO_ADS || appMode == AppMode.MODE_PRO){
                 this.mAdsVisibilityValue.setValue(View.GONE);
             } else {
@@ -56,15 +51,15 @@ public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implem
             }
         });
 
-        mCurModeText.addSource(viewModel.getApplicationMode(),
-                appMode -> composeModeText(appMode, AppViewModel.getExpireTime().getValue()));
-        mCurModeText.addSource(AppViewModel.getExpireTime(),
-                expireTime -> composeModeText(viewModel.getApplicationMode().getValue(), expireTime));
+        mCurModeText.addSource(this.getApplicationMode(),
+                appMode -> composeModeText(appMode, this.getExpireTime().getValue()));
+        mCurModeText.addSource(this.getExpireTime(),
+                expireTime -> composeModeText(this.getApplicationMode().getValue(), expireTime));
 
-        mSeeAdsText.addSource(viewModel.getApplicationMode(),
+        mSeeAdsText.addSource(this.getApplicationMode(),
                 appMode -> composeSeeAdsText(appMode, this.mRewardedVideoLoaded.getValue()));
         mSeeAdsText.addSource(this.mRewardedVideoLoaded,
-                adsLoaded -> composeSeeAdsText(viewModel.getApplicationMode().getValue(), adsLoaded));
+                adsLoaded -> composeSeeAdsText(this.getApplicationMode().getValue(), adsLoaded));
     }
 
     private void composeSeeAdsText(@Nullable AppMode mode, @Nullable Boolean adsLoaded){
@@ -113,7 +108,7 @@ public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implem
     }
 
     public LiveData<Integer> getAllowTrackingText(){
-        return Transformations.map(AppViewModel.getAllowTrackingParticipated(),
+        return Transformations.map(this.getAllowTrackingParticipated(),
             val -> {
                 if (val) {
                     return R.string.bl_upgrade_track_value_done;
@@ -123,11 +118,7 @@ public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implem
     }
 
     public void setAllowTracking(View view){
-        AppViewModel.setAllowTracking(((Switch) view).isChecked());
-    }
-
-    public void inviteFriend(){
-        // TODO: Implement
+        this.setAllowTracking(((Switch) view).isChecked());
     }
 
     public LiveData<Boolean> getIsVideLoaded(){
@@ -138,8 +129,21 @@ public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implem
         return mSeeAdsText;
     }
 
-    public LiveData<Integer> getAdsVisibilityValue(){
+    LiveData<Integer> getAdsVisibilityValue(){
         return mAdsVisibilityValue;
+    }
+
+    public LiveData<Integer> getSkuVisibilityValue(){
+        return Transformations.map(this.getApplicationMode(),
+                appMode -> {
+                    int result;
+                    if (appMode == AppMode.MODE_PRO) {
+                        result = View.GONE;
+                    } else {
+                        result = View.VISIBLE;
+                    }
+                    return result;
+                });
     }
 
     public void onSeeRewardedAds(){
@@ -176,7 +180,7 @@ public class BaseUpgradeActivityViewModel extends UpgradeOptionsViewModel implem
 
     @Override
     public void onRewarded(RewardItem rewardItem) {
-        AppViewModel.rewardUser(rewardItem);
+        this.rewardUser(rewardItem);
     }
 
     @Override

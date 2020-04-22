@@ -17,11 +17,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.mssdevlab.baselib.ApplicationMode.AppMode;
+import com.mssdevlab.baselib.ApplicationMode.AppViewModel;
 import com.mssdevlab.baselib.BaseActivity;
 import com.mssdevlab.baselib.ads.InterstitialManager;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private MainActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +32,8 @@ public class MainActivity extends BaseActivity
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setLifecycleOwner(this);
         ViewModelProvider provider = new ViewModelProvider(this);
-        MainActivityViewModel viewModel = provider.get(MainActivityViewModel.class);
-        binding.setViewModelMain(viewModel);
+        this.mViewModel = provider.get(MainActivityViewModel.class);
+        binding.setViewModelMain(this.mViewModel);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,6 +52,11 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         this.addCommonMenuItems(navigationView.getMenu(), R.id.nav_common, null);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public AppViewModel getAppViewModel() {
+        return this.mViewModel;
     }
 
     @Override
@@ -93,28 +100,28 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_eval) {
-            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_EVALUATION)){
+            if (this.mViewModel.isAppModeAtLeast(this, AppMode.MODE_EVALUATION)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run an Evaluation feature.")
                         .setCancelable(true).show();
             }
         } else if (id == R.id.nav_no_ads) {
-            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_NO_ADS)){
+            if (this.mViewModel.isAppModeAtLeast(this, AppMode.MODE_NO_ADS)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run a NoAds feature.")
                         .setCancelable(true).show();
             }
         } else if (id == R.id.nav_pro) {
-            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_PRO)){
+            if (this.mViewModel.isAppModeAtLeast(this, AppMode.MODE_PRO)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run a Pro feature.")
                         .setCancelable(true).show();
             }
         } else if (id == R.id.nav_demo) {
-            if (getAppViewModel().isAppModeAtLeast(this, AppMode.MODE_DEMO)){
+            if (this.mViewModel.isAppModeAtLeast(this, AppMode.MODE_DEMO)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Restricted feature");
                 builder.setMessage("Application mode allows to run a Demo feature.")

@@ -47,8 +47,7 @@ class Security
     /**
      * Verifies that the data was signed with the given signature, and returns
      * the verified purchase. The data is in JSON format and signed
-     * with a private key. The data also contains the {@link PurchaseState}
-     * and product ID of the purchase.
+     * with a private key. The data also contains  product ID of the purchase.
      *
      * @param productId       the product Id used for debug validation.
      * @param base64PublicKey the base64-encoded public key to use for verifying.
