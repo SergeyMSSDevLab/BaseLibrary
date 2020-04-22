@@ -212,8 +212,12 @@ public class ComboBannerFragment extends Fragment {
                     public void run()
                     {
                         activity.runOnUiThread(() -> {
-                            mAdView.loadAd(adRequest);
-                            Log.v(LOG_TAG, "ensureAdView: loadAd started");
+                            if (mAdView != null){
+                                mAdView.loadAd(adRequest);
+                                Log.v(LOG_TAG, "ensureAdView: loadAd started");
+                            } else {
+                                Log.v(LOG_TAG, "ensureAdView: loadAd not statrted, mAdView is null");
+                            }
                         });
                     }
                 }, 1000);
@@ -299,6 +303,7 @@ public class ComboBannerFragment extends Fragment {
     public void onDestroy() {
         Log.v(LOG_TAG, "onDestroy");
         if (this.mAdView != null) {
+            this.mAdView.removeAllViews();
             this.mAdView.destroy();
             this.mAdView = null;
         }
