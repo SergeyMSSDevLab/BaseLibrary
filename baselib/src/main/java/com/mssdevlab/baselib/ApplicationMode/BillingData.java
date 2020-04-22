@@ -84,11 +84,9 @@ class BillingData {
     }
 
     private static void setAppPurchases(@NonNull List<Purchase> val){
-        // TODO: check purchase acknowledge and save ofline information
         AppModeManager.setPurchases(val);
     }
     private static void addAppPurchases(List<Purchase> val){
-        // todo: check if purchase already exists
         AppModeManager.addPurchases(val);
     }
 

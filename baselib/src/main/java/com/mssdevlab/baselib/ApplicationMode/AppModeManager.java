@@ -176,6 +176,7 @@ class AppModeManager {
             setPurchases(purchases);
         } else {
             BaseApplication baseApp = BaseApplication.getInstance();
+            // todo: check if purchase already exists
             sActivePurchases.addAll(purchases);
             sCurrentMode = AppMode.MODE_DEMO;
             checkAppMode(baseApp);

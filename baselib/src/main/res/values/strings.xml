@@ -73,6 +73,7 @@
     <string name="bl_upgrade_buy_value">Upgrade the application and enjoy it without limits and without ads.</string>
     <string name="bl_upgrade_expire_time">expire:</string>
     <string name="bl_upgrade_price_title">Buy for %1$s</string>
+    <string name="bl_upgrade_price_title_discount">Buy for %1$s instead of regular price <strike><font fgcolor='gray'> %2$s</font></strike></string>
     <string name="bl_title_activity_upgrade">Upgrade application</string>
     <string name="bl_title_activity_sponsoring">Sponsoring options</string>
 

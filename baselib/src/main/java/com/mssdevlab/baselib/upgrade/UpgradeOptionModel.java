@@ -14,8 +14,14 @@ public class UpgradeOptionModel extends BaseObservable {
 
     UpgradeOptionModel(@NonNull final SkuDetails skuDetails, @NonNull final Resources res){
         this.mSkuDetails = skuDetails;
-        this.mPriceTitle = res.getString(R.string.bl_upgrade_price_title,
-                this.mSkuDetails.getOriginalPrice());
+        if (this.mSkuDetails.getPriceAmountMicros() == this.mSkuDetails.getOriginalPriceAmountMicros()){
+            this.mPriceTitle = res.getString(R.string.bl_upgrade_price_title,
+                    this.mSkuDetails.getOriginalPrice());
+        } else {
+            this.mPriceTitle = res.getString(R.string.bl_upgrade_price_title_discount,
+                    this.mSkuDetails.getPrice(),
+                    this.mSkuDetails.getOriginalPrice());
+        }
     }
 
     public String getTitle() {
@@ -30,5 +36,5 @@ public class UpgradeOptionModel extends BaseObservable {
         return this.mPriceTitle;
     }
 
-    public SkuDetails getSkuDetails() { return this.mSkuDetails; }
+    SkuDetails getSkuDetails() { return this.mSkuDetails; }
 }

@@ -32,10 +32,6 @@ public class AppViewModel extends ViewModel {
         AppModeManager.initAppMode();
     }
 
-    public AppViewModel() {
-        super();
-    }
-
     @NonNull
     public LiveData<AppMode> getApplicationMode(){
         return ApplicationData.getApplicationMode();

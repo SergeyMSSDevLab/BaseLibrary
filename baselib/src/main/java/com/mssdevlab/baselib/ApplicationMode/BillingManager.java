@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
@@ -215,12 +216,25 @@ class BillingManager implements PurchasesUpdatedListener {
     }
 
     private void handlePurchase(Purchase purchase) {
-        if (!Security.verifyPurchase(purchase.getSku(), mBase64EncodedPublicKey, purchase.getOriginalJson(), purchase.getSignature())) {
+        if (!Security.verifyPurchase(purchase.getSku(),
+                                    mBase64EncodedPublicKey,
+                                    purchase.getOriginalJson(),
+                                    purchase.getSignature())) {
             Log.i(LOG_TAG, "Got a purchase: " + purchase + "; but signature is bad. Skipping...");
             return;
         }
+        if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED
+                && !purchase.isAcknowledged()) {
+            AcknowledgePurchaseParams acknowledgePurchaseParams =
+                    AcknowledgePurchaseParams.newBuilder()
+                            .setPurchaseToken(purchase.getPurchaseToken())
+                            .build();
+            this.mBillingClient.acknowledgePurchase(acknowledgePurchaseParams, res -> {
+                Log.i(LOG_TAG, "acknowledgePurchase() returns resultCode: " + res.getResponseCode());
+            });
+        }
 
-        Log.d(LOG_TAG, "Got a verified purchase: " + purchase);
+        Log.d(LOG_TAG, "Got a verified purchase: " + purchase.getOriginalJson());
         mPurchases.add(purchase);
     }
 
