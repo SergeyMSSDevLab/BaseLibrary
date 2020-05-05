@@ -213,11 +213,9 @@ public class ComboBannerFragment extends Fragment {
                     public void run()
                     {
                         activity.runOnUiThread(() -> {
-                            if (mAdView != null){
+                            if (mAdView != null && !mAdView.isLoading()){
                                 mAdView.loadAd(adRequest);
                                 Log.v(LOG_TAG, "ensureAdView: loadAd started");
-                            } else {
-                                Log.v(LOG_TAG, "ensureAdView: loadAd not statrted, mAdView is null");
                             }
                         });
                     }
