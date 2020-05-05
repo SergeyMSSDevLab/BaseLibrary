@@ -28,8 +28,14 @@ Implements facade for billing functionality.
 */
 public class AppViewModel extends ViewModel {
 
+    private static MediatorLiveData<ShowView> sDataMode = new MediatorLiveData<>();
+
     public static void initAppMode(){
         AppModeManager.initAppMode();
+        sDataMode.addSource(PromoteManager.getShowPromo(),
+                aBoolean -> onAppMode(sDataMode, ApplicationData.getApplicationMode().getValue(), aBoolean));
+        sDataMode.addSource(ApplicationData.getApplicationMode(),
+                appMode -> onAppMode(sDataMode, appMode, PromoteManager.getShowPromo().getValue()));
     }
 
     @NonNull
@@ -83,16 +89,10 @@ public class AppViewModel extends ViewModel {
 
     @NonNull
     public LiveData<ShowView> getBannerShowMode(){
-        MediatorLiveData<ShowView> dataMode = new MediatorLiveData<>();
-        dataMode.addSource(PromoteManager.getShowPromo(),
-                aBoolean -> onAppMode(dataMode, ApplicationData.getApplicationMode().getValue(), aBoolean));
-        dataMode.addSource(ApplicationData.getApplicationMode(),
-                appMode -> onAppMode(dataMode, appMode, PromoteManager.getShowPromo().getValue()));
-
-        return dataMode;
+        return sDataMode;
     }
 
-    private void onAppMode(MediatorLiveData<ShowView> dataMode, AppMode newMode, Boolean isPromo){
+    private static void onAppMode(MediatorLiveData<ShowView> dataMode, AppMode newMode, Boolean isPromo){
         if (isPromo == null || !isPromo){
             if (newMode != null){
                 if (newMode.ordinal() < AppMode.MODE_NO_ADS.ordinal()){

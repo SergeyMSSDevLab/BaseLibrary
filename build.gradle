@@ -7,14 +7,14 @@ buildscript {
         compileSdkVersion = 29
         minSdkVersion = 21
         targetSdkVersion = 29
-        buildToolsVersion = '29.0.2'
+        buildToolsVersion = '29.0.3'
 
         // App dependencies
         junitVersion = '4.13'
         lifecycleVersion = '2.2.0'
         annotationVersion = '1.1.0'
         mobileAdsVersion = '19.1.0'
-        fireBaseAnalyticsVersion = '17.3.0'
+        fireBaseAnalyticsVersion = '17.4.0'
         constraintlayoutVersion = '2.0.0-beta4'
         materialVersion = '1.2.0-alpha06'
         appCompatVersion = '1.1.0'
