@@ -4,22 +4,21 @@ buildscript {
 // Define versions in a single place
     ext {
         // Sdk and tools
-        compileSdkVersion = 29
+        compileSdkVersion = 30
         minSdkVersion = 21
-        targetSdkVersion = 29
-        buildToolsVersion = '29.0.3'
+        targetSdkVersion = 30
+        buildToolsVersion = '30.0.3'
 
         // App dependencies
         junitVersion = '4.13'
         lifecycleVersion = '2.2.0'
         annotationVersion = '1.1.0'
-        mobileAdsVersion = '19.1.0'
-        fireBaseAnalyticsVersion = '17.4.0'
-        constraintlayoutVersion = '2.0.0-beta4'
-        materialVersion = '1.2.0-alpha06'
+        constraintlayoutVersion = '2.0.4'
+        materialVersion = '1.3.0-beta01'
         appCompatVersion = '1.1.0'
         cardViewVersion = '1.0.0'
-        BillingVersion = '2.2.0'
+        BillingVersion = '3.0.2'
+        fireBaseBoMVersion = '26.2.0'
 
     }
 
@@ -28,7 +27,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.1.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

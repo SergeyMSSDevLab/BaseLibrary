@@ -24,16 +24,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dataBinding {
-        enabled = true
-    }
+    buildFeatures {
 
-    viewBinding {
-        enabled = true
+        dataBinding true
+        viewBinding true
     }
 }
 
 dependencies {
+    implementation platform("com.google.firebase:firebase-bom:$rootProject.fireBaseBoMVersion")
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation "com.android.billingclient:billing:$rootProject.BillingVersion"
@@ -42,8 +42,9 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
-    implementation "com.google.firebase:firebase-ads:$rootProject.mobileAdsVersion"
-    implementation "com.google.firebase:firebase-analytics:$rootProject.fireBaseAnalyticsVersion"
+    implementation "com.google.firebase:firebase-ads"
+    implementation "com.google.firebase:firebase-analytics"
+    implementation "com.google.android.gms:play-services-base:17.5.0"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
 }
